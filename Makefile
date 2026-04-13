@@ -7,16 +7,17 @@
 
 TARGET  =   game
 
-CC      =   lcc
+GBDK_HOME ?= /opt/gbdk
+LCC     ?=   $(GBDK_HOME)/bin/lcc
 
 SRC     =   $(shell find src/ -name "*.c")
 
-CFLAGS  =   -Wa-l -Wl-m -Wl-j -I include/
+CFLAGS  =   -Wa-l -Wl-m -Wl-j -Iinclude/
 
 all: $(TARGET).gb
 
 $(TARGET).gb: $(SRC)
-	$(CC) $(CFLAGS) -o $(TARGET).gb $(SRC)
+	$(LCC) $(CFLAGS) -o $(TARGET).gb $(SRC)
 
 clean:
 	rm -f *.o *.lst *.map *.sym *.noi *.rel *.ihx

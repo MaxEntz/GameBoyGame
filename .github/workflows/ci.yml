@@ -39,8 +39,9 @@ jobs:
               -O gbdk.tar.gz
             tar -xzf gbdk.tar.gz
           fi
-          echo "GBDK_HOME=${{ github.workspace }}/gbdk" >> $GITHUB_ENV
-          echo "${{ github.workspace }}/gbdk/bin" >> $GITHUB_PATH
+          sudo ln -sfnT "${{ github.workspace }}/gbdk" /opt/gbdk
+          echo "GBDK_HOME=/opt/gbdk" >> $GITHUB_ENV
+          echo "/opt/gbdk/bin" >> $GITHUB_PATH
 
       - name: Verify GBDK installation
         run: lcc -v

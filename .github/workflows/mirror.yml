@@ -11,6 +11,7 @@ env:
 
 jobs:
   mirror:
+    if: ${{ !startsWith(github.repository, 'EpitechPGE2-2025') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
