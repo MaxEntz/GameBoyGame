@@ -1,0 +1,69 @@
+name: Build Game Boy ROM
+
+on:
+  push:
+  pull_request:
+
+env:
+  GBDK_VERSION: "4.3.0"
+
+jobs:
+  build:
+    name: Build with GBDK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            python3 \
+            wget \
+            unzip
+
+      - name: Cache GBDK
+        uses: actions/cache@v4
+        with:
+          path: gbdk
+          key: gbdk-${{ env.GBDK_VERSION }}
+
+      - name: Download and install GBDK-2020
+        run: |
+          if [ ! -d "gbdk" ]; then
+            wget -q "https://github.com/gbdk-2020/gbdk-2020/releases/download/${{ env.GBDK_VERSION }}/gbdk-linux64.tar.gz" \
+              -O gbdk.tar.gz
+            tar -xzf gbdk.tar.gz
+          fi
+          echo "GBDK_HOME=${{ github.workspace }}/gbdk" >> $GITHUB_ENV
+          echo "${{ github.workspace }}/gbdk/bin" >> $GITHUB_PATH
+
+      - name: Verify GBDK installation
+        run: lcc -v
+
+      - name: Build project
+        run: make
+
+      - name: Check ROM was generated
+        run: |
+          ROM_FILE=$(find . -name "*.gb" -o -name "*.gbc" | head -n 1)
+          if [ -z "$ROM_FILE" ]; then
+            echo "❌ Aucune ROM (.gb / .gbc) trouvée après le build !"
+            exit 1
+          fi
+          echo "✅ ROM générée : $ROM_FILE"
+          ls -lh "$ROM_FILE"
+
+      - name: Upload ROM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gameboy-rom
+          path: |
+            **/*.gb
+            **/*.gbc
+          if-no-files-found: error
+          retention-days: 7

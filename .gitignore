@@ -1,0 +1,12 @@
+# Build outputs
+build/
+*.o
+*.gb
+*.sym
+*.map
+
+# GBDK
+*.rel
+*.lst
+*.noi
+*.ihx
