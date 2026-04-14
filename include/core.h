@@ -22,6 +22,10 @@ typedef enum {
     GAME_STATE_GAME_OVER
 } game_state_t;
 
+typedef struct game_s {
+    game_state_t state;
+} game_t;
+
 /**
  * @brief Main game loop
  * This funciton is the base of all the game,
@@ -31,5 +35,19 @@ typedef enum {
  */
 void
 core(void);
+
+/**
+ * @brief Set the display object
+ * @param display Boolean to turn on/off the display
+ * @param sprite Boolean to show/hide sprites
+ * @param bkg Boolean to show/hide background
+ * @param win Boolean to show/hide window layer UI
+ * @return void
+ */
+void
+set_display(BOOLEAN display,
+            BOOLEAN sprite,
+            BOOLEAN bkg,
+            BOOLEAN win);
 
 #endif /* !CORE_H_ */   
