@@ -24,6 +24,8 @@ typedef enum {
 
 typedef struct game_s {
     game_state_t state;
+    BOOLEAN is_running;
+    BOOLEAN state_changed;
 } game_t;
 
 /**
