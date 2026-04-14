@@ -11,10 +11,8 @@
     #include <stdint.h>
     #include <stddef.h>
 
-    typedef uint8_t  UINT8;
-    typedef uint16_t UINT16;
-    typedef int8_t   INT8;
-    typedef int16_t  INT16;
+    #define FAILURE 84
+    #define SUCCESS 0
 
     #define TRUE  1
     #define FALSE 0

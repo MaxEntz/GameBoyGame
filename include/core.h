@@ -9,6 +9,18 @@
     #define CORE_H_
 
     #include <gb/gb.h>
+    #include "project_types.h"
+
+typedef enum {
+    GAME_STATE_MENU,
+    GAME_STATE_PLAYING,
+    GAME_STATE_PAUSED,
+    GAME_STATE_VICTORY,
+    GAME_STATE_MG1,
+    GAME_STATE_MG2,
+    GAME_STATE_MG3,
+    GAME_STATE_GAME_OVER
+} game_state_t;
 
 /**
  * @brief Main game loop
