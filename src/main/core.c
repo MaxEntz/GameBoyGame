@@ -8,6 +8,9 @@
 #include "main/core.h"
 #include "lobby/lobby.h"
 
+/**
+ * @brief Array of function pointers to handle different game states
+ */
 static const management_state_t g_state_function[MAX_STATES] = {
     {GAME_STATE_LOBBY    ,lobby,handle_input_lobby,update_lobby},
     {GAME_STATE_PLAYING  ,NULL ,NULL              ,NULL}        ,
@@ -20,7 +23,7 @@ static const management_state_t g_state_function[MAX_STATES] = {
 };
 
 static void
-init_game(game_t *game)
+init_game(OUT game_t *game)
 {
     game->state = GAME_STATE_LOBBY;
     game->is_running = TRUE;
@@ -29,11 +32,20 @@ init_game(game_t *game)
     game->player_y = 78;
 }
 
+
+/**
+ * @brief Set the display configuration
+ * @param display Whether to turn on the display
+ * @param sprite Whether to show sprites
+ * @param bkg Whether to show the background
+ * @param win Whether to show the window layer
+ * @return void
+ */
 static void
-set_display(BOOLEAN display,
-            BOOLEAN sprite,
-            BOOLEAN bkg,
-            BOOLEAN win)
+set_display(IN BOOLEAN display,
+            IN BOOLEAN sprite,
+            IN BOOLEAN bkg,
+            IN BOOLEAN win)
 {
     if (display)
         DISPLAY_ON;
@@ -53,8 +65,11 @@ set_display(BOOLEAN display,
         HIDE_WIN;
 }
 
+/**
+ * @brief Load the assets for the current game state
+ */
 static void
-load_assets(game_t *game)
+load_assets(OUT game_t *game)
 {
     void (*loader)(game_t *game) = g_state_function[game->state].load_assets;
 
@@ -62,8 +77,11 @@ load_assets(game_t *game)
         loader(game);
 }
 
+/**
+ * @brief Change the scene if the state has changed
+ */
 static void
-change_scene(game_t *game)
+change_scene(OUT game_t *game)
 {
     if (game->state_changed) {
         set_display(FALSE, FALSE, FALSE, FALSE);
@@ -71,6 +89,33 @@ change_scene(game_t *game)
         set_display(TRUE, TRUE, TRUE, FALSE);
         game->state_changed = FALSE;
     }
+}
+
+/**
+ * @brief Update the game state
+ */
+static void
+update_game(OUT game_t *game)
+{
+    void (*updater)(game_t *game) = g_state_function[game->state].update;
+    
+    if (updater != NULL)
+    updater(game);
+}
+
+/**
+ * @brief Handle the input for the current game state
+ */
+static void
+handle_keys(OUT game_t *game)
+{
+    UINT8 keys = joypad();
+    
+    void (*handler)(game_t *game, UINT8 keys) =
+    g_state_function[game->state].handle_input;
+    
+    if (handler != NULL)
+    handler(game, keys);
 }
 
 static void
@@ -83,27 +128,6 @@ vbl_interrupt(void)
     // On mettera les clock et tout ce qu'on a besoin ici
     // Attention le temps est court, faut pas faire n'importe quoi
     // genre des calculs de ouf, juste des trucs simple et rapide
-}
-
-static void
-update_game(game_t *game)
-{
-    void (*updater)(game_t *game) = g_state_function[game->state].update;
-
-    if (updater != NULL)
-        updater(game);
-}
-
-static void
-handle_keys(game_t *game)
-{
-    UINT8 keys = joypad();
-
-    void (*handler)(game_t *game, UINT8 keys) =
-        g_state_function[game->state].handle_input;
-    
-    if (handler != NULL)
-        handler(game, keys);
 }
 
 void

@@ -18,12 +18,24 @@
  * @return void
  */
 void
-lobby(game_t *game);
+lobby(OUT game_t *game);
 
+/**
+ * @brief Handle the input in the lobby state
+ * @param game Pointer to the game structure
+ * @param keys The keys pressed
+ * @return void
+ */
 void
-handle_input_lobby(game_t *game, UINT8 keys);
+handle_input_lobby(OUT game_t *game,
+                   IN UINT8 keys);
 
+/**
+ * @brief Update the lobby state
+ * @param game Pointer to the game structure
+ * @return void
+ */
 void
-update_lobby(game_t *game);
+update_lobby(OUT game_t *game);
 
 #endif /* !LOBBY_H_ */

@@ -18,19 +18,21 @@ load_assets(void)
 }
 
 void
-lobby(game_t *game)
+lobby(OUT game_t *game)
 {
     (void)game;
     load_assets();
 }
 
-void update_lobby(game_t *game)
+void
+update_lobby(OUT game_t *game)
 {
     move_sprite(0, game->player_x, game->player_y);
 }
 
 void
-handle_input_lobby(game_t *game, UINT8 keys)
+handle_input_lobby(OUT game_t *game,
+                   IN UINT8 keys)
 {
     if (keys & J_LEFT && game->player_x > 8 + 16)
         move_sprite(0, game->player_x -= SPEED, game->player_y);

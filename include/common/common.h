@@ -13,6 +13,9 @@
 
     #define MAX_STATES 8
 
+/**
+ * @brief Enum to represent different game states
+ */
 typedef enum {
     GAME_STATE_LOBBY,
     GAME_STATE_PLAYING,
@@ -24,6 +27,11 @@ typedef enum {
     GAME_STATE_GAME_OVER
 } game_state_t;
 
+/**
+ * @brief Structure to manage the game state
+ * And the player position for now, but we can add more stuff later
+ * Like the score, the health, etc...
+ */
 typedef struct game_s {
     game_state_t state;
     BOOLEAN      is_running;
@@ -32,6 +40,10 @@ typedef struct game_s {
     UINT8        player_y;
 } game_t;
 
+/**
+ * @brief Structure to manage different game states
+ * And the functions to call for each state
+ */
 typedef struct management_state_s {
     game_state_t state;
     void (*load_assets)(game_t *game);
