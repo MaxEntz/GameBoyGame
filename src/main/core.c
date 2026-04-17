@@ -5,8 +5,19 @@
 ** core.c
 */
 
-#include "core.h"
-#include "asset_lobby.h"
+#include "main/core.h"
+#include "lobby/lobby.h"
+
+static const asset_loading_t asset_loaders[MAX_STATES] = {
+    {GAME_STATE_LOBBY, lobby},
+    {GAME_STATE_PLAYING, NULL},
+    {GAME_STATE_PAUSED, NULL},
+    {GAME_STATE_VICTORY, NULL},
+    {GAME_STATE_MG1, NULL},
+    {GAME_STATE_MG2, NULL},
+    {GAME_STATE_MG3, NULL},
+    {GAME_STATE_GAME_OVER, NULL}
+};
 
 static void
 init_game(game_t *game)
@@ -43,31 +54,16 @@ set_display(BOOLEAN display,
 static void
 load_assets(game_t *game)
 {
-    switch (game->state) {
-        case GAME_STATE_LOBBY:
-            set_bkg_data(0, 1, grass_tile);
-            set_bkg_data(1, 1, wall_tile);
-            set_bkg_tiles(0, 0, 20, 18, map);
-            set_sprite_data(0, 1, square_tile);
-            set_sprite_tile(0, 0);
+    void (*loader)(game_t *game) = NULL;
+
+    for (UINT8 i = 0; i < MAX_STATES; i++) {
+        if (asset_loaders[i].state == game->state) {
+            loader = asset_loaders[i].load_assets;
             break;
-        case GAME_STATE_PLAYING:
-            break;
-        case GAME_STATE_PAUSED:
-            break;
-        case GAME_STATE_VICTORY:
-            break;
-        case GAME_STATE_MG1:
-            break;
-        case GAME_STATE_MG2:
-            break;
-        case GAME_STATE_MG3:
-            break;
-        case GAME_STATE_GAME_OVER:
-            break;
-        default:
-            break;
+        }
     }
+    if (loader != NULL)
+        loader(game);
 }
 
 static void

@@ -9,24 +9,10 @@
     #define CORE_H_
 
     #include <gb/gb.h>
-    #include "project_types.h"
+    #include "common/common.h"
 
-typedef enum {
-    GAME_STATE_LOBBY,
-    GAME_STATE_PLAYING,
-    GAME_STATE_PAUSED,
-    GAME_STATE_VICTORY,
-    GAME_STATE_MG1,
-    GAME_STATE_MG2,
-    GAME_STATE_MG3,
-    GAME_STATE_GAME_OVER
-} game_state_t;
+    #include "asset_lobby.h"
 
-typedef struct game_s {
-    game_state_t state;
-    BOOLEAN is_running;
-    BOOLEAN state_changed;
-} game_t;
 
 /**
  * @brief Main game loop

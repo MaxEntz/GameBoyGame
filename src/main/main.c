@@ -5,7 +5,7 @@
 ** main.c
 */
 
-#include "core.h"
+#include "main/core.h"
 
 void
 main(void)
