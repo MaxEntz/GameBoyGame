@@ -76,6 +76,13 @@ change_scene(game_t *game)
 }
 
 void
+vbl_interrupt(void)
+{
+    // This function is called at the end of each frame
+    // We can use it to update the game state or handle animations
+}
+
+void
 core(void)
 {
     game_t game;
@@ -83,6 +90,8 @@ core(void)
     UINT8 y = 68;
 
     init_game(&game);
+    add_VBL(vbl_interrupt);
+    enable_interrupts();
     set_display(FALSE, FALSE, FALSE, FALSE);
     load_assets(&game);
     set_display(TRUE, TRUE, TRUE, FALSE);
@@ -90,12 +99,6 @@ core(void)
         UINT8 keys = joypad();
 
         change_scene(&game);
-        if ((keys & J_UP)    && y > 8)           y -= SPEED;
-        if ((keys & J_DOWN)  && y < 144 - 16)    y += SPEED;
-        if ((keys & J_LEFT)  && x > 8)           x -= SPEED;
-        if ((keys & J_RIGHT) && x < 160 - 16)    x += SPEED;
-        move_sprite(0, x + 8, y + 16);
-        delay(50);
-        vsync();
+        wait_vbl_done();
     }
 }

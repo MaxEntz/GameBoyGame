@@ -18,7 +18,7 @@
     #define TRUE  1
     #define FALSE 0
 
-    #define SPEED 4
+    #define SPEED 1
 
     #define IN
     #define OUT
