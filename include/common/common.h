@@ -26,13 +26,17 @@ typedef enum {
 
 typedef struct game_s {
     game_state_t state;
-    BOOLEAN is_running;
-    BOOLEAN state_changed;
+    BOOLEAN      is_running;
+    BOOLEAN      state_changed;
+    UINT8        player_x;
+    UINT8        player_y;
 } game_t;
 
-typedef struct asset_loading_s {
+typedef struct management_state_s {
     game_state_t state;
     void (*load_assets)(game_t *game);
-} asset_loading_t;
+    void (*handle_input)(game_t *game, UINT8 keys);
+    void (*update)(game_t *game);
+} management_state_t;
 
 #endif /* !COMMON_H_ */

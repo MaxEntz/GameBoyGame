@@ -20,4 +20,10 @@
 void
 lobby(game_t *game);
 
+void
+handle_input_lobby(game_t *game, UINT8 keys);
+
+void
+update_lobby(game_t *game);
+
 #endif /* !LOBBY_H_ */

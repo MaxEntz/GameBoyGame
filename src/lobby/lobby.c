@@ -20,5 +20,24 @@ load_assets(void)
 void
 lobby(game_t *game)
 {
+    (void)game;
     load_assets();
+}
+
+void update_lobby(game_t *game)
+{
+    move_sprite(0, game->player_x, game->player_y);
+}
+
+void
+handle_input_lobby(game_t *game, UINT8 keys)
+{
+    if (keys & J_LEFT && game->player_x > 8 + 16)
+        move_sprite(0, game->player_x -= SPEED, game->player_y);
+    if (keys & J_RIGHT && game->player_x < 168 - 16)
+        move_sprite(0, game->player_x += SPEED, game->player_y);
+    if (keys & J_UP && game->player_y > 8 + 16)
+        move_sprite(0, game->player_x, game->player_y -= SPEED);
+    if (keys & J_DOWN && game->player_y < 144 - 16)
+        move_sprite(0, game->player_x, game->player_y += SPEED);
 }
