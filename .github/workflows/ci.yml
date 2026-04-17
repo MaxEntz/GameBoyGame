@@ -54,10 +54,10 @@ jobs:
         run: |
           ROM_FILE=$(find . -name "*.gb" -o -name "*.gbc" | head -n 1)
           if [ -z "$ROM_FILE" ]; then
-            echo "❌ Aucune ROM (.gb / .gbc) trouvée après le build !"
+            echo "KO Aucune ROM (.gb / .gbc) trouvée après le build !"
             exit 1
           fi
-          echo "✅ ROM générée : $ROM_FILE"
+          echo "OK ROM générée : $ROM_FILE"
           ls -lh "$ROM_FILE"
 
       - name: Upload ROM artifact
