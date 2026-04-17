@@ -35,11 +35,11 @@ handle_input_lobby(OUT game_t *game,
                    IN UINT8 keys)
 {
     if (keys & J_LEFT && game->player_x > 8 + 16)
-        move_sprite(0, game->player_x -= SPEED, game->player_y);
+        game->player_x -= SPEED;
     if (keys & J_RIGHT && game->player_x < 168 - 16)
-        move_sprite(0, game->player_x += SPEED, game->player_y);
+        game->player_x += SPEED;
     if (keys & J_UP && game->player_y > 8 + 16)
-        move_sprite(0, game->player_x, game->player_y -= SPEED);
+        game->player_y -= SPEED;
     if (keys & J_DOWN && game->player_y < 144 - 16)
-        move_sprite(0, game->player_x, game->player_y += SPEED);
+        game->player_y += SPEED;
 }

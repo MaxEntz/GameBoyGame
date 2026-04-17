@@ -100,7 +100,7 @@ update_game(OUT game_t *game)
     void (*updater)(game_t *game) = g_state_function[game->state].update;
     
     if (updater != NULL)
-    updater(game);
+        updater(game);
 }
 
 /**
@@ -115,7 +115,7 @@ handle_keys(OUT game_t *game)
     g_state_function[game->state].handle_input;
     
     if (handler != NULL)
-    handler(game, keys);
+        handler(game, keys);
 }
 
 static void
