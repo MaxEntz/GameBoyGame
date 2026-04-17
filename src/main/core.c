@@ -82,15 +82,10 @@ core(void)
     UINT8 x = 76;
     UINT8 y = 68;
 
-    set_display(FALSE, FALSE, FALSE, FALSE);
-    set_bkg_data(0, 1, grass_tile);
-    set_bkg_data(1, 1, wall_tile);
-    set_bkg_tiles(0, 0, 20, 18, map);
-
-    set_sprite_data(0, 1, square_tile);
-    set_sprite_tile(0, 0);
-    set_display(TRUE, TRUE, TRUE, FALSE);
     init_game(&game);
+    set_display(FALSE, FALSE, FALSE, FALSE);
+    load_assets(&game);
+    set_display(TRUE, TRUE, TRUE, FALSE);
     while (game.is_running) {
         UINT8 keys = joypad();
 

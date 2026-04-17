@@ -20,8 +20,5 @@ load_assets(void)
 void
 lobby(game_t *game)
 {
-    if (game->state_changed) {
-        load_assets();
-        game->state_changed = FALSE;
-    }
+    load_assets();
 }
