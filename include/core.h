@@ -12,7 +12,7 @@
     #include "project_types.h"
 
 typedef enum {
-    GAME_STATE_MENU,
+    GAME_STATE_LOBBY,
     GAME_STATE_PLAYING,
     GAME_STATE_PAUSED,
     GAME_STATE_VICTORY,

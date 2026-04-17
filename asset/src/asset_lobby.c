@@ -2,10 +2,10 @@
 ** EPITECH PROJECT, 2026
 ** GameBoyGame
 ** File description:
-** asset_menu.c
+** asset_lobby.c
 */
 
-#include "asset_menu.h"
+#include "asset_lobby.h"
 
 const UINT8 grass_tile[] = {
     0x00,0x00, 0x24,0x00, 0x00,0x00, 0x42,0x00,

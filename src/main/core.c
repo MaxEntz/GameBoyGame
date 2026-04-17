@@ -6,12 +6,12 @@
 */
 
 #include "core.h"
-#include "asset_menu.h"
+#include "asset_lobby.h"
 
 static void
 init_game(game_t *game)
 {
-    game->state = GAME_STATE_MENU;
+    game->state = GAME_STATE_LOBBY;
     game->is_running = TRUE;
     game->state_changed = FALSE;
 }
@@ -44,7 +44,7 @@ static void
 load_assets(game_t *game)
 {
     switch (game->state) {
-        case GAME_STATE_MENU:
+        case GAME_STATE_LOBBY:
             set_bkg_data(0, 1, grass_tile);
             set_bkg_data(1, 1, wall_tile);
             set_bkg_tiles(0, 0, 20, 18, map);
