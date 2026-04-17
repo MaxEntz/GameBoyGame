@@ -20,7 +20,7 @@
 ## Architecture du projet
 
 ```
-mon-projet/
+cartridge/
 ├── src/
 │   ├── common/               #Structure et macro
 │   ├── lobby/
