@@ -11,7 +11,7 @@
     #include <gb/gb.h>
     #include "project_types.h"
 
-    #define MAX_STATES 8
+    #define MAX_STATES GAME_STATE_COUNT
 
 /**
  * @brief Enum to represent different game states
@@ -24,7 +24,8 @@ typedef enum {
     GAME_STATE_MG1,
     GAME_STATE_MG2,
     GAME_STATE_MG3,
-    GAME_STATE_GAME_OVER
+    GAME_STATE_GAME_OVER,
+    GAME_STATE_COUNT
 } game_state_t;
 
 /**
