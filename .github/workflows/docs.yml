@@ -1,0 +1,31 @@
+name: Check CHANGELOGS
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-changelog:
+    name: Vérifier la présence d'une modification dans CHANGELOGS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Vérifier que CHANGELOGS a été modifié
+        run: |
+          CHANGED=$(git diff origin/${{ github.base_ref }}...HEAD --name-only)
+          echo "Fichiers modifiés :"
+          echo "$CHANGED"
+
+          if echo "$CHANGED" | grep -q "CHANGELOGS"; then
+            echo "OK CHANGELOGS trouvé dans les fichiers modifiés."
+          else
+            echo "KO Aucune modification détectée dans CHANGELOGS."
+            echo "Merci d'ajouter une entrée dans le fichier CHANGELOGS avant de merger."
+            exit 1
+          fi

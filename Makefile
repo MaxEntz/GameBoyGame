@@ -11,13 +11,14 @@ GBDK_HOME ?= /opt/gbdk
 LCC     ?=   $(GBDK_HOME)/bin/lcc
 
 SRC     =   $(shell find src/ -name "*.c")
+ASSET   =   $(shell find asset/src/ -name "*.c")
 
-CFLAGS  =   -Wa-l -Wl-m -Wl-j -Iinclude/
+CFLAGS  =   -Wa-l -Wl-m -Wl-j -Iinclude/ -Iasset/include/
 
 all: $(TARGET).gb
 
-$(TARGET).gb: $(SRC)
-	$(LCC) $(CFLAGS) -o $(TARGET).gb $(SRC)
+$(TARGET).gb: $(SRC) $(ASSET)
+	$(LCC) $(CFLAGS) -o $(TARGET).gb $(SRC) $(ASSET)
 
 clean:
 	rm -f *.o *.lst *.map *.sym *.noi *.rel *.ihx

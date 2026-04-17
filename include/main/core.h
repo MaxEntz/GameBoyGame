@@ -9,6 +9,10 @@
     #define CORE_H_
 
     #include <gb/gb.h>
+    #include "common/common.h"
+
+    #include "asset_lobby.h"
+
 
 /**
  * @brief Main game loop
