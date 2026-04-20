@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2025
+** EPITECH PROJECT, 2026
 ** GameBoyGame
 ** File description:
 ** transition.c
@@ -39,9 +39,9 @@ void transition_fade_in(void)
     return;
 }
 
-void transition_sound(int stage)
+void transition_sound(UINT8 stage)
 {
-    if (stage < 0 || stage >= TRANSITION_STEPS)
+    if (stage >= TRANSITION_STEPS)
         stage = 0;
     NR50_REG = 0xFF;        // Set master volume to max
     NR51_REG = 0xFF;        // Enable all sound channels for both left and right output

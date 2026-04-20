@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2025
+** EPITECH PROJECT, 2026
 ** GameBoyGame
 ** File description:
 ** game_changer.h
@@ -18,6 +18,7 @@
  * @param new_state The new game state to switch to
  * @return void
  */
-void game_changer(game_t *game, game_state_t new_state);
+void
+game_changer(game_t *game, game_state_t new_state);
 
 #endif /* GAME_CHANGER_H_ */

@@ -7,6 +7,11 @@
 
 #include "lobby/lobby.h"
 
+/**
+ * @brief Load the lobby assets and handle the lobby state
+ * @param game Pointer to the game structure
+ * @return void
+ */
 static void
 load_assets(void)
 {

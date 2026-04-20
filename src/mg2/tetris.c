@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2025
+** EPITECH PROJECT, 2026
 ** GameBoyGame
 ** File description:
 ** tetris.c
@@ -7,6 +7,11 @@
 
 #include "mg2/mg2.h"
 
+/**
+ * @brief Load the tetris assets and handle the tetris state
+ * @param game Pointer to the game structure
+ * @return void
+ */
 static void
 load_assets(void)
 {
