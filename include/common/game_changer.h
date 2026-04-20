@@ -5,8 +5,8 @@
 ** game_changer.h
 */
 
-#ifndef GAME_CHANGER_H
-#define GAME_CHANGER_H
+#ifndef GAME_CHANGER_H_
+#define GAME_CHANGER_H_
 
 #include "common/common.h"
 #include "common/transition.h"
@@ -20,4 +20,4 @@
  */
 void game_changer(game_t *game, game_state_t new_state);
 
-#endif /* GAME_CHANGER_H */
+#endif /* GAME_CHANGER_H_ */
