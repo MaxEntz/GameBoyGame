@@ -9,7 +9,7 @@ env:
 
 jobs:
   build:
-    if: ${{ !startsWith(github.repository, 'EpitechPGE2-2026') }}
+    if: ${{ !startsWith(github.repository, 'EpitechPGE2-2025') }}
     name: Build with GBDK
     runs-on: ubuntu-latest
 
