@@ -39,4 +39,5 @@ handle_input_tetris(OUT game_t *game,
  */
 void
 update_tetris(OUT game_t *game);
+
 #endif /* MG2_H */
