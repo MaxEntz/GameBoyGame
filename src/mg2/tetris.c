@@ -6,7 +6,6 @@
 */
 
 #include "mg2/mg2.h"
-#include "common/game_changer.h"
 
 static void
 load_assets(void)

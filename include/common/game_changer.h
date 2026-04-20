@@ -10,7 +10,6 @@
 
 #include "common/common.h"
 #include "common/transition.h"
-#include <stdbool.h>
 
 /**
  * @brief Change the game state with a transition effect
