@@ -9,7 +9,7 @@
 #define TRANSITION_H
 
 #define TRANSITION_STEPS 4
-#define TRANSITION_DELAY 500
+#define TRANSITION_DELAY 100
 
 #include "common/common.h"
 
@@ -32,8 +32,8 @@ void transition_fade_in(void);
 /**
  * @brief Play a sound effect for the transition
  * 
- * This function will play a sound effect for the transition between game states.
+ * This function will play one of 4 transition sound stages depending on stage.
  */
-void transition_sound(void);
+void transition_sound(int stage);
 
 #endif /* TRANSITION_H */
