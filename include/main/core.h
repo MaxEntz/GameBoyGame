@@ -24,4 +24,10 @@
 void
 core(void);
 
+/**
+ * @brief Change the scene if the state has changed
+ */
+void
+change_scene(OUT game_t *game);
+
 #endif /* !CORE_H_ */   

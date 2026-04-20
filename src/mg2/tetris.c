@@ -36,7 +36,7 @@ handle_input_tetris(OUT game_t *game,
                    IN UINT8 keys)
 {
     if (keys & J_A)
-        game->state_changed = game_changer(game, GAME_STATE_LOBBY);
+        game_changer(game, GAME_STATE_LOBBY);
     if (keys & J_LEFT && game->player_x > 8 + 16)
         game->player_x += SPEED;
     if (keys & J_RIGHT && game->player_x < 168 - 16)

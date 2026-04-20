@@ -78,10 +78,7 @@ load_assets(OUT game_t *game)
         loader(game);
 }
 
-/**
- * @brief Change the scene if the state has changed
- */
-static void
+void
 change_scene(OUT game_t *game)
 {
     if (game->state_changed) {

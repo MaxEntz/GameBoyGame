@@ -6,17 +6,19 @@
 */
 
 #include "common/game_changer.h"
+#include "main/core.h"
 
-bool game_changer(game_t *game, game_state_t new_game)
+void game_changer(game_t *game, game_state_t new_game)
 {
     if (game->state == new_game)
-        return FALSE;
+        return;
     if (new_game >= GAME_STATE_COUNT)
-        return FALSE;
+        return;
     transition_sound(0);
     transition_fade_out();
     game->state = new_game;
-    delay(500);
+    game->state_changed = TRUE;
+    change_scene(game);
+    delay(300);
     transition_fade_in();
-    return TRUE;
 }
