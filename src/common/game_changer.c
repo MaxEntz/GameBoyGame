@@ -13,7 +13,10 @@ bool game_changer(game_t *game, game_state_t new_game)
         return FALSE;
     if (new_game >= GAME_STATE_COUNT)
         return FALSE;
+    transition_fade_out();
     transition_sound();
-    transition_effect();
+    delay(2000);
+    transition_sound();
+    transition_fade_in();
     return FALSE;
 }
