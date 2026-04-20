@@ -8,7 +8,8 @@
 #include "common/game_changer.h"
 #include "main/core.h"
 
-void game_changer(game_t *game, game_state_t new_game)
+void
+game_changer(game_t *game, game_state_t new_game)
 {
     if (game->state == new_game)
         return;

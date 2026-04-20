@@ -28,7 +28,7 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ### Added
 - Added a transition effect between screens
-- Added sound effects for transitions
+- Added sound effects for transitions, with 4 stages
 - Added a tetris 'game' (copy of the lobby) to test the transition effect
 
 ### Changed

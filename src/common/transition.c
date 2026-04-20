@@ -16,7 +16,8 @@ static const UINT8 transition_palette[TRANSITION_STEPS] = {
 
 static const UINT8 tone_nr13[TRANSITION_STEPS] = {0x30, 0x50, 0x70, 0x90};
 
-void transition_fade_out(void)
+void
+transition_fade_out(void)
 {
 
     for (UINT8 step = 0; step < TRANSITION_STEPS; step++) {
@@ -28,7 +29,8 @@ void transition_fade_out(void)
     return;
 }
 
-void transition_fade_in(void)
+void
+transition_fade_in(void)
 {
     for (UINT8 step = TRANSITION_STEPS; step > 0; step--) {
         BGP_REG = transition_palette[step - 1];
@@ -39,7 +41,8 @@ void transition_fade_in(void)
     return;
 }
 
-void transition_sound(UINT8 stage)
+void
+transition_sound(UINT8 stage)
 {
     if (stage >= TRANSITION_STEPS)
         stage = 0;
