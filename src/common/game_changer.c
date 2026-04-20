@@ -16,8 +16,7 @@ bool game_changer(game_t *game, game_state_t new_game)
     transition_sound(0);
     transition_fade_out();
     game->state = new_game;
-    game->state_changed = TRUE;
     delay(500);
     transition_fade_in();
-    return FALSE;
+    return TRUE;
 }
