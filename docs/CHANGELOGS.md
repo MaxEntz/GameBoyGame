@@ -21,3 +21,20 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ### Fixed
 - No bug fixes yet
+
+---
+
+## [1.0.1] - 2026-04-20
+
+### Added
+- Added a transition effect between screens
+- Added sound effects for transitions
+- Added a tetris 'game' (copy of the lobby) to test the transition effect
+
+### Changed
+- Lobby input handling to use the new transition effect
+
+### Fixed
+- No bug fixes yet
+
+---
