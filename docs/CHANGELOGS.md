@@ -24,7 +24,7 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
-## [1.0.1] - 2026-04-20
+## [1.1.0] - 2026-04-20
 
 ### Added
 - Added a transition effect between screens

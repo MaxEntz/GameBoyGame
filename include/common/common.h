@@ -9,7 +9,6 @@
     #define COMMON_H_
 
     #include <gb/gb.h>
-    #include <gb/drawing.h>
     #include "project_types.h"
 
     #define MAX_STATES GAME_STATE_COUNT

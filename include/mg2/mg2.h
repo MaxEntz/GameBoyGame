@@ -14,7 +14,7 @@
 #include "asset_lobby.h"    //a enlever
 
 /**
- * @brief Load the lobby assets and handle the tetris state
+ * @brief Load the tetris assets and handle the tetris state
  * We can see it like a creator in CPP
  * @param game Pointer to the game structure
  * @return void
