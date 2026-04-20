@@ -6,6 +6,7 @@
 */
 
 #include "lobby/lobby.h"
+#include "common/game_changer.h"
 
 static void
 load_assets(void)
@@ -34,6 +35,8 @@ void
 handle_input_lobby(OUT game_t *game,
                    IN UINT8 keys)
 {
+    if (keys & J_A)
+        game->state_changed = game_changer(game, GAME_STATE_MG2);
     if (keys & J_LEFT && game->player_x > 8 + 16)
         game->player_x -= SPEED;
     if (keys & J_RIGHT && game->player_x < 168 - 16)
