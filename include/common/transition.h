@@ -9,7 +9,7 @@
 #define TRANSITION_H
 
 #define TRANSITION_STEPS 4
-#define TRANSITION_DELAY 100
+#define TRANSITION_DELAY 500
 
 #include "common/common.h"
 

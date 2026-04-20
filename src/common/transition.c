@@ -7,14 +7,19 @@
 
 #include "common/transition.h"
 
+static const UINT8 transition_palette[TRANSITION_STEPS] = {
+    0xE4, // Normal
+    0xF9, // Light Gray
+    0xFE, // Dark Gray
+    0xFF  // Dark
+};
 
 void transition_fade_out(void)
 {
 
     for (UINT8 step = 0; step < TRANSITION_STEPS; step++) {
-        BGP_REG = (step << 6) | (step << 4) | (step << 2) | step; // background
-        OBP0_REG = (step << 6) | (step << 4) | (step << 2) | step; // sprites palette 0
-        OBP1_REG = (step << 6) | (step << 4) | (step << 2) | step; // sprites palette 1
+        BGP_REG = transition_palette[step];
+        wait_vbl_done();
         delay(TRANSITION_DELAY);
     }
     return;
@@ -22,6 +27,11 @@ void transition_fade_out(void)
 
 void transition_fade_in(void)
 {
+    for (UINT8 step = TRANSITION_STEPS; step > 0; step--) {
+        BGP_REG = transition_palette[step - 1];
+        wait_vbl_done();
+        delay(TRANSITION_DELAY);
+    }
     return;
 }
 
@@ -37,7 +47,5 @@ void transition_sound(void)
     NR12_REG=0X43;
     NR13_REG=0X73;
     NR14_REG=0X86;
-    
-    delay(200);
     return;
 }
