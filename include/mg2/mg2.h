@@ -2,41 +2,42 @@
 ** EPITECH PROJECT, 2026
 ** GameBoyGame
 ** File description:
-** lobby.h
+** mg2.h
 */
 
-#ifndef LOBBY_H_
-    #define LOBBY_H_
+#ifndef MG2_H
+#define MG2_H
 
-    #include "asset_lobby.h"
-    #include "common/common.h"
-    #include "common/game_changer.h"
+#include "common/common.h"
+#include "common/game_changer.h"
+
+#include "asset_lobby.h"    //a enlever
 
 /**
- * @brief Load the lobby assets and handle the lobby state
+ * @brief Load the tetris assets and handle the tetris state
  * We can see it like a creator in CPP
  * @param game Pointer to the game structure
  * @return void
  */
 void
-lobby(OUT game_t *game);
+tetris(OUT game_t *game);
 
 /**
- * @brief Handle the input in the lobby state
+ * @brief Handle the input in the tetris state
  * @param game Pointer to the game structure
  * @param keys The keys pressed
  * @return void
  */
 void
-handle_input_lobby(OUT game_t *game,
+handle_input_tetris(OUT game_t *game,
                    IN UINT8 keys);
 
 /**
- * @brief Update the lobby state
+ * @brief Update the tetris state
  * @param game Pointer to the game structure
  * @return void
  */
 void
-update_lobby(OUT game_t *game);
+update_tetris(OUT game_t *game);
 
-#endif /* !LOBBY_H_ */
+#endif /* MG2_H */

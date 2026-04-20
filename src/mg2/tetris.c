@@ -2,13 +2,13 @@
 ** EPITECH PROJECT, 2026
 ** GameBoyGame
 ** File description:
-** lobby.c
+** tetris.c
 */
 
-#include "lobby/lobby.h"
+#include "mg2/mg2.h"
 
 /**
- * @brief Load the lobby assets and handle the lobby state
+ * @brief Load the tetris assets and handle the tetris state
  * @param game Pointer to the game structure
  * @return void
  */
@@ -23,30 +23,30 @@ load_assets(void)
 }
 
 void
-lobby(OUT game_t *game)
+tetris(OUT game_t *game)
 {
     (void)game;
     load_assets();
 }
 
 void
-update_lobby(OUT game_t *game)
+update_tetris(OUT game_t *game)
 {
     move_sprite(0, game->player_x, game->player_y);
 }
 
 void
-handle_input_lobby(OUT game_t *game,
+handle_input_tetris(OUT game_t *game,
                    IN UINT8 keys)
 {
     if (keys & J_A)
-        game_changer(game, GAME_STATE_MG2);
+        game_changer(game, GAME_STATE_LOBBY);
     if (keys & J_LEFT && game->player_x > 8 + 16)
-        game->player_x -= SPEED;
-    if (keys & J_RIGHT && game->player_x < 168 - 16)
         game->player_x += SPEED;
+    if (keys & J_RIGHT && game->player_x < 168 - 16)
+        game->player_x -= SPEED;
     if (keys & J_UP && game->player_y > 8 + 16)
-        game->player_y -= SPEED;
-    if (keys & J_DOWN && game->player_y < 144 - 16)
         game->player_y += SPEED;
+    if (keys & J_DOWN && game->player_y < 144 - 16)
+        game->player_y -= SPEED;
 }
