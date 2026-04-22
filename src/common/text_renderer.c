@@ -12,6 +12,12 @@
 
 static BOOLEAN g_text_renderer_ready = FALSE;
 
+/**
+ * @brief Convert a character to its corresponding font tile index
+ * 
+ * @param c The character to convert
+ * @return The tile index corresponding to the character in the font tileset
+ */
 static UINT8
 char_to_font_index(char c)
 {
@@ -50,6 +56,22 @@ text_renderer_draw(OUT const text_render_t *render)
                         render->y,
                         (UINT8)(COMMON_FONT_BASE_TILE +
                         char_to_font_index(render->text[index])));
+        index++;
+    }
+}
+
+void
+text_renderer_clear(OUT const text_render_t *render)
+{
+    UINT8 index = 0;
+
+    if (render == NULL || render->text == NULL)
+        return;
+    while (render->text[index] != '\0'
+        && (UINT8)(render->x + index) < COMMON_SCREEN_WIDTH_TILES) {
+        set_bkg_tile_xy((UINT8)(render->x + index),
+                        render->y,
+                        TILE_SPACE);
         index++;
     }
 }

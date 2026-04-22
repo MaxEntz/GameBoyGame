@@ -41,4 +41,12 @@ text_renderer_init(void);
 void
 text_renderer_draw(OUT const text_render_t *render);
 
+/**
+ * @brief Clear the text drawn by text_renderer_draw
+ * 
+ * @param render The text render configuration, including the text and its position
+ */
+void
+text_renderer_clear(OUT const text_render_t *render);
+
 #endif /* !TEXT_RENDERER_H_ */

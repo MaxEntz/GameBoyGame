@@ -40,15 +40,14 @@ void
 handle_input_tetris(OUT game_t *game,
                    IN UINT8 keys)
 {
-    if (keys & J_A)
-        game_changer(game, GAME_STATE_LOBBY);
-
     text_render_t test = {
         .text = "ZebI",
         .x = (COMMON_SCREEN_WIDTH_TILES - 7) / 2,
         .y = COMMON_SCREEN_HEIGHT_TILES / 2
     };
 
+    if (keys & J_A)
+        text_renderer_clear(&test);
     if (keys & J_B) {
         text_renderer_draw(&test);
     }
