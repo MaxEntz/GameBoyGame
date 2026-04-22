@@ -20,7 +20,7 @@
  * @param y The y position in tiles (0-17)
  */
 typedef struct text_render_s {
-    const char *text;
+    const CHAR *text;
     UINT8       x;
     UINT8       y;
 } text_render_t;

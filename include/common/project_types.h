@@ -24,4 +24,6 @@
     #define OUT
     #define INOUT
 
+    #define CHAR char
+
 #endif /* !TYPES_H_ */

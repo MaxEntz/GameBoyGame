@@ -19,7 +19,7 @@ static BOOLEAN g_text_renderer_ready = FALSE;
  * @return The tile index corresponding to the character in the font tileset
  */
 static UINT8
-char_to_font_index(char c)
+char_to_font_index(CHAR c)
 {
     if (c >= 'a' && c <= 'z')
         c -= ('a' - 'A');
