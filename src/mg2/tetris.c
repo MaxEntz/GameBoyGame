@@ -6,6 +6,7 @@
 */
 
 #include "mg2/mg2.h"
+#include "common/text_renderer.h"
 
 /**
  * @brief Load the tetris assets and handle the tetris state
@@ -41,6 +42,17 @@ handle_input_tetris(OUT game_t *game,
 {
     if (keys & J_A)
         game_changer(game, GAME_STATE_LOBBY);
+
+    text_render_t test = {
+        .text = "ZebI",
+        .x = (COMMON_SCREEN_WIDTH_TILES - 7) / 2,
+        .y = COMMON_SCREEN_HEIGHT_TILES / 2
+    };
+
+    if (keys & J_B) {
+        text_renderer_draw(&test);
+    }
+
     if (keys & J_LEFT && game->player_x > 8 + 16)
         game->player_x += SPEED;
     if (keys & J_RIGHT && game->player_x < 168 - 16)

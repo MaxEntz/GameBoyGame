@@ -6,6 +6,7 @@
 */
 
 #include "main/core.h"
+#include "common/text_renderer.h"
 #include "lobby/lobby.h"
 #include "mg2/mg2.h"
 
@@ -108,10 +109,10 @@ static void
 handle_keys(OUT game_t *game)
 {
     UINT8 keys = joypad();
-    
+
     void (*handler)(game_t *game, UINT8 keys) =
     g_state_function[game->state].handle_input;
-    
+
     if (handler != NULL)
         handler(game, keys);
 }
@@ -134,6 +135,7 @@ core(void)
     game_t game;
 
     init_game(&game);
+    text_renderer_init();
     add_VBL(vbl_interrupt);
     enable_interrupts();
     set_display(FALSE, FALSE, FALSE, FALSE);
