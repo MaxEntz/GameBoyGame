@@ -14,7 +14,7 @@ static BOOLEAN g_text_renderer_ready = FALSE;
 
 /**
  * @brief Convert a character to its corresponding font tile index
- * 
+ *
  * @param c The character to convert
  * @return The tile index corresponding to the character in the font tileset
  */
@@ -24,12 +24,24 @@ char_to_font_index(CHAR c)
     if (c >= 'a' && c <= 'z')
         c -= ('a' - 'A');
     if (c == ' ')
-        return TILE_SPACE;
+        return FTILE_SPACE;
     if (c >= 'A' && c <= 'Z')
-        return (UINT8)(TILE_A + (c - 'A'));
+        return (UINT8)(FTILE_A + (c - 'A'));
     if (c >= '0' && c <= '9')
-        return (UINT8)(TILE_0 + (c - '0'));
-    return 0;
+        return (UINT8)(FTILE_0 + (c - '0'));
+    if (c == '.')
+        return FTILE_PERIOD;
+    if (c == ',')
+        return FTILE_COMMA;
+    if (c == '!')
+        return FTILE_EXCL;
+    if (c == '?')
+        return FTILE_QUEST;
+    if (c == '\'')
+        return FTILE_APOS;
+    if (c == '-')
+        return FTILE_HYPHEN;
+    return FTILE_SPACE;
 }
 
 void
@@ -38,8 +50,8 @@ text_renderer_init(void)
     if (g_text_renderer_ready)
         return;
     set_bkg_data(COMMON_FONT_BASE_TILE,
-                 (UINT8)TILE_COUNT,
-                 common_font_tiles);
+                 (UINT8)FTILE_COUNT,
+                 font_tiles);
     g_text_renderer_ready = TRUE;
 }
 
@@ -71,7 +83,7 @@ text_renderer_clear(OUT const text_render_t *render)
         && (UINT8)(render->x + index) < COMMON_SCREEN_WIDTH_TILES) {
         set_bkg_tile_xy((UINT8)(render->x + index),
                         render->y,
-                        TILE_SPACE);
+                        FTILE_SPACE);
         index++;
     }
 }
