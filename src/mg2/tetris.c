@@ -6,6 +6,9 @@
 */
 
 #include "mg2/mg2.h"
+#include "common/dialogue.h"
+
+static dialogue_t s_dlg;
 
 /**
  * @brief Load the tetris assets and handle the tetris state
@@ -32,6 +35,7 @@ tetris(OUT game_t *game)
 void
 update_tetris(OUT game_t *game)
 {
+    dialogue_update(&s_dlg);
     move_sprite(0, game->player_x, game->player_y);
 }
 
@@ -39,8 +43,12 @@ void
 handle_input_tetris(OUT game_t *game,
                    IN UINT8 keys)
 {
+    if (dialogue_is_active(&s_dlg)) {
+        dialogue_handle_input(&s_dlg, keys);
+        return;
+    }
     if (keys & J_A)
-        game_changer(game, GAME_STATE_LOBBY);
+        dialogue_start(&s_dlg, "Wshhhhh\nBien le fouew ?\nABCDEFGHIJKLMNOPQR\nSTUVWXYZ'!?.-");
     if (keys & J_LEFT && game->player_x > 8 + 16)
         game->player_x += SPEED;
     if (keys & J_RIGHT && game->player_x < 168 - 16)

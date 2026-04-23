@@ -12,6 +12,8 @@
     #include "project_types.h"
 
     #define MAX_STATES GAME_STATE_COUNT
+    #define COMMON_SCREEN_WIDTH_TILES 20U               //20 tiles of 8 pixels = 160 pixels
+    #define COMMON_SCREEN_HEIGHT_TILES 18U              //18 tiles of 8 pixels = 144 pixels
 
 /**
  * @brief Enum to represent different game states
