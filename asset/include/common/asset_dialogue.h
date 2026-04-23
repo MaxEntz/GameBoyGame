@@ -10,7 +10,7 @@
 
     #include "common/project_types.h"
 
-    #define DIALOGUE_TILE_BASE 165U  // Instant after font tiles (128 + 37)
+    #define DIALOGUE_TILE_BASE 171U  // Immediately after font tiles (128 + 43)
 
 /**
  * @brief Tile indices within the dialogue_box_tiles array
