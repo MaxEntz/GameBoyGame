@@ -20,8 +20,7 @@ enum tetris_tile_id_e {
     TETRIS_TILE_BLOCK_Z   = 6,
     TETRIS_TILE_BLOCK_J   = 7,
     TETRIS_TILE_BLOCK_L   = 8,
-    TETRIS_TILE_HUD_FRAME = 9,
-    TETRIS_TILE_COUNT     = 10
+    TETRIS_TILE_COUNT     = 9
 };
 
 #define TETRIS_TILE_SIZE 16u
@@ -37,6 +36,5 @@ extern const UINT8 tetris_tile_block_s[];
 extern const UINT8 tetris_tile_block_z[];
 extern const UINT8 tetris_tile_block_j[];
 extern const UINT8 tetris_tile_block_l[];
-extern const UINT8 tetris_tile_hud_frame[];
 
 #endif /* !ASSET_TETRIS_H_ */
