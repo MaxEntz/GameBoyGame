@@ -20,6 +20,15 @@
 
     #define SPEED 1
 
+    #define SCREEN_WIDTH 160
+    #define SCREEN_HEIGHT 144
+
+    #define SPRITE_SIZE 8
+
+    #define JUMP_FORCE 25
+
+    #define MAX_FALL_SPEED 4
+
     #define IN
     #define OUT
     #define INOUT
