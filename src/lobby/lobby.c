@@ -22,6 +22,29 @@ load_assets(void)
     set_sprite_tile(0, 0);
 }
 
+static void
+calculate_velocity(OUT game_t *game)
+{
+    if (game->velocity_y < MAX_FALL_SPEED)
+        game->velocity_y += GRAVITY;
+}
+
+static void
+applicate_gravity(OUT game_t *game)
+{   
+    calculate_velocity(game);
+    if (game->player_y < SCREEN_HEIGHT && !game->is_jumping)
+        game->player_y += game->velocity_y;
+    if (game->is_jumping) {
+        if (game->player_y > game->jump_limit)
+            game->player_y -= game->velocity_y;
+        else {
+            game->is_jumping = FALSE;
+            game->velocity_y = 0;
+        }
+    }
+}
+
 void
 lobby(OUT game_t *game)
 {
@@ -32,6 +55,7 @@ lobby(OUT game_t *game)
 void
 update_lobby(OUT game_t *game)
 {
+    applicate_gravity(game);
     move_sprite(0, game->player_x, game->player_y);
 }
 
@@ -41,12 +65,14 @@ handle_input_lobby(OUT game_t *game,
 {
     if (keys & J_A)
         game_changer(game, GAME_STATE_MG2);
-    if (keys & J_LEFT && game->player_x > 8 + 16)
+    if (keys & J_LEFT && game->player_x > 16)
         game->player_x -= SPEED;
-    if (keys & J_RIGHT && game->player_x < 168 - 16)
+    if (keys & J_RIGHT && game->player_x < SCREEN_WIDTH - SPRITE_SIZE)
         game->player_x += SPEED;
-    if (keys & J_UP && game->player_y > 8 + 16)
-        game->player_y -= SPEED;
-    if (keys & J_DOWN && game->player_y < 144 - 16)
+    if (keys & J_UP && game->player_y > 8 + SPRITE_SIZE && game->is_jumping == FALSE) {
+        game->is_jumping = TRUE;
+        game->jump_limit = game->player_y - JUMP_FORCE;
+    }
+    if (keys & J_DOWN && game->player_y < SCREEN_HEIGHT)
         game->player_y += SPEED;
 }
