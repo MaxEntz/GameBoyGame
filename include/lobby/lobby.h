@@ -12,7 +12,8 @@
     #include "common/common.h"
     #include "common/game_changer.h"
 
-    #define GRAVITY (game->velocity_y)
+    #define GRAVITY 1U
+    #define JUMP_SPEED 2U
 
 /**
  * @brief Load the lobby assets and handle the lobby state

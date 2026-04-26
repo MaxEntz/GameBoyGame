@@ -39,6 +39,8 @@ typedef struct game_s {
     game_state_t state;
     BOOLEAN      is_running;
     BOOLEAN      state_changed;
+    UINT8        fps_counter;
+    UINT16       seconde_counter;
     UINT8        player_x;
     UINT8        player_y;
     BOOLEAN      is_jumping;

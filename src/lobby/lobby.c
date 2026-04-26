@@ -6,6 +6,7 @@
 */
 
 #include "lobby/lobby.h"
+#include <stdio.h>
 
 /**
  * @brief Load the lobby assets and handle the lobby state
@@ -25,23 +26,27 @@ load_assets(void)
 static void
 calculate_velocity(OUT game_t *game)
 {
-    if (game->velocity_y < MAX_FALL_SPEED)
+    if (!game->is_jumping && game->velocity_y < MAX_FALL_SPEED)
         game->velocity_y += GRAVITY;
 }
 
 static void
 applicate_gravity(OUT game_t *game)
-{   
+{
     calculate_velocity(game);
-    if (game->player_y < SCREEN_HEIGHT && !game->is_jumping)
-        game->player_y += game->velocity_y;
     if (game->is_jumping) {
-        if (game->player_y > game->jump_limit)
-            game->player_y -= game->velocity_y;
+        if (game->player_y > game->jump_limit + JUMP_SPEED)
+            game->player_y -= JUMP_SPEED;
         else {
+            game->player_y = game->jump_limit;
             game->is_jumping = FALSE;
             game->velocity_y = 0;
         }
+    } else if (game->player_y < SCREEN_HEIGHT) {
+        if (game->player_y + game->velocity_y > SCREEN_HEIGHT)
+            game->player_y = SCREEN_HEIGHT;
+        else
+            game->player_y += game->velocity_y;
     }
 }
 
@@ -72,6 +77,7 @@ handle_input_lobby(OUT game_t *game,
     if (keys & J_UP && game->player_y > 8 + SPRITE_SIZE && game->is_jumping == FALSE) {
         game->is_jumping = TRUE;
         game->jump_limit = game->player_y - JUMP_FORCE;
+        game->velocity_y = 0;
     }
     if (keys & J_DOWN && game->player_y < SCREEN_HEIGHT)
         game->player_y += SPEED;
