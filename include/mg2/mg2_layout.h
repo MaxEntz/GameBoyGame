@@ -18,7 +18,7 @@
     #define MG2_SCORE_LABEL_X    13
     #define MG2_SCORE_LABEL_Y    1
     #define MG2_SCORE_VAL_X      13
-    #define MG2_SCORE_VAL_Y      3
+    #define MG2_SCORE_VAL_Y      2
 
     #define MG2_LEVEL_LABEL_X    13
     #define MG2_LEVEL_LABEL_Y    5
@@ -26,9 +26,9 @@
     #define MG2_LEVEL_VAL_Y      6
 
     #define MG2_LINES_LABEL_X    13
-    #define MG2_LINES_LABEL_Y    8
+    #define MG2_LINES_LABEL_Y    9
     #define MG2_LINES_VAL_X      15
-    #define MG2_LINES_VAL_Y      9
+    #define MG2_LINES_VAL_Y      10
 
     #define MG2_NEXT_BOX_X       13
     #define MG2_NEXT_BOX_Y       12

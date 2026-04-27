@@ -28,30 +28,13 @@ enum tetris_tile_id_e {
     TETRIS_TILE_NEXT_HB   = 14,
     TETRIS_TILE_NEXT_VL   = 15,
     TETRIS_TILE_NEXT_VR   = 16,
-    TETRIS_TILE_COUNT     = 17
+    TETRIS_TILE_BLOCK_BLACK = 17,
+    TETRIS_TILE_COUNT     = 18
 };
 
 #define TETRIS_TILE_SIZE 16u
 
 extern const UINT8 tetris_tiles[];
 extern const UINT8 tetris_bg_map[];
-
-extern const UINT8 tetris_tile_empty[];
-extern const UINT8 tetris_tile_border[];
-extern const UINT8 tetris_tile_block_i[];
-extern const UINT8 tetris_tile_block_o[];
-extern const UINT8 tetris_tile_block_t[];
-extern const UINT8 tetris_tile_block_s[];
-extern const UINT8 tetris_tile_block_z[];
-extern const UINT8 tetris_tile_block_j[];
-extern const UINT8 tetris_tile_block_l[];
-extern const UINT8 tetris_tile_next_tl[];
-extern const UINT8 tetris_tile_next_tr[];
-extern const UINT8 tetris_tile_next_bl[];
-extern const UINT8 tetris_tile_next_br[];
-extern const UINT8 tetris_tile_next_ht[];
-extern const UINT8 tetris_tile_next_hb[];
-extern const UINT8 tetris_tile_next_vl[];
-extern const UINT8 tetris_tile_next_vr[];
 
 #endif /* !ASSET_TETRIS_H_ */
