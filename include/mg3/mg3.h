@@ -6,10 +6,10 @@
 */
 
 #ifndef MG3_H_
-#define MG3_H_
+    #define MG3_H_
 
-#include "common/common.h"
-#include "common/game_changer.h"
+    #include "common/common.h"
+    #include "common/game_changer.h"
 
 /**
  * @brief Load the Flappy Bird assets and handle its state
@@ -35,6 +35,6 @@ update_flappybird(OUT game_t *game);
  */
 void
 handle_input_flappybird(OUT game_t *game, 
-                            IN UINT8 keys);
+                        IN UINT8 keys);
 
-#endif /* MG3_H */
+#endif /* MG3_H_ */
