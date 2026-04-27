@@ -13,9 +13,6 @@
     #define PIECE_SPAWN_X  3
     #define PIECE_SPAWN_Y  0
 
-// 4x4, 1byte = 1 row
-extern const UINT8 piece_shapes[PIECE_COUNT][4];
-
 typedef enum piece_type_e {
     PIECE_I     = 0,
     PIECE_O     = 1,
@@ -33,7 +30,9 @@ typedef struct piece_s {
     UINT8 y;
 } piece_t;
 
-void piece_draw(IN const piece_t *piece);
-void piece_erase(IN const piece_t *piece);
+extern const UINT8 piece_shapes[PIECE_COUNT][4][4];
+
+void    piece_draw(IN const piece_t *piece);
+void    piece_erase(IN const piece_t *piece);
 
 #endif /* !TETRIS_PIECE_H_ */
