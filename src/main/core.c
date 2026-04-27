@@ -9,7 +9,7 @@
 #include "common/text_renderer.h"
 #include "common/dialogue.h"
 #include "lobby/lobby.h"
-#include "mg2/mg2.h"
+#include "mg2/tetris.h"
 
 /**
  * @brief Array of function pointers to handle different game states
