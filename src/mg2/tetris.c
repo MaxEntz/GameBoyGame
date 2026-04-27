@@ -40,6 +40,7 @@ void
 tetris(OUT game_t *game)
 {
     (void)game;
+    move_sprite(0, 0, 0);
     set_bkg_data(0, TETRIS_TILE_COUNT, tetris_tiles);
     text_renderer_init();
     set_bkg_tiles(0, 0, 20, 18, tetris_bg_map);
