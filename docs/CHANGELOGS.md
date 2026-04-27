@@ -59,25 +59,6 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
-## [1.4.0] - 2026-04-26
-
-### Added
-- Visual layout for MG2 Tetris screen: playfield borders, HUD labels, NEXT piece preview box
-- `include/mg2/mg2_layout.h`: HUD positioning constants (score, level, lines, next)
-- 8 new 2bpp frame tiles for NEXT box (4 corners + top/bottom/left/right edges)
-- `tetris_bg_map[]`: static 20×18 tilemap for MG2 background
-- `draw_hud()` with `text_render_t[]` array for all HUD label rendering
-
-### Changed
-- `src/mg2/tetris.c`: implements full visual load (tiles, tilemap, font, HUD text)
-- `include/mg2/mg2.h`: cleaned up, added `text_renderer.h` and `mg2_layout.h` includes
-- `TETRIS_TILE_COUNT` updated from 9 to 17 to include NEXT box frame tiles
-
-### Fixed
-- No bug fixes yet
-
----
-
 ## [1.3.0] - 2026-04-24
 
 ### Added
@@ -91,5 +72,25 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ### Fixed
 - No bug fixes yet
+
+---
+
+## [1.4.0] - 2026-04-27
+
+### Added
+- layout constants for playfield, HUD, and NEXT box positions
+- 20×18 tilemap for MG2 background
+- 9 new 2bpp tiles: decorative NEXT box frame (4 corners, top/bottom edges, left/right edges) + full black tile
+- HUD labels (SCORE, LEVEL, LINES)
+- NEXT piece preview box
+
+### Changed
+- `src/mg2/tetris.c`: full visual load replacing the placeholder
+- `include/mg2/mg2.h`: cleaned up includes, removed `asset_lobby` dependency
+- `asset_tetris.h/c`: removed redundant individual tile arrays, only `tetris_tiles[]` and `tetris_bg_map[]` exposed
+- `TETRIS_TILE_COUNT` updated to 18
+
+### Fixed
+- Lobby player sprite remaining visible on MG2 screen (`move_sprite(0, 0, 0)` on state entry)
 
 ---
