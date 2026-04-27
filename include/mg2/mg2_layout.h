@@ -1,0 +1,38 @@
+/*
+** EPITECH PROJECT, 2026
+** GameBoyGame
+** File description:
+** mg2_layout.h
+** Values for the tetris layout
+*/
+
+#ifndef MG2_LAYOUT_H_
+    #define MG2_LAYOUT_H_
+
+    #define MG2_PLAYFIELD_X      1
+    #define MG2_PLAYFIELD_W      10
+    #define MG2_PLAYFIELD_H      18
+    #define MG2_SEPARATOR_X      11
+    #define MG2_HUD_X            12
+
+    #define MG2_SCORE_LABEL_X    13
+    #define MG2_SCORE_LABEL_Y    1
+    #define MG2_SCORE_VAL_X      13
+    #define MG2_SCORE_VAL_Y      3
+
+    #define MG2_LEVEL_LABEL_X    13
+    #define MG2_LEVEL_LABEL_Y    5
+    #define MG2_LEVEL_VAL_X      15
+    #define MG2_LEVEL_VAL_Y      6
+
+    #define MG2_LINES_LABEL_X    13
+    #define MG2_LINES_LABEL_Y    8
+    #define MG2_LINES_VAL_X      15
+    #define MG2_LINES_VAL_Y      9
+
+    #define MG2_NEXT_BOX_X       13
+    #define MG2_NEXT_BOX_Y       12
+    #define MG2_NEXT_INNER_X     14
+    #define MG2_NEXT_INNER_Y     13
+
+#endif /* !MG2_LAYOUT_H_ */

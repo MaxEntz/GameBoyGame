@@ -59,6 +59,25 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.4.0] - 2026-04-26
+
+### Added
+- Visual layout for MG2 Tetris screen: playfield borders, HUD labels, NEXT piece preview box
+- `include/mg2/mg2_layout.h`: HUD positioning constants (score, level, lines, next)
+- 8 new 2bpp frame tiles for NEXT box (4 corners + top/bottom/left/right edges)
+- `tetris_bg_map[]`: static 20×18 tilemap for MG2 background
+- `draw_hud()` with `text_render_t[]` array for all HUD label rendering
+
+### Changed
+- `src/mg2/tetris.c`: implements full visual load (tiles, tilemap, font, HUD text)
+- `include/mg2/mg2.h`: cleaned up, added `text_renderer.h` and `mg2_layout.h` includes
+- `TETRIS_TILE_COUNT` updated from 9 to 17 to include NEXT box frame tiles
+
+### Fixed
+- No bug fixes yet
+
+---
+
 ## [1.3.0] - 2026-04-24
 
 ### Added
