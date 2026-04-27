@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2026
 ** GameBoyGame
 ** File description:
-** mg3.h
+** flappy.h
 */
 
-#ifndef MG3_H_
-    #define MG3_H_
+#ifndef FLAPPY_H_
+    #define FLAPPY_H_
 
     #include "common/common.h"
     #include "common/game_changer.h"
@@ -37,4 +37,4 @@ void
 handle_input_flappybird(OUT game_t *game, 
                         IN UINT8 keys);
 
-#endif /* MG3_H_ */
+#endif /* FLAPPY_H_ */
