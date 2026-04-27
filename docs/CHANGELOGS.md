@@ -91,6 +91,6 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 - `TETRIS_TILE_COUNT` updated to 18
 
 ### Fixed
-- Lobby player sprite remaining visible on MG2 screen (`move_sprite(0, 0, 0)` on state entry)
+- Lobby player sprite remaining visible on MG2 screen
 
 ---
