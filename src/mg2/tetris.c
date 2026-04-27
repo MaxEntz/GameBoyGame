@@ -7,6 +7,8 @@
 
 #include "mg2/tetris.h"
 
+static piece_t g_piece;
+
 /**
  * @brief Array of text elements for the HUD
  * Each element contains the text to display and its position on the screen
@@ -41,11 +43,18 @@ tetris(OUT game_t *game)
 {
     (void)game;
     grid_init();
+    
+    //hardcoded rn
+    g_piece.type = PIECE_S;
+    g_piece.x = PIECE_SPAWN_X;
+    g_piece.y = PIECE_SPAWN_Y;
+
     move_sprite(0, 0, 0);
     set_bkg_data(0, TETRIS_TILE_COUNT, tetris_tiles);
     text_renderer_init();
     set_bkg_tiles(0, 0, 20, 18, tetris_bg_map);
     draw_hud();
+    piece_draw(&g_piece);
     SHOW_BKG;
     DISPLAY_ON;
 }
