@@ -5,7 +5,7 @@
 ** tetris.c
 */
 
-#include "mg2/mg2.h"
+#include "mg2/tetris.h"
 
 /**
  * @brief Array of text elements for the HUD
@@ -40,6 +40,7 @@ void
 tetris(OUT game_t *game)
 {
     (void)game;
+    grid_init();
     move_sprite(0, 0, 0);
     set_bkg_data(0, TETRIS_TILE_COUNT, tetris_tiles);
     text_renderer_init();

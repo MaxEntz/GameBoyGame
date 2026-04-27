@@ -1,0 +1,33 @@
+/*
+** EPITECH PROJECT, 2026
+** GameBoyGame
+** File description:
+** tetris_piece.h
+*/
+
+#ifndef TETRIS_PIECE_H_
+    #define TETRIS_PIECE_H_
+
+    #include "common/project_types.h"
+
+typedef enum piece_type_e {
+    PIECE_I     = 0,
+    PIECE_O     = 1,
+    PIECE_T     = 2,
+    PIECE_S     = 3,
+    PIECE_Z     = 4,
+    PIECE_J     = 5,
+    PIECE_L     = 6,
+    PIECE_COUNT = 7
+} piece_type_t;
+
+typedef struct piece_s {
+    UINT8 type;
+    UINT8 x;
+    UINT8 y;
+} piece_t;
+
+// 4x4, 1byte = 1 row
+extern const UINT8 piece_shapes[PIECE_COUNT][4];
+
+#endif /* !TETRIS_PIECE_H_ */
