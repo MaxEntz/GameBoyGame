@@ -16,11 +16,23 @@
 static void
 load_assets(void)
 {
+    SPRITES_8x8;
+
     set_bkg_data(0, 1, grass_tile);
     set_bkg_data(1, 1, wall_tile);
     set_bkg_tiles(0, 0, 20, 18, map);
-    set_sprite_data(0, 1, square_tile);
+    set_sprite_data(0, 4, player_tiles);
+
     set_sprite_tile(0, 0);
+    set_sprite_tile(1, 1);
+    set_sprite_tile(2, 2);
+    set_sprite_tile(3, 3);
+
+    move_sprite(0, 80, 80);
+    move_sprite(1, 88, 80);
+    move_sprite(2, 80, 88);
+    move_sprite(3, 88, 88);
+
 }
 
 static void
@@ -42,9 +54,9 @@ applicate_gravity(OUT game_t *game)
             game->is_jumping = FALSE;
             game->velocity_y = 0;
         }
-    } else if (game->player_y < SCREEN_HEIGHT) {
-        if (game->player_y + game->velocity_y > SCREEN_HEIGHT)
-            game->player_y = SCREEN_HEIGHT;
+    } else if (game->player_y < SCREEN_HEIGHT - SPRITE_SIZE) {
+        if (game->player_y + game->velocity_y > SCREEN_HEIGHT - SPRITE_SIZE)
+            game->player_y = SCREEN_HEIGHT - SPRITE_SIZE;
         else
             game->player_y += game->velocity_y;
     }
@@ -60,8 +72,17 @@ lobby(OUT game_t *game)
 void
 update_lobby(OUT game_t *game)
 {
+    game->fps_counter++;
+    if (game->fps_counter >= 60) {
+        game->fps_counter = 0;
+        game->seconde_counter++;
+    }
+
     applicate_gravity(game);
     move_sprite(0, game->player_x, game->player_y);
+    move_sprite(1, game->player_x + 8, game->player_y);
+    move_sprite(2, game->player_x, game->player_y + 8);
+    move_sprite(3, game->player_x + 8, game->player_y + 8);
 }
 
 void
@@ -79,6 +100,6 @@ handle_input_lobby(OUT game_t *game,
         game->jump_limit = game->player_y - JUMP_FORCE;
         game->velocity_y = 0;
     }
-    if (keys & J_DOWN && game->player_y < SCREEN_HEIGHT)
+    if (keys & J_DOWN && game->player_y < SCREEN_HEIGHT - SPRITE_SIZE)
         game->player_y += SPEED;
 }

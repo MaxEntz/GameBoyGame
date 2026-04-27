@@ -33,7 +33,10 @@ init_game(OUT game_t *game)
     game->state_changed = FALSE;
     game->player_x = 88;
     game->player_y = 78;
+    game->fps_counter = 0;
+    game->seconde_counter = 0;
     game->is_jumping = FALSE;
+    game->is_moving = FALSE;
     game->jump_limit = game->player_y;
     game->velocity_y = 0;
 }

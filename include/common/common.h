@@ -44,6 +44,7 @@ typedef struct game_s {
     UINT8        player_x;
     UINT8        player_y;
     BOOLEAN      is_jumping;
+    BOOLEAN      is_moving;
     UINT8        jump_limit;
     UINT8        velocity_y;
 } game_t;
