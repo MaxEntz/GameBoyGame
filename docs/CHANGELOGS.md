@@ -7,6 +7,19 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.5.0] - 2026-04-27
+
+### Added
+- Add mg3.h with function prototypes for Flappy Bird (init, update, input).
+- Create flappy.c with empty function stubs to ensure initial compilation.
+- Set up the foundational architecture for MG3 development.
+
+### Changed
+-`src/mg3/flappy.c`: The base of the base of flappy bird only proto
+-`include/mg3/flappy.h`: The base of the base too. Only proto.
+
+---
+
 ## [1.4.0] - 2026-04-27
 
 ### Added
