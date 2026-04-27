@@ -10,7 +10,9 @@
 
 #include "common/common.h"
 #include "common/game_changer.h"
+#include "common/text_renderer.h"
 #include "mg2/asset_tetris.h"
+#include "mg2/mg2_layout.h"
 
 /**
  * @brief Load the tetris assets and handle the tetris state
