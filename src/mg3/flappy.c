@@ -5,7 +5,7 @@
 ** flappy.c
 */
 
-#include "mg3/mg3.h"
+#include "mg3/flappy.h"
 
 void
 flappybird(OUT game_t *game)
