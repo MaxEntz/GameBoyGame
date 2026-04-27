@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2025
+** EPITECH PROJECT, 2026
 ** GameBoyGame
 ** File description:
 ** mg3.h
@@ -16,14 +16,16 @@
  * @param game Pointer to the game structure
  * @return void
  */
-void flappybird(OUT game_t *game);
+void
+flappybird(OUT game_t *game);
 
 /**
  * @brief Update of Flappy Bird
  * @param game Pointer to the game structure
  * @return void
  */
-void update_flappybird(OUT game_t *game);
+void
+update_flappybird(OUT game_t *game);
 
 /**
  * @brief Handle the input handle of Flappy Bird
@@ -31,6 +33,8 @@ void update_flappybird(OUT game_t *game);
  * @param keys The keys pressed
  * @return void
  */
-void handle_input_flappybird(OUT game_t *game, IN UINT8 keys);
+void
+handle_input_flappybird(OUT game_t *game, 
+                            IN UINT8 keys);
 
 #endif /* MG3_H */
