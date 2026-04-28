@@ -25,7 +25,7 @@ typedef enum piece_type_e {
 } piece_type_t;
 
 typedef struct piece_s {
-    UINT8 type;
+    piece_type_t type;
     UINT8 x;
     UINT8 y;
 } piece_t;

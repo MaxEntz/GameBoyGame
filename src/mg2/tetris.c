@@ -60,8 +60,6 @@ tetris(OUT game_t *game)
     set_bkg_tiles(0, 0, 20, 18, tetris_bg_map);
     draw_hud();
     piece_draw(&curr_piece);
-    SHOW_BKG;
-    DISPLAY_ON;
 }
 
 void
