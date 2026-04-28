@@ -6,6 +6,7 @@
 */
 
 #include "mg2/tetris.h"
+#include "common/game_changer.h"
 
 static piece_t curr_piece;
 static UINT8   delay_frame;
@@ -85,6 +86,8 @@ void
 handle_input_tetris(OUT game_t *game,
                    IN UINT8 keys)
 {
-    (void)game;
-    (void)keys;
+    if (keys & J_SELECT) {
+        game_changer(game, GAME_STATE_LOBBY);
+        return;
+    }
 }
