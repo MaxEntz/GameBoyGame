@@ -2,17 +2,19 @@
 ** EPITECH PROJECT, 2026
 ** GameBoyGame
 ** File description:
-** mg2.h
+** tetris.h
 */
 
-#ifndef MG2_H
-#define MG2_H
+#ifndef TETRIS_H_
+#define TETRIS_H_
 
 #include "common/common.h"
 #include "common/game_changer.h"
 #include "common/text_renderer.h"
 #include "mg2/asset_tetris.h"
-#include "mg2/mg2_layout.h"
+#include "mg2/tetris_layout.h"
+#include "mg2/tetris_piece.h"
+#include "mg2/tetris_grid.h"
 
 /**
  * @brief Load the tetris assets and handle the tetris state
@@ -41,4 +43,4 @@ handle_input_tetris(OUT game_t *game,
 void
 update_tetris(OUT game_t *game);
 
-#endif /* MG2_H */
+#endif /* !TETRIS_H_ */
