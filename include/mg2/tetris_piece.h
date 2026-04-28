@@ -26,8 +26,8 @@ typedef enum piece_type_e {
 
 typedef struct piece_s {
     piece_type_t type;
-    UINT8 x;
-    UINT8 y;
+    INT8 x;
+    UINT8  y;
 } piece_t;
 
 extern const UINT8 piece_shapes[PIECE_COUNT][4][4];
