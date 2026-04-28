@@ -26,8 +26,8 @@ typedef enum piece_type_e {
 
 typedef struct piece_s {
     piece_type_t type;
-    UINT8 x;
-    UINT8 y;
+    INT8 x;
+    UINT8  y;
 } piece_t;
 
 extern const UINT8 piece_shapes[PIECE_COUNT][4][4];
@@ -35,6 +35,8 @@ extern const UINT8 piece_shapes[PIECE_COUNT][4][4];
 void    piece_draw(IN const piece_t *piece);
 void    piece_erase(IN const piece_t *piece);
 BOOLEAN piece_can_move_down(IN const piece_t *piece);
+BOOLEAN piece_can_move_left(IN const piece_t *piece);
+BOOLEAN piece_can_move_right(IN const piece_t *piece);
 void    piece_lock(IN const piece_t *piece);
 
 #endif /* !TETRIS_PIECE_H_ */

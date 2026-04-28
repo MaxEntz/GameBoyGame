@@ -10,6 +10,7 @@
 
 static piece_t curr_piece;
 static UINT8   delay_frame;
+static UINT8   move_frame;
 
 static const text_render_t mg2_labels[] = {
     {"SCORE",   MG2_SCORE_LABEL_X, MG2_SCORE_LABEL_Y},
@@ -52,6 +53,7 @@ tetris(OUT game_t *game)
     (void)game;
     grid_init();
     delay_frame = 0;
+    move_frame = 0;
     curr_piece.type = PIECE_I;
     curr_piece.x = PIECE_SPAWN_X;
     curr_piece.y = PIECE_SPAWN_Y;
@@ -67,6 +69,8 @@ void
 update_tetris(OUT game_t *game)
 {
     (void)game;
+    if (move_frame > 0)
+        move_frame--;
     delay_frame++;
     if (delay_frame < DROP_DELAY)
         return;
@@ -88,6 +92,26 @@ handle_input_tetris(OUT game_t *game,
 {
     if (keys & J_SELECT) {
         game_changer(game, GAME_STATE_LOBBY);
+        return;
+    }
+    if (move_frame > 0)
+        return;
+    if (keys & J_LEFT) {
+        if (piece_can_move_left(&curr_piece)) {
+            piece_erase(&curr_piece);
+            curr_piece.x--;
+            piece_draw(&curr_piece);
+            move_frame = MOVE_DELAY;
+        }
+        return;
+    }
+    if (keys & J_RIGHT) {
+        if (piece_can_move_right(&curr_piece)) {
+            piece_erase(&curr_piece);
+            curr_piece.x++;
+            piece_draw(&curr_piece);
+            move_frame = MOVE_DELAY;
+        }
         return;
     }
 }

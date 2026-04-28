@@ -72,6 +72,44 @@ piece_can_move_down(IN const piece_t *piece)
     return TRUE;
 }
 
+BOOLEAN
+piece_can_move_left(IN const piece_t *piece)
+{
+    UINT8 row;
+    UINT8 col;
+
+    for (row = 0; row < 4; row++) {
+        for (col = 0; col < 4; col++) {
+            if (piece_shapes[piece->type][row][col]) {
+                if (piece->x + col == 0)
+                    return FALSE;
+                if (tetris_grid[piece->y + row][piece->x + col - 1] != 0)
+                    return FALSE;
+            }
+        }
+    }
+    return TRUE;
+}
+
+BOOLEAN
+piece_can_move_right(IN const piece_t *piece)
+{
+    UINT8 row;
+    UINT8 col;
+
+    for (row = 0; row < 4; row++) {
+        for (col = 0; col < 4; col++) {
+            if (piece_shapes[piece->type][row][col]) {
+                if (piece->x + col + 1 >= TETRIS_GRID_W)
+                    return FALSE;
+                if (tetris_grid[piece->y + row][piece->x + col + 1] != 0)
+                    return FALSE;
+            }
+        }
+    }
+    return TRUE;
+}
+
 void
 piece_lock(IN const piece_t *piece)
 {
