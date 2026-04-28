@@ -2,12 +2,12 @@
 ** EPITECH PROJECT, 2026
 ** GameBoyGame
 ** File description:
-** mg2_layout.h
+** tetris_layout.h
 ** Values for the tetris layout
 */
 
-#ifndef MG2_LAYOUT_H_
-    #define MG2_LAYOUT_H_
+#ifndef TETRIS_LAYOUT_H_
+    #define TETRIS_LAYOUT_H_
 
     #define MG2_PLAYFIELD_X      1
     #define MG2_PLAYFIELD_W      10
@@ -35,4 +35,6 @@
     #define MG2_NEXT_INNER_X     14
     #define MG2_NEXT_INNER_Y     13
 
-#endif /* !MG2_LAYOUT_H_ */
+    #define DROP_DELAY  30
+
+#endif /* !TETRIS_LAYOUT_H_ */

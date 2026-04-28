@@ -7,6 +7,22 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.6.0] - 2026-04-28
+
+### Added
+- Grid for the tetris playfield (10*18)
+- Pieces as a double array of 4x4, with 7 pieces
+- Piece struct with type, rotation, and position variables (not all implemented yet)
+- Piece drawing and erasing functions
+- Piece locking and collision detection functions
+- Pseudo-random piece spawning (cycling through the 7 pieces in order for now)
+- Basic graity for the pieces (only moving down, no player input yet)
+
+### Changed
+- `include` : Renamed `mg2*.h` to `tetris*.h` for clarity
+
+---
+
 ## [1.5.0] - 2026-04-27
 
 ### Added
