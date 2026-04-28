@@ -6,6 +6,7 @@
 */
 
 #include <gb/gb.h>
+#include "mg2/tetris.h"
 #include "mg2/tetris_piece.h"
 #include "mg2/tetris_layout.h"
 #include "mg2/tetris_grid.h"
@@ -65,6 +66,44 @@ piece_can_move_down(IN const piece_t *piece)
                 if (piece->y + row + 1 >= TETRIS_GRID_H)
                     return FALSE;
                 if (tetris_grid[piece->y + row + 1][piece->x + col] != 0)
+                    return FALSE;
+            }
+        }
+    }
+    return TRUE;
+}
+
+BOOLEAN
+piece_can_move_left(IN const piece_t *piece)
+{
+    UINT8 row;
+    UINT8 col;
+
+    for (row = 0; row < 4; row++) {
+        for (col = 0; col < 4; col++) {
+            if (piece_shapes[piece->type][row][col]) {
+                if (piece->x + col == 0)
+                    return FALSE;
+                if (tetris_grid[piece->y + row][piece->x + col - 1] != 0)
+                    return FALSE;
+            }
+        }
+    }
+    return TRUE;
+}
+
+BOOLEAN
+piece_can_move_right(IN const piece_t *piece)
+{
+    UINT8 row;
+    UINT8 col;
+
+    for (row = 0; row < 4; row++) {
+        for (col = 0; col < 4; col++) {
+            if (piece_shapes[piece->type][row][col]) {
+                if (piece->x + col + 1 >= TETRIS_GRID_W)
+                    return FALSE;
+                if (tetris_grid[piece->y + row][piece->x + col + 1] != 0)
                     return FALSE;
             }
         }
