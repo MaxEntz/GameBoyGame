@@ -14,7 +14,7 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 - `move_frame` counter to throttle horizontal input (avoids instant clipping), configurable via `MOVE_DELAY` in `tetris_layout.h`
 
 ### Fixed
-- `mg2/tetris_piece.h` : changed `x` from `UINT8` to `INT8` in `piece_t` struct to allow negative values for the pieces (used for the O tile)
+- `include/mg2/tetris_piece.h` : changed `x` from `UINT8` to `INT8` in `piece_t` struct to allow negative values for the pieces (used for the O tile)
 ---
 
 ## [1.6.0] - 2026-04-28

@@ -6,7 +6,6 @@
 */
 
 #include <gb/gb.h>
-#include "mg2/tetris.h"
 #include "mg2/tetris_piece.h"
 #include "mg2/tetris_layout.h"
 #include "mg2/tetris_grid.h"
