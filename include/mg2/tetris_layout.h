@@ -35,4 +35,6 @@
     #define MG2_NEXT_INNER_X     14
     #define MG2_NEXT_INNER_Y     13
 
+    #define DROP_DELAY  30
+
 #endif /* !TETRIS_LAYOUT_H_ */
