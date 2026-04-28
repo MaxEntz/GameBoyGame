@@ -7,6 +7,16 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.7.0] - 2026-04-28
+
+### Added
+- Left/right movement for pieces with wall and grid collision detection
+- `move_frame` counter to throttle horizontal input (avoids instant clipping), configurable via `MOVE_DELAY` in `tetris_layout.h`
+
+### Fixed
+- `mg2/tetris_piece.h` : changed `x` from `UINT8` to `INT8` in `piece_t` struct to allow negative values for the pieces (used for the O tile)
+---
+
 ## [1.6.0] - 2026-04-28
 
 ### Added
