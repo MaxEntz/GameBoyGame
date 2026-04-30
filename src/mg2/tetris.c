@@ -45,6 +45,8 @@ spawn_next(void)
     curr_piece.type = (curr_piece.type + 1) % PIECE_COUNT;
     curr_piece.x = PIECE_SPAWN_X;
     curr_piece.y = PIECE_SPAWN_Y;
+    curr_piece.rot = 0;
+    curr_piece.can_rotate = TRUE;
 }
 
 void
@@ -57,6 +59,8 @@ tetris(OUT game_t *game)
     curr_piece.type = PIECE_I;
     curr_piece.x = PIECE_SPAWN_X;
     curr_piece.y = PIECE_SPAWN_Y;
+    curr_piece.rot = 0;
+    curr_piece.can_rotate = TRUE;
     move_sprite(0, 0, 0);
     set_bkg_data(0, TETRIS_TILE_COUNT, tetris_tiles);
     text_renderer_init();
@@ -94,26 +98,34 @@ handle_input_tetris(OUT game_t *game,
         game_changer(game, GAME_STATE_LOBBY);
         return;
     }
+    if (!(keys & (J_A | J_B)))
+        curr_piece.can_rotate = TRUE;
+    if (curr_piece.can_rotate) {
+        if (keys & J_A) {
+            rotate_r(&curr_piece);
+            curr_piece.can_rotate = FALSE;
+        } else if (keys & J_B) {
+            rotate_l(&curr_piece);
+            curr_piece.can_rotate = FALSE;
+        }
+    }
     if (keys & J_DOWN)
         delay_frame += (DROP_DELAY / 4);
-    if (move_frame > 0)
-        return;
-    if (keys & J_LEFT) {
-        if (piece_can_move_left(&curr_piece)) {
-            piece_erase(&curr_piece);
-            curr_piece.x--;
-            piece_draw(&curr_piece);
-            move_frame = MOVE_DELAY;
+    if (move_frame == 0) {
+        if (keys & J_LEFT) {
+            if (piece_can_move_left(&curr_piece)) {
+                piece_erase(&curr_piece);
+                curr_piece.x--;
+                piece_draw(&curr_piece);
+                move_frame = MOVE_DELAY;
+            }
+        } else if (keys & J_RIGHT) {
+            if (piece_can_move_right(&curr_piece)) {
+                piece_erase(&curr_piece);
+                curr_piece.x++;
+                piece_draw(&curr_piece);
+                move_frame = MOVE_DELAY;
+            }
         }
-        return;
-    }
-    if (keys & J_RIGHT) {
-        if (piece_can_move_right(&curr_piece)) {
-            piece_erase(&curr_piece);
-            curr_piece.x++;
-            piece_draw(&curr_piece);
-            move_frame = MOVE_DELAY;
-        }
-        return;
     }
 }
