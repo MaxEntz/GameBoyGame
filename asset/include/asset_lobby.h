@@ -15,6 +15,8 @@ extern const UINT8 wall_tile[];
 extern const UINT8 square_tile[];
 extern const UINT8 player_tiles_front[];
 extern const UINT8 player_tile_front_move[];
+extern const UINT8 player_tile_back[];
+extern const UINT8 player_tile_back_move[];
 extern const UINT8 map[];
 
 #endif /* !ASSET_LOBBY_H_ */
