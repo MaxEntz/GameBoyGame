@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 This format is based on Keep a Changelog  
 and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
+---
+
+## [1.8.0] - 2026-04-29
+
+### Added
+- Piece downward movement acceleration
+- Piece rotation with collision detection (clockwise and counterclockwise)
+- `can_rotate` flag to prevent multiple rotations from a single button press
+
+### Changed
+- `include/mg2/tetris_piece.h` : added `can_rotate` boolean to `piece_t` struct, and new function prototypes for `rotate_r` and `rotate_l`
+- `src/mg2/tetris_piece.c` : `piece_shapes` array updated to include all 4 rotation states for each piece
 
 ---
 
