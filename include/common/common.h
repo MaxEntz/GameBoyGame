@@ -15,6 +15,11 @@
     #define COMMON_SCREEN_WIDTH_TILES 20U               //20 tiles of 8 pixels = 160 pixels
     #define COMMON_SCREEN_HEIGHT_TILES 18U              //18 tiles of 8 pixels = 144 pixels
 
+    #define MOVING_SENS_UP 6
+    #define MOVING_SENS_DOWN 0
+    #define MOVING_SENS_LEFT 12
+    #define MOVING_SENS_RIGHT 18
+
 /**
  * @brief Enum to represent different game states
  */
@@ -43,10 +48,8 @@ typedef struct game_s {
     UINT16       seconde_counter;
     UINT8        player_x;
     UINT8        player_y;
-    BOOLEAN      is_jumping;
     BOOLEAN      is_moving;
-    UINT8        jump_limit;
-    UINT8        velocity_y;
+    UINT8   moving_sens;
 } game_t;
 
 /**
