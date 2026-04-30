@@ -94,6 +94,8 @@ handle_input_tetris(OUT game_t *game,
         game_changer(game, GAME_STATE_LOBBY);
         return;
     }
+    if (keys & J_DOWN)
+        delay_frame += (DROP_DELAY / 4);
     if (move_frame > 0)
         return;
     if (keys & J_LEFT) {
