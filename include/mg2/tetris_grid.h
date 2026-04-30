@@ -18,6 +18,7 @@ extern UINT8 tetris_grid[TETRIS_GRID_H][TETRIS_GRID_W];
 /**
  * @brief init the tetris grid with empty values
  */
-void grid_init(void);
+void
+grid_init(void);
 
 #endif /* !TETRIS_GRID_H_ */
