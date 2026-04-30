@@ -27,6 +27,8 @@ load_assets(void)
     set_sprite_data(10, 2, player_tile_back_move);
     set_sprite_data(12, 4, player_tile_left);
     set_sprite_data(16, 2, player_tile_left_move);
+    set_sprite_data(18, 4, player_tile_right);
+    set_sprite_data(22, 2, player_tile_right_move);
 
     set_sprite_tile(0, 0);
     set_sprite_tile(1, 1);
