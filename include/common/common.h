@@ -45,11 +45,11 @@ typedef struct game_s {
     BOOLEAN      is_running;
     BOOLEAN      state_changed;
     UINT8        fps_counter;
-    UINT16       seconde_counter;
+    UINT16       seconds_counter;
     UINT8        player_x;
     UINT8        player_y;
     BOOLEAN      is_moving;
-    UINT8   moving_sens;
+    UINT8        moving_dir;
 } game_t;
 
 /**

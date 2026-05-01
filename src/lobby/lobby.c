@@ -6,7 +6,6 @@
 */
 
 #include "lobby/lobby.h"
-#include <stdio.h>
 
 /**
  * @brief Load the lobby assets and handle the lobby state
@@ -60,7 +59,7 @@ lobby(OUT game_t *game)
 static void
 move_sprite_personage(OUT game_t *game)
 {
-    UINT8 sens = game->moving_sens;
+    UINT8 sens = game->moving_dir;
 
     if (game->is_moving) {
         set_sprite_tile(0, sens + 0);
@@ -89,7 +88,7 @@ update_lobby(OUT game_t *game)
     game->fps_counter++;
     if (game->fps_counter >= 60) {
         game->fps_counter = 0;
-        game->seconde_counter++;
+        game->seconds_counter++;
     }
 
     move_sprite_personage(game);
@@ -109,8 +108,8 @@ static BOOLEAN
 is_colliding_with_wall(IN game_t *game,
                        IN UINT8 sens)
 {
-    UINT8 x = game->player_x - 8;
-    UINT8 y = game->player_y - 16;
+    INT16 x = game->player_x - 8;
+    INT16 y = game->player_y - 16;
     UINT8 tile_x;
     UINT8 tile_y;
     UINT8 tile;
@@ -138,6 +137,8 @@ is_colliding_with_wall(IN game_t *game,
 
     tile_x = x >> 3;
     tile_y = y >> 3;
+    if (tile_x >= 20 || tile_y >= 18)
+        return TRUE;
     tile = map[tile_y * 20 + tile_x];
 
     if (tile == 0 || tile == 2)
@@ -157,21 +158,21 @@ handle_input_lobby(OUT game_t *game,
     if (keys & J_LEFT && !is_colliding_with_wall(game, MOVING_SENS_LEFT)) {
         game->player_x -= SPEED;
         game->is_moving = TRUE;
-        game->moving_sens = MOVING_SENS_LEFT;
+        game->moving_dir = MOVING_SENS_LEFT;
     }
     if (keys & J_RIGHT && !is_colliding_with_wall(game, MOVING_SENS_RIGHT)) {
         game->player_x += SPEED;
         game->is_moving = TRUE;
-        game->moving_sens = MOVING_SENS_RIGHT;
+        game->moving_dir = MOVING_SENS_RIGHT;
     }
     if (keys & J_UP && !is_colliding_with_wall(game, MOVING_SENS_UP)) {
         game->player_y -= SPEED;
         game->is_moving = TRUE;
-        game->moving_sens = MOVING_SENS_UP;
+        game->moving_dir = MOVING_SENS_UP;
     }
     if (keys & J_DOWN && !is_colliding_with_wall(game, MOVING_SENS_DOWN)) {
         game->player_y += SPEED;
         game->is_moving = TRUE;
-        game->moving_sens = MOVING_SENS_DOWN;
+        game->moving_dir = MOVING_SENS_DOWN;
     }
 }

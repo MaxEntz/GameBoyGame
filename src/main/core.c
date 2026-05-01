@@ -34,9 +34,9 @@ init_game(OUT game_t *game)
     game->player_x = 88;
     game->player_y = 78;
     game->fps_counter = 0;
-    game->seconde_counter = 0;
+    game->seconds_counter = 0;
     game->is_moving = FALSE;
-    game->moving_sens = MOVING_SENS_DOWN;
+    game->moving_dir = MOVING_SENS_DOWN;
 }
 
 

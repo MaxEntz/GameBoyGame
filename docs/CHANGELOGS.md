@@ -6,7 +6,7 @@ This format is based on Keep a Changelog
 and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 ---
 
-### [1.9.0] - 2026-05-01
+## [1.9.0] - 2026-05-01
 
 ### Added
 - Adding all basic sprite for the mole game
