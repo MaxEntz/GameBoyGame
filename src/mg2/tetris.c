@@ -85,6 +85,8 @@ update_tetris(OUT game_t *game)
         piece_draw(&curr_piece);
     } else {
         piece_lock(&curr_piece);
+        if (grid_clear_lines() > 0)
+            grid_draw_playfield();
         spawn_next();
         piece_draw(&curr_piece);
     }
