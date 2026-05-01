@@ -6,6 +6,19 @@ This format is based on Keep a Changelog
 and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 ---
 
+## [1.9.0] - 2026-05-01
+
+### Added
+- Adding all basic sprite for the mole game
+- Adding the collision with the map number
+- Update the sprite and animate it
+
+### Changed
+- `asset/` : added all asset for the lobby
+- `src/lobby/lobby.c` : Update code to ensure the motion for all sprite
+
+---
+
 ## [1.8.0] - 2026-04-29
 
 ### Added

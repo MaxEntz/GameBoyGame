@@ -20,6 +20,11 @@
 
     #define SPEED 1
 
+    #define SCREEN_WIDTH 160
+    #define SCREEN_HEIGHT 144
+
+    #define SPRITE_SIZE 8
+
     #define IN
     #define OUT
     #define INOUT
