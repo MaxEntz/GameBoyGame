@@ -21,6 +21,7 @@ load_assets(void)
     set_bkg_data(0, 1, grass_tile);
     set_bkg_data(1, 1, wall_tile);
     set_bkg_data(2, 1, void_tile);
+    set_bkg_data(3, 4, tronc_tile);
     set_bkg_tiles(0, 0, 20, 18, map);
     set_sprite_data(0, 4, player_tiles_front);
     set_sprite_data(4, 2, player_tile_front_move);
