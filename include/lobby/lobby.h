@@ -11,6 +11,7 @@
     #include "asset_lobby.h"
     #include "common/common.h"
     #include "common/game_changer.h"
+    #include "common/transition.h"
 
 /**
  * @brief Load the lobby assets and handle the lobby state
