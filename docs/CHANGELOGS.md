@@ -12,7 +12,7 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 - Adding the total score, score mg1... in the core struct
 
 ### Changed
-- `include/common/common.h`: adde the var into the struct
+- `include/common/common.h`: added the var into the struct
 
 ---
 
