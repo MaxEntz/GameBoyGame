@@ -6,6 +6,16 @@ This format is based on Keep a Changelog
 and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 ---
 
+## [1.9.1] - 2026-05-02
+
+### Added
+- Adding the total score, score mg1... in the core struct
+
+### Changed
+- `include/common/common.h`: adde the var into the struct
+
+---
+
 ## [1.9.0] - 2026-05-01
 
 ### Added
