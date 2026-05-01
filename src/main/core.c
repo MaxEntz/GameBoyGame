@@ -10,6 +10,7 @@
 #include "common/dialogue.h"
 #include "lobby/lobby.h"
 #include "mg2/mg2.h"
+#include "mg3/mg3.h"
 
 /**
  * @brief Array of function pointers to handle different game states
@@ -21,7 +22,7 @@ static const management_state_t g_state_function[MAX_STATES] = {
     {GAME_STATE_VICTORY  ,NULL ,NULL              ,NULL}        ,
     {GAME_STATE_MG1      ,NULL ,NULL              ,NULL}        ,
     {GAME_STATE_MG2      ,tetris ,handle_input_tetris,update_tetris}        ,
-    {GAME_STATE_MG3      ,NULL ,NULL              ,NULL}        ,
+    {GAME_STATE_MG3      ,flappybird, handle_input_flappybird, update_flappybird}        ,
     {GAME_STATE_GAME_OVER,NULL ,NULL              ,NULL}
 };
 
