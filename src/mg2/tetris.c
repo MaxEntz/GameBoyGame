@@ -11,6 +11,7 @@
 static piece_t curr_piece;
 static UINT8   delay_frame;
 static UINT8   move_frame;
+static UINT8   cleared_lines;
 
 static const text_render_t mg2_labels[] = {
     {"SCORE", MG2_SCORE_LABEL_X, MG2_SCORE_LABEL_Y},
@@ -18,6 +19,9 @@ static const text_render_t mg2_labels[] = {
     {"LINES", MG2_LINES_LABEL_X, MG2_LINES_LABEL_Y},
     {NULL,    0,                 0}
 };
+
+static const UINT16 score_table[5] = {0, 100, 300, 500, 800};
+
 
 /**
  * @brief Write val as a zero-padded decimal string of exactly width digits
@@ -54,10 +58,20 @@ draw_hud(void)
 static void
 draw_score(INT16 score)
 {
-    CHAR buf[7];
+    CHAR          buf[7];
     text_render_t render = {buf, MG2_SCORE_VAL_X, MG2_SCORE_VAL_Y};
 
     uint_to_str((UINT16)score, buf, 6);
+    text_renderer_draw(&render);
+}
+
+static void
+draw_lines(UINT8 lines)
+{
+    CHAR          buf[4];
+    text_render_t render = {buf, MG2_LINES_VAL_X, MG2_LINES_VAL_Y};
+
+    uint_to_str((UINT16)lines, buf, 3);
     text_renderer_draw(&render);
 }
 
@@ -81,6 +95,7 @@ tetris(OUT game_t *game)
 {
     game->score_mg2 = 0;
     game->level = 1;
+    cleared_lines = 0;
     grid_init();
     delay_frame = 0;
     move_frame = 0;
@@ -95,6 +110,7 @@ tetris(OUT game_t *game)
     set_bkg_tiles(0, 0, 20, 18, tetris_bg_map);
     draw_hud();
     draw_score(0);
+    draw_lines(0);
     piece_draw(&curr_piece);
 }
 
@@ -118,8 +134,10 @@ update_tetris(OUT game_t *game)
         cleared = grid_clear_lines();
         if (cleared > 0) {
             grid_draw_playfield();
-            game->score_mg2 += (INT16)(cleared * 100 * game->level);
+            game->score_mg2 += (INT16)(score_table[cleared] * game->level);
+            cleared_lines += cleared;
             draw_score(game->score_mg2);
+            draw_lines(cleared_lines);
         }
         spawn_next();
         piece_draw(&curr_piece);
