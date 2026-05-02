@@ -13,17 +13,29 @@ static UINT8   delay_frame;
 static UINT8   move_frame;
 
 static const text_render_t mg2_labels[] = {
-    {"SCORE",   MG2_SCORE_LABEL_X, MG2_SCORE_LABEL_Y},
-    {"000000",  MG2_SCORE_VAL_X,   MG2_SCORE_VAL_Y},
-    {"LEVEL",   MG2_LEVEL_LABEL_X, MG2_LEVEL_LABEL_Y},
-    {"0",       MG2_LEVEL_VAL_X,   MG2_LEVEL_VAL_Y},
-    {"LINES",   MG2_LINES_LABEL_X, MG2_LINES_LABEL_Y},
-    {"0",       MG2_LINES_VAL_X,   MG2_LINES_VAL_Y},
-    {NULL,      0,                 0}
+    {"SCORE", MG2_SCORE_LABEL_X, MG2_SCORE_LABEL_Y},
+    {"LEVEL", MG2_LEVEL_LABEL_X, MG2_LEVEL_LABEL_Y},
+    {"LINES", MG2_LINES_LABEL_X, MG2_LINES_LABEL_Y},
+    {NULL,    0,                 0}
 };
 
 /**
- * @brief Draw all HUD labels on the background
+ * @brief Write val as a zero-padded decimal string of exactly width digits
+ */
+static void
+uint_to_str(UINT16 val, CHAR *buf, UINT8 width)
+{
+    INT8 i;
+
+    for (i = (INT8)(width - 1); i >= 0; i--) {
+        buf[i] = '0' + (CHAR)(val % 10);
+        val /= 10;
+    }
+    buf[width] = '\0';
+}
+
+/**
+ * @brief Draw all static HUD labels on the background
  */
 static void
 draw_hud(void)
@@ -35,8 +47,23 @@ draw_hud(void)
 }
 
 /**
- * @brief Advance to the next piece in the cycle (I->O->T->S->Z->J->L->I)
+ * @brief Draw the current score value on the HUD
  * 
+ * @param score Score value to draw
+ */
+static void
+draw_score(INT16 score)
+{
+    CHAR buf[7];
+    text_render_t render = {buf, MG2_SCORE_VAL_X, MG2_SCORE_VAL_Y};
+
+    uint_to_str((UINT16)score, buf, 6);
+    text_renderer_draw(&render);
+}
+
+/**
+ * @brief Advance to the next piece in the cycle (I->O->T->S->Z->J->L->I)
+ *
  * only temp until i implement the randomness
  */
 static void
@@ -52,7 +79,8 @@ spawn_next(void)
 void
 tetris(OUT game_t *game)
 {
-    (void)game;
+    game->score_mg2 = 0;
+    game->level = 1;
     grid_init();
     delay_frame = 0;
     move_frame = 0;
@@ -66,13 +94,15 @@ tetris(OUT game_t *game)
     text_renderer_init();
     set_bkg_tiles(0, 0, 20, 18, tetris_bg_map);
     draw_hud();
+    draw_score(0);
     piece_draw(&curr_piece);
 }
 
 void
 update_tetris(OUT game_t *game)
 {
-    (void)game;
+    UINT8 cleared;
+
     if (move_frame > 0)
         move_frame--;
     delay_frame++;
@@ -85,8 +115,12 @@ update_tetris(OUT game_t *game)
         piece_draw(&curr_piece);
     } else {
         piece_lock(&curr_piece);
-        if (grid_clear_lines() > 0)
+        cleared = grid_clear_lines();
+        if (cleared > 0) {
             grid_draw_playfield();
+            game->score_mg2 += (INT16)(cleared * 100 * game->level);
+            draw_score(game->score_mg2);
+        }
         spawn_next();
         piece_draw(&curr_piece);
     }
