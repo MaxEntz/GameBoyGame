@@ -13,67 +13,7 @@ static UINT8   delay_frame;
 static UINT8   move_frame;
 static UINT8   cleared_lines;
 
-static const text_render_t mg2_labels[] = {
-    {"SCORE", MG2_SCORE_LABEL_X, MG2_SCORE_LABEL_Y},
-    {"LEVEL", MG2_LEVEL_LABEL_X, MG2_LEVEL_LABEL_Y},
-    {"LINES", MG2_LINES_LABEL_X, MG2_LINES_LABEL_Y},
-    {NULL,    0,                 0}
-};
-
 static const UINT16 score_table[5] = {0, 100, 300, 500, 800};
-
-
-/**
- * @brief Write val as a zero-padded decimal string of exactly width digits
- */
-static void
-uint_to_str(UINT16 val, CHAR *buf, UINT8 width)
-{
-    INT8 i;
-
-    for (i = (INT8)(width - 1); i >= 0; i--) {
-        buf[i] = '0' + (CHAR)(val % 10);
-        val /= 10;
-    }
-    buf[width] = '\0';
-}
-
-/**
- * @brief Draw all static HUD labels on the background
- */
-static void
-draw_hud(void)
-{
-    UINT8 i = 0;
-
-    while (mg2_labels[i].text != NULL)
-        text_renderer_draw(&mg2_labels[i++]);
-}
-
-/**
- * @brief Draw the current score value on the HUD
- * 
- * @param score Score value to draw
- */
-static void
-draw_score(INT16 score)
-{
-    CHAR          buf[7];
-    text_render_t render = {buf, MG2_SCORE_VAL_X, MG2_SCORE_VAL_Y};
-
-    uint_to_str((UINT16)score, buf, 6);
-    text_renderer_draw(&render);
-}
-
-static void
-draw_lines(UINT8 lines)
-{
-    CHAR          buf[4];
-    text_render_t render = {buf, MG2_LINES_VAL_X, MG2_LINES_VAL_Y};
-
-    uint_to_str((UINT16)lines, buf, 3);
-    text_renderer_draw(&render);
-}
 
 /**
  * @brief Advance to the next piece in the cycle (I->O->T->S->Z->J->L->I)
@@ -108,9 +48,7 @@ tetris(OUT game_t *game)
     set_bkg_data(0, TETRIS_TILE_COUNT, tetris_tiles);
     text_renderer_init();
     set_bkg_tiles(0, 0, 20, 18, tetris_bg_map);
-    draw_hud();
-    draw_score(0);
-    draw_lines(0);
+    draw_hud(0, 1, 0);
     piece_draw(&curr_piece);
 }
 

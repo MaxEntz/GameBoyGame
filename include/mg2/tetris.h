@@ -15,6 +15,7 @@
 #include "mg2/tetris_layout.h"
 #include "mg2/tetris_piece.h"
 #include "mg2/tetris_grid.h"
+#include "mg2/tetris_hud.h"
 
 /**
  * @brief Load the tetris assets and handle the tetris state
