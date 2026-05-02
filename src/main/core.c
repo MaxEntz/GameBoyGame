@@ -37,6 +37,10 @@ init_game(OUT game_t *game)
     game->seconds_counter = 0;
     game->is_moving = FALSE;
     game->moving_dir = MOVING_SENS_DOWN;
+    game->total_score = 0;
+    game->score_mg1 = 0;
+    game->score_mg2 = 0;
+    game->score_mg3 = 0;
 }
 
 
