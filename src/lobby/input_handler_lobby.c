@@ -6,6 +6,38 @@
 */
 
 #include "lobby/lobby.h"
+#include <stdio.h>
+
+static void
+handle_a_input(IN game_t *game)
+{
+    if (game->player_x >= 80 && game->player_x <= 96 &&
+        game->player_y >= 80 && game->player_y <= 96) {
+        game_changer(game, GAME_STATE_MG2);
+    }
+}
+
+static BOOLEAN
+switch_map(game_t *game,
+           INT16 x,
+           INT16 y,
+           UINT8 tile)
+{
+    if (x != 0 && y != 0)
+        return FALSE;
+    if (tile != 14)
+        return FALSE;
+    if (x == 0 || x == 160 - 16) {
+        return TRUE;
+    } else if (y == 0 && game->moving_dir == MOVING_SENS_UP) {
+        game->is_changing_map = TRUE;
+        for (UINT16 i = 0; i < 20 * 18; i++)
+            game->current_map[i] = map_cl1[i];
+        transition_map_animation(game);
+        return TRUE;
+    }
+    return FALSE;
+}
 
 /**
  * @brief Check if the player is colliding with a wall in the given direction
@@ -50,9 +82,10 @@ is_colliding_with_wall(IN game_t *game,
     tile_y = y >> 3;
     if (tile_x >= 20 || tile_y >= 18)
         return TRUE;
-    tile = map[tile_y * 20 + tile_x];
-
-    if (tile == 0 || tile == 1)
+    tile = game->current_map[tile_y * 20 + tile_x];
+    if (switch_map(game, x, y, tile))
+        return TRUE;
+    if (tile == 0 || tile == 1 || tile == 14)
         return FALSE;
     return TRUE;
 }
@@ -62,10 +95,12 @@ handle_input_lobby(OUT game_t *game,
                    IN UINT8 keys)
 {
     game->is_moving = FALSE;
+    if (game->is_changing_map)
+        return;
     if (keys & J_A)
-        game_changer(game, GAME_STATE_MG2);
+        handle_a_input(game);
     if (keys & J_B)
-        game_changer(game, GAME_STATE_MG3);
+        game_changer(game, GAME_STATE_MG2);
     if (keys & J_LEFT && !is_colliding_with_wall(game, MOVING_SENS_LEFT)) {
         game->player_x -= SPEED;
         game->is_moving = TRUE;

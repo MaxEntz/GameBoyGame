@@ -6,6 +6,7 @@
 */
 
 #include "lobby/lobby.h"
+#include <stdio.h>
 
 /**
  * @brief Load the lobby assets and handle the lobby state
@@ -22,7 +23,8 @@ load_assets(void)
     set_bkg_data(2, 4, tronc_tile);
     set_bkg_data(6, 4, wall_tile);
     set_bkg_data(10, 4, wall_tile_limit);
-    set_bkg_tiles(0, 0, 20, 18, map);
+    set_bkg_data(14, 1, wall_crossing_tile);
+    set_bkg_tiles(0, 0, 20, 18, map_bl1);
     set_sprite_data(0, 4, player_tiles_front);
     set_sprite_data(4, 2, player_tile_front_move);
     set_sprite_data(6, 4, player_tile_back);

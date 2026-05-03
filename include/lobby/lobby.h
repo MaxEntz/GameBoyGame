@@ -13,6 +13,13 @@
     #include "common/game_changer.h"
     #include "common/transition.h"
 
+typedef enum {
+    TRANSITION_TB,
+    TRANSITION_BT,
+    TRANSITION_LR,
+    TRANSITION_RL
+} transition_dir_t;
+
 /**
  * @brief Load the lobby assets and handle the lobby state
  * We can see it like a creator in CPP
@@ -39,5 +46,13 @@ handle_input_lobby(OUT game_t *game,
  */
 void
 update_lobby(OUT game_t *game);
+
+/**
+ * @brief Handle the map transition animation
+ * @param game Pointer to the game structure
+ * @return void
+ */
+void
+transition_map_animation(OUT game_t *game);
 
 #endif /* !LOBBY_H_ */
