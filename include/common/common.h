@@ -50,6 +50,8 @@ typedef struct game_s {
     UINT8        player_y;
     BOOLEAN      is_moving;
     UINT8        moving_dir;
+    BOOLEAN      is_changing_map;
+    UINT8  current_map[20 * 18];
 } game_t;
 
 /**
