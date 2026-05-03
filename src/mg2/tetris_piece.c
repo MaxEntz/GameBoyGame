@@ -192,6 +192,12 @@ piece_lock(IN const piece_t *piece)
     }
 }
 
+BOOLEAN
+piece_can_spawn(IN const piece_t *piece)
+{
+    return piece_fits(piece, piece->rot, 0);
+}
+
 void
 rotate_r(INOUT piece_t *piece)
 {

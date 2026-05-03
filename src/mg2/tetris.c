@@ -100,6 +100,10 @@ update_tetris(OUT game_t *game)
             draw_lines(cleared_lines);
         }
         spawn_next();
+        if (!piece_can_spawn(&curr_piece)) {
+            game_changer(game, GAME_STATE_LOBBY);
+            return;
+        }
         piece_draw(&curr_piece);
     }
 }

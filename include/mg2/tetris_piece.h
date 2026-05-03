@@ -46,6 +46,8 @@ BOOLEAN
 piece_can_move_right(IN const piece_t *piece);
 void
 piece_lock(IN const piece_t *piece);
+BOOLEAN
+piece_can_spawn(IN const piece_t *piece);
 void
 rotate_r(INOUT piece_t *piece);
 void
