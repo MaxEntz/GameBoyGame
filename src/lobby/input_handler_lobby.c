@@ -6,15 +6,38 @@
 */
 
 #include "lobby/lobby.h"
-#include <stdio.h>
 
+/**
+ * @brief Get the tile at the specified position in the map
+ * @param game Pointer to the game structure
+ * @param x X coordinate
+ * @param y Y coordinate
+ * @return The tile at the specified position
+ */
+static UINT8
+get_tile_by_map(game_t *game, INT16 x, INT16 y)
+{
+    UINT8 tile_x = 0;
+    UINT8 tile_y = 0;
+
+    if (x < 0 || y < 0)
+        return 0;
+    tile_x = x >> 3;
+    tile_y = y >> 3;
+    if (tile_x >= 20 || tile_y >= 18)
+        return 0;
+    return game->current_map[tile_y * 20 + tile_x];
+}
+
+/**
+ * @brief Handle the A button input
+ * @param game Pointer to the game structure
+ */
 static void
 handle_a_input(IN game_t *game)
 {
     INT16 x = game->player_x - 8;
     INT16 y = game->player_y - 16;
-    UINT8 tile_x = 0;
-    UINT8 tile_y = 0;
     UINT8 tile = 0;
 
     if (x < 0 || y < 0)
@@ -37,9 +60,7 @@ handle_a_input(IN game_t *game)
         default:
             break;
     }
-    tile_x = x >> 3;
-    tile_y = y >> 3;
-    tile = game->current_map[tile_y * 20 + tile_x];
+    tile = get_tile_by_map(game, x, y);
     if (tile == 23 || tile == 24 || tile == 25 || tile == 26)
         game_changer(game, GAME_STATE_MG2);
     
@@ -57,9 +78,7 @@ is_colliding_with_wall(IN game_t *game,
 {
     INT16 x = game->player_x - 8;
     INT16 y = game->player_y - 16;
-    UINT8 tile_x;
-    UINT8 tile_y;
-    UINT8 tile;
+    UINT8 tile = 0;
 
     switch (sens) {
         case MOVING_SENS_LEFT:
@@ -82,13 +101,9 @@ is_colliding_with_wall(IN game_t *game,
             break;
     }
 
-    if (x < 0 || y < 0)
+    if (x < 0 || y < 0 || x >= 160 || y >= 144)
         return TRUE;
-    tile_x = x >> 3;
-    tile_y = y >> 3;
-    if (tile_x >= 20 || tile_y >= 18)
-        return TRUE;
-    tile = game->current_map[tile_y * 20 + tile_x];
+    tile = get_tile_by_map(game, x, y);
     if (switch_map(game, x, y, tile))
         return FALSE;
     if (tile == 0 || tile == 1 || tile == 14)
