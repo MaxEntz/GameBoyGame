@@ -6,6 +6,7 @@
 */
 
 #include "lobby/lobby.h"
+#include <stdio.h>
 
 static void
 handle_a_input(IN game_t *game)
@@ -50,7 +51,7 @@ switch_map(game_t *game,
            INT16 y,
            UINT8 tile)
 {
-    if (x != 0 && y != 0)
+    if ((x != 0 && y != 0) && (x != 160 - 16 && y != 144 - 16))
         return FALSE;
     if (tile != 14)
         return FALSE;
@@ -60,7 +61,13 @@ switch_map(game_t *game,
         game->is_changing_map = TRUE;
         for (UINT16 i = 0; i < 20 * 18; i++)
             game->current_map[i] = map_cl1[i];
-        transition_map_animation(game);
+        transition_map_animation(game, TRANSITION_TB);
+        return TRUE;
+    } else if (y >= 144 - 16 && game->moving_dir == MOVING_SENS_DOWN) {
+        game->is_changing_map = TRUE;
+        for (UINT16 i = 0; i < 20 * 18; i++)
+            game->current_map[i] = map_bl1[i];
+        transition_map_animation(game, TRANSITION_BT);
         return TRUE;
     }
     return FALSE;

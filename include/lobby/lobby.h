@@ -13,7 +13,7 @@
     #include "common/game_changer.h"
     #include "common/transition.h"
 
-typedef enum {
+typedef enum transition_dir_e {
     TRANSITION_TB,
     TRANSITION_BT,
     TRANSITION_LR,
@@ -53,6 +53,7 @@ update_lobby(OUT game_t *game);
  * @return void
  */
 void
-transition_map_animation(OUT game_t *game);
+transition_map_animation(OUT game_t *game,
+                         IN transition_dir_t dir);
 
 #endif /* !LOBBY_H_ */
