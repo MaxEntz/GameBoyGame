@@ -9,15 +9,15 @@
 
 const map_manager_t g_map_manager[11] = {
     {NULL, NULL}, /* 0 */
-    {MAP_TL, map_tl},
-    {MAP_TC, map_tc},
-    {MAP_TR, map_tr},
-    {MAP_CL, map_cl},
-    {MAP_CC, map_cc},
-    {MAP_CR, map_cr},
-    {MAP_BL, map_bl},
-    {MAP_BC, map_bc},
-    {MAP_BR, map_br},
+    {MAP_ID_TL, map_tl},
+    {MAP_ID_TC, map_tc},
+    {MAP_ID_TR, map_tr},
+    {MAP_ID_CL, map_cl},
+    {MAP_ID_CC, map_cc},
+    {MAP_ID_CR, map_cr},
+    {MAP_ID_BL, map_bl},
+    {MAP_ID_BC, map_bc},
+    {MAP_ID_BR, map_br},
     {NULL, NULL} /* 10 */
 };
 
@@ -31,7 +31,7 @@ const map_manager_t g_map_manager[11] = {
 static BOOLEAN
 swap_map_with_param(game_t *game, map_id_t new_map_id, transition_dir_t dir)
 {
-    if (new_map_id < MAP_TL || new_map_id > MAP_BR)
+    if (new_map_id < MAP_ID_TL || new_map_id > MAP_ID_BR)
         return FALSE;
     game->current_map_id = new_map_id;
     game->is_changing_map = TRUE;

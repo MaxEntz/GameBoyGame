@@ -54,7 +54,6 @@ lobby(OUT game_t *game)
 {
     (void)game;
     load_assets();
-    transition_fade_in();
 }
 
 /**

@@ -14,10 +14,10 @@
     #include "common/transition.h"
 
     // Map manager macro
-    #define MAP_LEFT -1
-    #define MAP_RIGHT 1
-    #define MAP_UP -3
-    #define MAP_DOWN 3
+    #define MAP_LEFT (-1)
+    #define MAP_RIGHT (1)
+    #define MAP_UP (-3)
+    #define MAP_DOWN (3)
 
 typedef enum transition_dir_e {
     TRANSITION_TB,

@@ -41,15 +41,15 @@ typedef enum {
 } game_state_t;
 
 typedef enum map_id_e {
-    MAP_TL = 1,
-    MAP_TC = 2,
-    MAP_TR = 3,
-    MAP_CL = 4,
-    MAP_CC = 5,
-    MAP_CR = 6,
-    MAP_BL = 7,
-    MAP_BC = 8,
-    MAP_BR = 9
+    MAP_ID_TL = 1,
+    MAP_ID_TC = 2,
+    MAP_ID_TR = 3,
+    MAP_ID_CL = 4,
+    MAP_ID_CC = 5,
+    MAP_ID_CR = 6,
+    MAP_ID_BL = 7,
+    MAP_ID_BC = 8,
+    MAP_ID_BR = 9
 } map_id_t;
 
 /**

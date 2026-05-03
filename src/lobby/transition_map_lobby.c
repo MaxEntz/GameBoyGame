@@ -25,7 +25,7 @@ transition_map_animation(OUT game_t *game,
             if (x <= 16)
                 game->is_changing_map = FALSE;
             else
-            x -= 2;
+                x -= 2;
         } else if (dir == TRANSITION_TB) {
             if (y >= 144 - 24)
                 game->is_changing_map = FALSE;
