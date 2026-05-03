@@ -49,7 +49,8 @@ typedef enum map_id_e {
     MAP_ID_CR = 6,
     MAP_ID_BL = 7,
     MAP_ID_BC = 8,
-    MAP_ID_BR = 9
+    MAP_ID_BR = 9,
+    MAP_ID_INVALID = 0
 } map_id_t;
 
 /**

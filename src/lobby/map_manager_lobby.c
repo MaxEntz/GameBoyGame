@@ -7,8 +7,8 @@
 
 #include "lobby/lobby.h"
 
-const map_manager_t g_map_manager[11] = {
-    {NULL, NULL}, /* 0 */
+static const map_manager_t g_map_manager[11] = {
+    {MAP_ID_INVALID, NULL}, /* 0 */
     {MAP_ID_TL, map_tl},
     {MAP_ID_TC, map_tc},
     {MAP_ID_TR, map_tr},
@@ -18,7 +18,7 @@ const map_manager_t g_map_manager[11] = {
     {MAP_ID_BL, map_bl},
     {MAP_ID_BC, map_bc},
     {MAP_ID_BR, map_br},
-    {NULL, NULL} /* 10 */
+    {MAP_ID_INVALID, NULL} /* 10 */
 };
 
 /**
