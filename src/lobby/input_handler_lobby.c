@@ -18,18 +18,26 @@ handle_a_input(IN game_t *game)
 
     if (x < 0 || y < 0)
         return;
+    if (x >= 160 || y >= 144)
+        return;
+    switch (game->moving_dir) {
+        case MOVING_SENS_UP:
+            y -= 8;
+            break;
+        case MOVING_SENS_DOWN:
+            y += 8;
+            break;
+        case MOVING_SENS_LEFT:
+            x -= 8;
+            break;
+        case MOVING_SENS_RIGHT:
+            x += 8;
+            break;
+        default:
+            break;
+    }
     tile_x = x >> 3;
     tile_y = y >> 3;
-    if (tile_x >= 20 || tile_y >= 18)
-        return;
-    if (game->moving_dir == MOVING_SENS_UP)
-        tile_y -= 1;
-    else if (game->moving_dir == MOVING_SENS_DOWN)
-        tile_y += 1;
-    else if (game->moving_dir == MOVING_SENS_LEFT)
-        tile_x -= 1;
-    else if (game->moving_dir == MOVING_SENS_RIGHT)
-        tile_x += 1;
     tile = game->current_map[tile_y * 20 + tile_x];
     if (tile == 23 || tile == 24 || tile == 25 || tile == 26)
         game_changer(game, GAME_STATE_MG2);
