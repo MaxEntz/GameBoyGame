@@ -29,7 +29,14 @@ extern const UINT8 player_tile_right[];
 extern const UINT8 player_tile_right_move[];
 extern const UINT8 ennemies1_tile[];
 extern const UINT8 transition_map[];
-extern const UINT8 map_bl1[];
-extern const UINT8 map_cl1[];
+extern const UINT8 map_bl[];
+extern const UINT8 map_cl[];
+extern const UINT8 map_tl[];
+extern const UINT8 map_bc[];
+extern const UINT8 map_cc[];
+extern const UINT8 map_tc[];
+extern const UINT8 map_br[];
+extern const UINT8 map_cr[];
+extern const UINT8 map_tr[];
 
 #endif /* !ASSET_LOBBY_H_ */

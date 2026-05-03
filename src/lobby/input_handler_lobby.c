@@ -45,34 +45,6 @@ handle_a_input(IN game_t *game)
     
 }
 
-static BOOLEAN
-switch_map(game_t *game,
-           INT16 x,
-           INT16 y,
-           UINT8 tile)
-{
-    if ((x != 0 && y != 0) && (x != 160 - 16 && y != 144 - 16))
-        return FALSE;
-    if (tile != 14)
-        return FALSE;
-    if (x == 0 || x == 160 - 16) {
-        return TRUE;
-    } else if (y == 0 && game->moving_dir == MOVING_SENS_UP) {
-        game->is_changing_map = TRUE;
-        for (UINT16 i = 0; i < 20 * 18; i++)
-            game->current_map[i] = map_cl1[i];
-        transition_map_animation(game, TRANSITION_TB);
-        return TRUE;
-    } else if (y >= 144 - 16 && game->moving_dir == MOVING_SENS_DOWN) {
-        game->is_changing_map = TRUE;
-        for (UINT16 i = 0; i < 20 * 18; i++)
-            game->current_map[i] = map_bl1[i];
-        transition_map_animation(game, TRANSITION_BT);
-        return TRUE;
-    }
-    return FALSE;
-}
-
 /**
  * @brief Check if the player is colliding with a wall in the given direction
  * @param game Pointer to the game structure
@@ -92,11 +64,11 @@ is_colliding_with_wall(IN game_t *game,
     switch (sens) {
         case MOVING_SENS_LEFT:
             x -= SPEED;
-            y += 16;
+            y += 8;
             break;
         case MOVING_SENS_RIGHT:
             x += SPEED + 16;
-            y += 16;
+            y += 8;
             break;
         case MOVING_SENS_UP:
             x += 8;
@@ -118,7 +90,7 @@ is_colliding_with_wall(IN game_t *game,
         return TRUE;
     tile = game->current_map[tile_y * 20 + tile_x];
     if (switch_map(game, x, y, tile))
-        return TRUE;
+        return FALSE;
     if (tile == 0 || tile == 1 || tile == 14)
         return FALSE;
     return TRUE;

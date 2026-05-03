@@ -39,7 +39,8 @@ init_game(OUT game_t *game)
     game->moving_dir = MOVING_SENS_DOWN;
     game->is_changing_map = FALSE;
     for (UINT16 i = 0; i < 20 * 18; i++)
-        game->current_map[i] = map_bl1[i];
+        game->current_map[i] = map_bl[i];
+    game->current_map_id = MAP_BL;
 }
 
 
