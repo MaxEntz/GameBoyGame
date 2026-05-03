@@ -10,10 +10,30 @@
 static void
 handle_a_input(IN game_t *game)
 {
-    if (game->player_x >= 80 && game->player_x <= 96 &&
-        game->player_y >= 80 && game->player_y <= 96) {
+    INT16 x = game->player_x - 8;
+    INT16 y = game->player_y - 16;
+    UINT8 tile_x = 0;
+    UINT8 tile_y = 0;
+    UINT8 tile = 0;
+
+    if (x < 0 || y < 0)
+        return;
+    tile_x = x >> 3;
+    tile_y = y >> 3;
+    if (tile_x >= 20 || tile_y >= 18)
+        return;
+    if (game->moving_dir == MOVING_SENS_UP)
+        tile_y -= 1;
+    else if (game->moving_dir == MOVING_SENS_DOWN)
+        tile_y += 1;
+    else if (game->moving_dir == MOVING_SENS_LEFT)
+        tile_x -= 1;
+    else if (game->moving_dir == MOVING_SENS_RIGHT)
+        tile_x += 1;
+    tile = game->current_map[tile_y * 20 + tile_x];
+    if (tile == 23 || tile == 24 || tile == 25 || tile == 26)
         game_changer(game, GAME_STATE_MG2);
-    }
+    
 }
 
 static BOOLEAN
