@@ -16,6 +16,7 @@ extern const UINT8 wall_tile[];
 extern const UINT8 wall_tile_limit[];
 extern const UINT8 wall_crossing_tile[];
 extern const UINT8 tronc_tile[];
+extern const UINT8 bush_tile[];
 extern const UINT8 square_tile[];
 extern const UINT8 player_tiles_front[];
 extern const UINT8 player_tile_front_move[];
