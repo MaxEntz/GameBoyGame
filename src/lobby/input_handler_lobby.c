@@ -85,11 +85,11 @@ is_colliding_with_wall(IN game_t *game,
     switch (sens) {
         case MOVING_SENS_LEFT:
             x -= SPEED;
-            y += 8;
+            y += 16;
             break;
         case MOVING_SENS_RIGHT:
             x += SPEED + 16;
-            y += 8;
+            y += 16;
             break;
         case MOVING_SENS_UP:
             x += 8;
