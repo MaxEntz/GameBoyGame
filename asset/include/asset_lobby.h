@@ -14,6 +14,7 @@ extern const UINT8 void_tile[];
 extern const UINT8 grass_tile[];
 extern const UINT8 wall_tile[];
 extern const UINT8 wall_tile_limit[];
+extern const UINT8 wall_crossing_tile[];
 extern const UINT8 tronc_tile[];
 extern const UINT8 square_tile[];
 extern const UINT8 player_tiles_front[];
@@ -24,6 +25,8 @@ extern const UINT8 player_tile_left[];
 extern const UINT8 player_tile_left_move[];
 extern const UINT8 player_tile_right[];
 extern const UINT8 player_tile_right_move[];
-extern const UINT8 map[];
+extern const UINT8 transition_map[];
+extern const UINT8 map_bl1[];
+extern const UINT8 map_cl1[];
 
 #endif /* !ASSET_LOBBY_H_ */
