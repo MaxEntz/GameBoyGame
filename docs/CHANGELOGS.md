@@ -6,6 +6,38 @@ This format is based on Keep a Changelog
 and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 ---
 
+## [1.10.0] - 2026-05-03
+
+### Added
+- Lobby transition at the start of the game
+- Complete map management system with modular map changer logic
+- Multiple maps support for the lobby with easy map selection logic
+- Portal-based map transition system
+- Enemy selection management with A input control
+- Input handler module for improved lobby input separation
+- New lobby assets:
+  - Bush assets for environment decoration
+  - Flower assets for visual enhancement
+  - New enemy character for MG launcher
+  - Updated cl1 character sprite
+  - Portal tile for map transitions
+  - Map border and limit assets
+- Improved game checker logic for game selection
+
+### Fixed
+- Lobby input handler code cleanup to avoid code duplication
+- Left move cursor positioning (y=16 alignment)
+- Map manager code cleanup to eliminate duplication
+- Removed unused includes
+
+### Changed
+- `src/lobby/` : Modularized into separate files for input handling, map management, and transitions
+- `asset/src/asset_lobby.c` : Expanded with new lobby assets
+- `include/common/common.h` : Extended with new common types
+- `include/lobby/lobby.h` : Added new struct definitions and function prototypes
+
+---
+
 ## [1.9.1] - 2026-05-02
 
 ### Added
