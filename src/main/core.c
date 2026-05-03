@@ -41,6 +41,10 @@ init_game(OUT game_t *game)
     for (UINT16 i = 0; i < 20 * 18; i++)
         game->current_map[i] = map_bl[i];
     game->current_map_id = MAP_BL;
+    game->total_score = 0;
+    game->score_mg1 = 0;
+    game->score_mg2 = 0;
+    game->score_mg3 = 0;
 }
 
 

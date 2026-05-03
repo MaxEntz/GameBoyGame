@@ -20,6 +20,11 @@
     #define MOVING_SENS_LEFT 12
     #define MOVING_SENS_RIGHT 18
 
+    // To update... about your game
+    #define MASTER_SCORE_MG1 100
+    #define MASTER_SCORE_MG2 100
+    #define MASTER_SCORE_MG3 100
+
 /**
  * @brief Enum to represent different game states
  */
@@ -65,6 +70,10 @@ typedef struct game_s {
     BOOLEAN      is_changing_map;
     UINT8        current_map[20 * 18];
     map_id_t     current_map_id;
+    INT16        total_score;
+    INT16        score_mg1;
+    INT16        score_mg2;
+    INT16        score_mg3;
 } game_t;
 
 /**
