@@ -12,6 +12,12 @@
 
 UINT8 tetris_grid[TETRIS_GRID_H][TETRIS_GRID_W];
 
+/**
+ * @brief Check if a grid row is full
+ * 
+ * @param r row index to check
+ * @return TRUE if the row is full, FALSE otherwise
+ */
 static BOOLEAN
 row_is_full(UINT8 r)
 {

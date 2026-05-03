@@ -34,22 +34,79 @@ typedef struct piece_s {
 
 extern const UINT8 piece_shapes[PIECE_COUNT][4][4][4];
 
+/**
+ * @brief Draw the piece on the playfield
+ * 
+ * @param piece piece to draw
+ */
 void
 piece_draw(IN const piece_t *piece);
+
+/**
+ * @brief Erase the piece from the playfield (draw empty tiles)
+ * 
+ * @param piece piece to erase
+ */
 void
 piece_erase(IN const piece_t *piece);
+
+/**
+ * @brief Check if the piece can move down
+ * 
+ * @param piece piece to check
+ * @return TRUE if the piece can move down, FALSE otherwise
+ */
 BOOLEAN
 piece_can_move_down(IN const piece_t *piece);
+
+/**
+ * @brief Check if the piece can move left
+ * 
+ * @param piece piece to check
+ * @return TRUE if the piece can move left, FALSE otherwise
+ */
 BOOLEAN
 piece_can_move_left(IN const piece_t *piece);
+
+/**
+ * @brief Check if the piece can move right
+ * 
+ * @param piece piece to check
+ * @return TRUE if the piece can move right, FALSE otherwise
+ */
 BOOLEAN
 piece_can_move_right(IN const piece_t *piece);
+
+/**
+ * @brief Write the piece's tiles to the grid
+ * 
+ * @param piece piece to lock
+ */
 void
 piece_lock(IN const piece_t *piece);
+
+/**
+ * @brief Check if the piece can spawn at its initial position
+ * 
+ * @param piece piece to check
+ * @return TRUE if the piece can spawn, FALSE otherwise
+ */
 BOOLEAN
 piece_can_spawn(IN const piece_t *piece);
+
+/**
+ * @brief Rotate the piece clockwise if possible, with basic wall addapation
+ * 
+ * @param piece piece to rotate
+ */
 void
 rotate_r(INOUT piece_t *piece);
+
+/**
+ * @brief Rotate the piece counter-clockwise if possible, with basic wall addapation
+ *
+ * @param piece piece to rotate
+ */
 void
 rotate_l(INOUT piece_t *piece);
 
