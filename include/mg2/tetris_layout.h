@@ -35,7 +35,10 @@
     #define MG2_NEXT_INNER_X     14
     #define MG2_NEXT_INNER_Y     13
 
-    #define DROP_DELAY  30
-    #define MOVE_DELAY  8
+    #define DROP_DELAY_BASE  30
+    #define DROP_DELAY_STEP  4
+    #define DROP_DELAY_MIN   6
+    #define LINES_PER_LEVEL  5
+    #define MOVE_DELAY       8
 
 #endif /* !TETRIS_LAYOUT_H_ */
