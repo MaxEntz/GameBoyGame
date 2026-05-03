@@ -21,6 +21,13 @@ const map_manager_t g_map_manager[11] = {
     {NULL, NULL} /* 10 */
 };
 
+/**
+ * @brief Swap the current map with a new map
+ * @param game Pointer to the game structure
+ * @param new_map_id The ID of the new map
+ * @param dir The direction of the transition
+ * @return TRUE if the map was swapped, FALSE otherwise
+ */
 static BOOLEAN
 swap_map_with_param(game_t *game, map_id_t new_map_id, transition_dir_t dir)
 {
