@@ -23,6 +23,8 @@ load_assets(void)
     set_bkg_data(6, 4, wall_tile);
     set_bkg_data(10, 4, wall_tile_limit);
     set_bkg_data(14, 1, wall_crossing_tile);
+    set_bkg_data(15, 4, bush_tile);
+    set_bkg_data(19, 4, flower_tile);
     set_bkg_tiles(0, 0, 20, 18, map_bl1);
     set_sprite_data(0, 4, player_tiles_front);
     set_sprite_data(4, 2, player_tile_front_move);
