@@ -6,7 +6,6 @@
 */
 
 #include "lobby/lobby.h"
-#include <stdio.h>
 
 /**
  * @brief Load the lobby assets and handle the lobby state

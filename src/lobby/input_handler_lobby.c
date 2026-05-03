@@ -6,7 +6,6 @@
 */
 
 #include "lobby/lobby.h"
-#include <stdio.h>
 
 static void
 handle_a_input(IN game_t *game)

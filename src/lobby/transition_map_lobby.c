@@ -59,5 +59,4 @@ transition_map_animation(OUT game_t *game)
     game->player_x = x;
     game->player_y = y;
     set_bkg_tiles(0, 0, 20, 18, game->current_map);
-    return;
 }
