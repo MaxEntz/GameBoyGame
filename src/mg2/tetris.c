@@ -59,7 +59,8 @@ tetris(OUT game_t *game)
     g_tetris.curr_piece.rot = 0;
     g_tetris.curr_piece.can_rotate = TRUE;
     grid_init();
-    move_sprite(0, 0, 0);
+    for (UINT8 i = 0; i < 4; i++)
+        move_sprite(i, 0, 0);
     set_bkg_data(0, TETRIS_TILE_COUNT, tetris_tiles);
     text_renderer_init();
     set_bkg_tiles(0, 0, 20, 18, tetris_bg_map);
