@@ -18,6 +18,21 @@
 #include "mg2/tetris_hud.h"
 
 /**
+ * @brief Tetris game state structure
+ * 
+ * @param curr_piece current falling piece
+ * @param delay_frame frame counter for automatic piece dropping
+ * @param move_frame frame counter for horizontal movement delay
+ * @param cleared_lines total number of cleared lines (for level progression)
+ */
+typedef struct tetris_s {
+    piece_t curr_piece;
+    UINT8   delay_frame;
+    UINT8   move_frame;
+    UINT8   cleared_lines;
+} tetris_t;
+
+/**
  * @brief Load the tetris assets and handle the tetris state
  * We can see it like a creator in CPP
  * @param game Pointer to the game structure
