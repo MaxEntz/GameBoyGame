@@ -35,11 +35,13 @@ get_drop_delay(UINT8 level)
 static void
 spawn_next(void)
 {
-    g_tetris.curr_piece.type = (g_tetris.curr_piece.type + 1) % PIECE_COUNT;
+    g_tetris.curr_piece.type = g_tetris.next_type;
     g_tetris.curr_piece.x = PIECE_SPAWN_X;
     g_tetris.curr_piece.y = PIECE_SPAWN_Y;
     g_tetris.curr_piece.rot = 0;
     g_tetris.curr_piece.can_rotate = TRUE;
+    g_tetris.next_type = (piece_type_t)((g_tetris.next_type + 1) % PIECE_COUNT);
+    draw_next_piece(g_tetris.next_type);
 }
 
 void
@@ -50,6 +52,7 @@ tetris(OUT game_t *game)
     g_tetris.cleared_lines = 0;
     g_tetris.delay_frame = 0;
     g_tetris.move_frame = 0;
+    g_tetris.next_type = PIECE_O;
     g_tetris.curr_piece.type = PIECE_I;
     g_tetris.curr_piece.x = PIECE_SPAWN_X;
     g_tetris.curr_piece.y = PIECE_SPAWN_Y;
@@ -61,6 +64,7 @@ tetris(OUT game_t *game)
     text_renderer_init();
     set_bkg_tiles(0, 0, 20, 18, tetris_bg_map);
     draw_hud(0, 1, 0);
+    draw_next_piece(g_tetris.next_type);
     piece_draw(&g_tetris.curr_piece);
 }
 

@@ -9,6 +9,7 @@
     #define TETRIS_HUD_H_
 
     #include "common/project_types.h"
+    #include "mg2/tetris_piece.h"
 
 /**
  * @brief Draw the current score
@@ -43,5 +44,14 @@ draw_level(UINT8 level);
  */
 void
 draw_hud(INT16 score, UINT8 level, UINT8 lines);
+
+/**
+ * @brief Erase and redraw the next piece preview box (row limited to 3 cuz 
+ * it's better visually)
+ *
+ * @param type piece type to preview
+ */
+void
+draw_next_piece(piece_type_t type);
 
 #endif /* !TETRIS_HUD_H_ */

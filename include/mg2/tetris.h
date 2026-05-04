@@ -26,10 +26,11 @@
  * @param cleared_lines total number of cleared lines (for level progression)
  */
 typedef struct tetris_s {
-    piece_t curr_piece;
-    UINT8   delay_frame;
-    UINT8   move_frame;
-    UINT8   cleared_lines;
+    piece_t      curr_piece;
+    piece_type_t next_type;
+    UINT8        delay_frame;
+    UINT8        move_frame;
+    UINT8        cleared_lines;
 } tetris_t;
 
 /**
