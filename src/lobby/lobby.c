@@ -18,10 +18,15 @@ load_assets(void)
     SPRITES_8x8;
 
     set_bkg_data(0, 1, grass_tile);
-    set_bkg_data(1, 1, wall_tile);
-    set_bkg_data(2, 1, void_tile);
-    set_bkg_data(3, 4, tronc_tile);
-    set_bkg_tiles(0, 0, 20, 18, map);
+    set_bkg_data(1, 1, void_tile);
+    set_bkg_data(2, 4, tronc_tile);
+    set_bkg_data(6, 4, wall_tile);
+    set_bkg_data(10, 4, wall_tile_limit);
+    set_bkg_data(14, 1, wall_crossing_tile);
+    set_bkg_data(15, 4, bush_tile);
+    set_bkg_data(19, 4, flower_tile);
+    set_bkg_data(23, 4, ennemies1_tile);
+    set_bkg_tiles(0, 0, 20, 18, map_bl);
     set_sprite_data(0, 4, player_tiles_front);
     set_sprite_data(4, 2, player_tile_front_move);
     set_sprite_data(6, 4, player_tile_back);
@@ -98,81 +103,3 @@ update_lobby(OUT game_t *game)
     move_sprite(3, game->player_x + 8, game->player_y + 8);
 }
 
-/**
- * @brief Check if the player is colliding with a wall in the given direction
- * @param game Pointer to the game structure
- * @param sens The direction of movement (left, right, up, down)
- * @return TRUE if colliding with a wall, FALSE otherwise
- */
-static BOOLEAN
-is_colliding_with_wall(IN game_t *game,
-                       IN UINT8 sens)
-{
-    INT16 x = game->player_x - 8;
-    INT16 y = game->player_y - 16;
-    UINT8 tile_x;
-    UINT8 tile_y;
-    UINT8 tile;
-
-    switch (sens) {
-        case MOVING_SENS_LEFT:
-            x -= SPEED;
-            y += 8;
-            break;
-        case MOVING_SENS_RIGHT:
-            x += SPEED + 16;
-            y += 8;
-            break;
-        case MOVING_SENS_UP:
-            x += 8;
-            y -= SPEED;
-            break;
-        case MOVING_SENS_DOWN:
-            x += 8;
-            y += SPEED + 16;
-            break;
-        default:
-            break;
-    }
-
-    tile_x = x >> 3;
-    tile_y = y >> 3;
-    if (tile_x >= 20 || tile_y >= 18)
-        return TRUE;
-    tile = map[tile_y * 20 + tile_x];
-
-    if (tile == 0 || tile == 2)
-        return FALSE;
-    return TRUE;
-}
-
-void
-handle_input_lobby(OUT game_t *game,
-                   IN UINT8 keys)
-{
-    game->is_moving = FALSE;
-    if (keys & J_A)
-        game_changer(game, GAME_STATE_MG2);
-    if (keys & J_B)
-        game_changer(game, GAME_STATE_MG3);
-    if (keys & J_LEFT && !is_colliding_with_wall(game, MOVING_SENS_LEFT)) {
-        game->player_x -= SPEED;
-        game->is_moving = TRUE;
-        game->moving_dir = MOVING_SENS_LEFT;
-    }
-    if (keys & J_RIGHT && !is_colliding_with_wall(game, MOVING_SENS_RIGHT)) {
-        game->player_x += SPEED;
-        game->is_moving = TRUE;
-        game->moving_dir = MOVING_SENS_RIGHT;
-    }
-    if (keys & J_UP && !is_colliding_with_wall(game, MOVING_SENS_UP)) {
-        game->player_y -= SPEED;
-        game->is_moving = TRUE;
-        game->moving_dir = MOVING_SENS_UP;
-    }
-    if (keys & J_DOWN && !is_colliding_with_wall(game, MOVING_SENS_DOWN)) {
-        game->player_y += SPEED;
-        game->is_moving = TRUE;
-        game->moving_dir = MOVING_SENS_DOWN;
-    }
-}

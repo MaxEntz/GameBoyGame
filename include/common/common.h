@@ -40,6 +40,19 @@ typedef enum {
     GAME_STATE_COUNT
 } game_state_t;
 
+typedef enum map_id_e {
+    MAP_ID_TL = 1,
+    MAP_ID_TC = 2,
+    MAP_ID_TR = 3,
+    MAP_ID_CL = 4,
+    MAP_ID_CC = 5,
+    MAP_ID_CR = 6,
+    MAP_ID_BL = 7,
+    MAP_ID_BC = 8,
+    MAP_ID_BR = 9,
+    MAP_ID_INVALID = 0
+} map_id_t;
+
 /**
  * @brief Structure to manage the game state
  * And the player position for now, but we can add more stuff later
@@ -55,6 +68,9 @@ typedef struct game_s {
     UINT8        player_y;
     BOOLEAN      is_moving;
     UINT8        moving_dir;
+    BOOLEAN      is_changing_map;
+    UINT8        current_map[20 * 18];
+    map_id_t     current_map_id;
     INT16        total_score;
     INT16        score_mg1;
     INT16        score_mg2;

@@ -37,6 +37,10 @@ init_game(OUT game_t *game)
     game->seconds_counter = 0;
     game->is_moving = FALSE;
     game->moving_dir = MOVING_SENS_DOWN;
+    game->is_changing_map = FALSE;
+    for (UINT16 i = 0; i < 20 * 18; i++)
+        game->current_map[i] = map_bl[i];
+    game->current_map_id = MAP_ID_BL;
     game->total_score = 0;
     game->score_mg1 = 0;
     game->score_mg2 = 0;

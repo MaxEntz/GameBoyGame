@@ -10,7 +10,6 @@
 
     #include <gb/gb.h>
     #include "common/common.h"
-
     #include "asset_lobby.h"
 
 
