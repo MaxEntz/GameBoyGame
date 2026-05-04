@@ -16,6 +16,7 @@
 #include "mg2/tetris_piece.h"
 #include "mg2/tetris_grid.h"
 #include "mg2/tetris_hud.h"
+#include "common/random.h"
 
 /**
  * @brief Tetris game state structure

@@ -40,7 +40,7 @@ spawn_next(void)
     g_tetris.curr_piece.y = PIECE_SPAWN_Y;
     g_tetris.curr_piece.rot = 0;
     g_tetris.curr_piece.can_rotate = TRUE;
-    g_tetris.next_type = (piece_type_t)((g_tetris.next_type + 1) % PIECE_COUNT);
+    g_tetris.next_type = (piece_type_t)random_get(PIECE_COUNT);
     draw_next_piece(g_tetris.next_type);
 }
 
@@ -52,7 +52,7 @@ tetris(OUT game_t *game)
     g_tetris.cleared_lines = 0;
     g_tetris.delay_frame = 0;
     g_tetris.move_frame = 0;
-    g_tetris.next_type = PIECE_O;
+    g_tetris.next_type = (piece_type_t)random_get(PIECE_COUNT);
     g_tetris.curr_piece.type = PIECE_I;
     g_tetris.curr_piece.x = PIECE_SPAWN_X;
     g_tetris.curr_piece.y = PIECE_SPAWN_Y;
