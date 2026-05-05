@@ -75,6 +75,7 @@ typedef struct game_s {
     INT16        score_mg1;
     INT16        score_mg2;
     INT16        score_mg3;
+    UINT8        level;
 } game_t;
 
 /**

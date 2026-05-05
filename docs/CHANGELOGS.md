@@ -6,6 +6,26 @@ This format is based on Keep a Changelog
 and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 ---
 
+## [1.11.0] - 2026-05-04
+
+### Added
+- Line clearing: full rows detected, erased, playfield redrawn when lines are cleared
+- Scoring system, dependig on cleared line count
+- Lines counter and level progression
+- Gravity speed scaling with level
+- Game over detection, returning to lobby on game over
+- Next piece preview displayed in the NEXT box
+- COmmon random functions, with an inittializer and a getter
+- Use of the rng for the piece spawning in tetris
+
+### Changed
+- `include/common/common.h`: added `level` field to `game_t`
+- `include/mg2/tetris_layout.h`: `DROP_DELAY` replaced by `DROP_DELAY_BASE`, `DROP_DELAY_STEP`, `DROP_DELAY_MIN`, `LINES_PER_LEVEL`
+- `src/mg2/tetris.c`: moved HUD calls to `tetris_hud.c`
+- `src/lobby/input_handler_lobby.c`: seeds RNG on first key press
+
+---
+
 ## [1.10.0] - 2026-05-03
 
 ### Added

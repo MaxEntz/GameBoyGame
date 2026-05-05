@@ -6,6 +6,10 @@
 */
 
 #include "lobby/lobby.h"
+#include "common/random.h"
+
+// MAXIME, met dans ta struct lobby quand tu la crée stp
+static BOOLEAN init_rng = FALSE;
 
 /**
  * @brief Get the tile at the specified position in the map
@@ -116,6 +120,10 @@ handle_input_lobby(OUT game_t *game,
                    IN UINT8 keys)
 {
     game->is_moving = FALSE;
+    if (!init_rng && keys) {
+        random_init(keys);
+        init_rng = TRUE;
+    }
     if (game->is_changing_map)
         return;
     if (keys & J_A)

@@ -63,6 +63,14 @@ const UINT8 piece_shapes[PIECE_COUNT][4][4][4] = {
     },
 };
 
+/**
+ * @brief Check if the piece can fit in the grid at the given rotation and horizontal gap
+ * 
+ * @param piece piece to check
+ * @param new_rot rotation to check
+ * @param gap horizontal gap to check (0 for no gap, -1 for left, +1 for right)
+ * @return TRUE if the piece can fit, FALSE otherwise
+ */
 static BOOLEAN
 piece_fits(IN const piece_t *piece, IN UINT8 new_rot, IN INT8 gap)
 {
@@ -190,6 +198,12 @@ piece_lock(IN const piece_t *piece)
                     (UINT8)(piece->type + TETRIS_TILE_BLOCK_I);
         }
     }
+}
+
+BOOLEAN
+piece_can_spawn(IN const piece_t *piece)
+{
+    return piece_fits(piece, piece->rot, 0);
 }
 
 void

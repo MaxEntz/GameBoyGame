@@ -21,4 +21,19 @@ extern UINT8 tetris_grid[TETRIS_GRID_H][TETRIS_GRID_W];
 void
 grid_init(void);
 
+/**
+ * @brief Detect and remove full rows
+ * @return Number of lines cleared (0-4)
+ */
+UINT8
+grid_clear_lines(void);
+
+/**
+ * @brief Redraw the entire playfield from grid data
+ * 
+ * PAS OPTI
+ */
+void
+grid_draw_playfield(void);
+
 #endif /* !TETRIS_GRID_H_ */
