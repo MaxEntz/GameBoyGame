@@ -7,7 +7,6 @@
 
 #include <gb/gb.h>
 #include "common/random.h"
-#include <stdio.h>
 
 static UINT16 g_seed;
 
