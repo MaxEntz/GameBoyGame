@@ -28,9 +28,7 @@ get_drop_delay(UINT8 level)
 }
 
 /**
- * @brief Advance to the next piece in the cycle (I->O->T->S->Z->J->L->I)
- *
- * only temp until i implement the randomness
+ * @brief Spawn the queued piece and pick the next one randomly
  */
 static void
 spawn_next(void)
@@ -53,11 +51,6 @@ tetris(OUT game_t *game)
     g_tetris.delay_frame = 0;
     g_tetris.move_frame = 0;
     g_tetris.next_type = (piece_type_t)random_get(PIECE_COUNT);
-    g_tetris.curr_piece.type = PIECE_I;
-    g_tetris.curr_piece.x = PIECE_SPAWN_X;
-    g_tetris.curr_piece.y = PIECE_SPAWN_Y;
-    g_tetris.curr_piece.rot = 0;
-    g_tetris.curr_piece.can_rotate = TRUE;
     grid_init();
     for (UINT8 i = 0; i < 4; i++)
         move_sprite(i, 0, 0);
@@ -65,7 +58,7 @@ tetris(OUT game_t *game)
     text_renderer_init();
     set_bkg_tiles(0, 0, 20, 18, tetris_bg_map);
     draw_hud(0, 1, 0);
-    draw_next_piece(g_tetris.next_type);
+    spawn_next();
     piece_draw(&g_tetris.curr_piece);
 }
 
