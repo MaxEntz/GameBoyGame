@@ -6,6 +6,16 @@ This format is based on Keep a Changelog
 and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 ---
 
+## [1.11.1] - 2026-05-06
+
+### Changed
+- `src/mg2/tetris_piece.c`: `piece_can_move_left` and `piece_can_move_right` now call to `piece_fits`
+- `src/mg2/tetris.c`: added `handle_piece_lock` and `handle_left_right` static to improve readability of `update_tetris` and `handle_input_tetris`
+- `src/mg2/tetris.c`: `tetris()` init now calls `spawn_next()` instead of manually setting piece fields; first piece is now random
+- `src/mg2/tetris_hud.c`: `draw_next_piece` merged clear and draw into a single loop
+
+---
+
 ## [1.11.0] - 2026-05-04
 
 ### Added
