@@ -28,9 +28,66 @@ get_drop_delay(UINT8 level)
 }
 
 /**
- * @brief Advance to the next piece in the cycle (I->O->T->S->Z->J->L->I)
- *
- * only temp until i implement the randomness
+ * @brief Lock the current piece, clear lines, update score/level, spawn next
+ * 
+ * @param game current game state
+ */
+static void
+handle_piece_lock(OUT game_t *game)
+{
+    UINT8 cleared;
+    UINT8 new_level;
+
+    piece_lock(&g_tetris.curr_piece);
+    cleared = grid_clear_lines();
+    if (cleared > 0) {
+        grid_draw_playfield();
+        game->score_mg2 += (INT16)(score_table[cleared] * game->level);
+        g_tetris.cleared_lines += cleared;
+        new_level = (UINT8)(1 + g_tetris.cleared_lines / LINES_PER_LEVEL);
+        if (new_level != game->level) {
+            game->level = new_level;
+            draw_level(game->level);
+        }
+        draw_score(game->score_mg2);
+        draw_lines(g_tetris.cleared_lines);
+    }
+    spawn_next();
+    if (!piece_can_spawn(&g_tetris.curr_piece))
+        game_changer(game, GAME_STATE_LOBBY);
+    else
+        piece_draw(&g_tetris.curr_piece);
+}
+
+/**
+ * @brief Handle left/right movement with move_frame throttle
+ * 
+ * @param keys current input keys
+ */
+static void
+handle_left_right(IN UINT8 keys)
+{
+    if (g_tetris.move_frame != 0)
+        return;
+    if (keys & J_LEFT) {
+        if (piece_can_move_left(&g_tetris.curr_piece)) {
+            piece_erase(&g_tetris.curr_piece);
+            g_tetris.curr_piece.x--;
+            piece_draw(&g_tetris.curr_piece);
+            g_tetris.move_frame = MOVE_DELAY;
+        }
+    } else if (keys & J_RIGHT) {
+        if (piece_can_move_right(&g_tetris.curr_piece)) {
+            piece_erase(&g_tetris.curr_piece);
+            g_tetris.curr_piece.x++;
+            piece_draw(&g_tetris.curr_piece);
+            g_tetris.move_frame = MOVE_DELAY;
+        }
+    }
+}
+
+/**
+ * @brief Spawn the queued piece and pick the next one randomly
  */
 static void
 spawn_next(void)
@@ -53,11 +110,6 @@ tetris(OUT game_t *game)
     g_tetris.delay_frame = 0;
     g_tetris.move_frame = 0;
     g_tetris.next_type = (piece_type_t)random_get(PIECE_COUNT);
-    g_tetris.curr_piece.type = PIECE_I;
-    g_tetris.curr_piece.x = PIECE_SPAWN_X;
-    g_tetris.curr_piece.y = PIECE_SPAWN_Y;
-    g_tetris.curr_piece.rot = 0;
-    g_tetris.curr_piece.can_rotate = TRUE;
     grid_init();
     for (UINT8 i = 0; i < 4; i++)
         move_sprite(i, 0, 0);
@@ -65,16 +117,13 @@ tetris(OUT game_t *game)
     text_renderer_init();
     set_bkg_tiles(0, 0, 20, 18, tetris_bg_map);
     draw_hud(0, 1, 0);
-    draw_next_piece(g_tetris.next_type);
+    spawn_next();
     piece_draw(&g_tetris.curr_piece);
 }
 
 void
 update_tetris(OUT game_t *game)
 {
-    UINT8 cleared;
-    UINT8 new_level;
-
     if (g_tetris.move_frame > 0)
         g_tetris.move_frame--;
     g_tetris.delay_frame++;
@@ -86,26 +135,7 @@ update_tetris(OUT game_t *game)
         g_tetris.curr_piece.y++;
         piece_draw(&g_tetris.curr_piece);
     } else {
-        piece_lock(&g_tetris.curr_piece);
-        cleared = grid_clear_lines();
-        if (cleared > 0) {
-            grid_draw_playfield();
-            game->score_mg2 += (INT16)(score_table[cleared] * game->level);
-            g_tetris.cleared_lines += cleared;
-            new_level = (UINT8)(1 + g_tetris.cleared_lines / LINES_PER_LEVEL);
-            if (new_level != game->level) {
-                game->level = new_level;
-                draw_level(game->level);
-            }
-            draw_score(game->score_mg2);
-            draw_lines(g_tetris.cleared_lines);
-        }
-        spawn_next();
-        if (!piece_can_spawn(&g_tetris.curr_piece)) {
-            game_changer(game, GAME_STATE_LOBBY);
-            return;
-        }
-        piece_draw(&g_tetris.curr_piece);
+        handle_piece_lock(game);
     }
 }
 
@@ -130,21 +160,5 @@ handle_input_tetris(OUT game_t *game,
     }
     if (keys & J_DOWN)
         g_tetris.delay_frame += (DROP_DELAY_BASE / 4);
-    if (g_tetris.move_frame == 0) {
-        if (keys & J_LEFT) {
-            if (piece_can_move_left(&g_tetris.curr_piece)) {
-                piece_erase(&g_tetris.curr_piece);
-                g_tetris.curr_piece.x--;
-                piece_draw(&g_tetris.curr_piece);
-                g_tetris.move_frame = MOVE_DELAY;
-            }
-        } else if (keys & J_RIGHT) {
-            if (piece_can_move_right(&g_tetris.curr_piece)) {
-                piece_erase(&g_tetris.curr_piece);
-                g_tetris.curr_piece.x++;
-                piece_draw(&g_tetris.curr_piece);
-                g_tetris.move_frame = MOVE_DELAY;
-            }
-        }
-    }
+    handle_left_right(keys);
 }
