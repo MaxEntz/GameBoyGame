@@ -82,15 +82,11 @@ draw_next_piece(piece_type_t type)
     UINT8 row;
     UINT8 col;
 
-    for (row = 0; row < 3; row++)
+    for (row = 0; row < 4; row++)
         for (col = 0; col < 4; col++)
             set_bkg_tile_xy((UINT8)(MG2_NEXT_INNER_X + col),
                             (UINT8)(MG2_NEXT_INNER_Y + row),
-                            TETRIS_TILE_EMPTY);
-    for (row = 0; row < 4; row++)
-        for (col = 0; col < 4; col++)
-            if (piece_shapes[type][0][row][col])
-                set_bkg_tile_xy((UINT8)(MG2_NEXT_INNER_X + col),
-                                (UINT8)(MG2_NEXT_INNER_Y + row),
-                                (UINT8)(type + TETRIS_TILE_BLOCK_I));
+                            piece_shapes[type][0][row][col]
+                                ? (UINT8)(type + TETRIS_TILE_BLOCK_I)
+                                : TETRIS_TILE_EMPTY);
 }
