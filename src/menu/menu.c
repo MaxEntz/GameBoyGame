@@ -30,12 +30,26 @@ hide_sprites(void)
         move_sprite(i, 0, 0);
 }
 
+/**
+ * @brief Draw the menu text
+ */
+static void
+draw_text(void)
+{
+    static const text_render_t title = {"???? THE MOLE", 3, 9};
+    static const text_render_t prompt = {"PRESS A TO START", 2, 13};
+
+    text_renderer_draw(&title);
+    text_renderer_draw(&prompt);
+}
+
 void
 menu(OUT game_t *game)
 {
     (void)game;
     clear_background();
     hide_sprites();
+    draw_text();
 }
 
 void
