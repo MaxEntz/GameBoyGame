@@ -130,6 +130,8 @@ handle_input_lobby(OUT game_t *game,
         handle_a_input(game);
     if (keys & J_B)
         game_changer(game, GAME_STATE_MG2);
+    if (keys & J_SELECT)
+        game_changer(game, GAME_STATE_MENU);
     if (keys & J_LEFT && !is_colliding_with_wall(game, MOVING_SENS_LEFT)) {
         game->player_x -= SPEED;
         game->is_moving = TRUE;

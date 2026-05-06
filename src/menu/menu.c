@@ -9,12 +9,25 @@
 #include "common/game_changer.h"
 
 /**
- * @brief Clear the background layer to a blank state
+ * @brief Load a blank tile into VRAM slot 0 and clear the background map
  */
 static void
 clear_background(void)
 {
+    set_bkg_data(0, 1, menu_void_tile);
     fill_bkg_rect(0, 0, COMMON_SCREEN_WIDTH_TILES, COMMON_SCREEN_HEIGHT_TILES, 0);
+}
+
+/**
+ * @brief Move all player sprites off-screen (for when coming from lobby)
+ */
+static void
+hide_sprites(void)
+{
+    UINT8 i = 0;
+
+    for (i = 0; i < 4; i++)
+        move_sprite(i, 0, 0);
 }
 
 void
@@ -22,6 +35,7 @@ menu(OUT game_t *game)
 {
     (void)game;
     clear_background();
+    hide_sprites();
 }
 
 void

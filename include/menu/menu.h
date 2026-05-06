@@ -9,6 +9,8 @@
     #define MENU_H_
 
     #include "common/common.h"
+    #include "common/game_changer.h"
+    #include "menu/asset_menu.h"
 
 /**
  * @brief Load the start menu assets
