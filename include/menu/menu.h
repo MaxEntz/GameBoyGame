@@ -12,6 +12,7 @@
 
 /**
  * @brief Load the start menu assets
+ * 
  * @param game Pointer to the game structure
  * @return void
  */
@@ -20,6 +21,7 @@ menu(OUT game_t *game);
 
 /**
  * @brief Handle input in the start menu state
+ * 
  * @param game Pointer to the game structure
  * @param keys The keys pressed
  * @return void
@@ -30,6 +32,7 @@ handle_input_menu(OUT game_t *game,
 
 /**
  * @brief Update the start menu state
+ * 
  * @param game Pointer to the game structure
  * @return void
  */
