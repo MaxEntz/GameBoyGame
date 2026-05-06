@@ -56,7 +56,7 @@ void
 handle_input_menu(OUT game_t *game,
                   IN UINT8 keys)
 {
-    if (keys & J_A)
+    if (keys & J_START)
         game_changer(game, GAME_STATE_LOBBY);
 }
 
