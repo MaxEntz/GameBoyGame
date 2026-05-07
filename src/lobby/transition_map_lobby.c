@@ -11,29 +11,30 @@ void
 transition_map_animation(OUT game_t *game,
                          IN transition_dir_t dir)
 {
-    INT16 x = game->player_x - 8;
-    INT16 y = game->player_y - 16;
+    lobby_state_t *lobby = lobby_get_state();
+    INT16 x = lobby->player_x - 8;
+    INT16 y = lobby->player_y - 16;
 
     set_bkg_tiles(0, 0, 20, 18, transition_map);
-    while (game->is_changing_map) {
+    while (lobby->is_changing_map) {
         if (dir == TRANSITION_LR) {
             if (x >= 160 - 24)
-                game->is_changing_map = FALSE;
+                lobby->is_changing_map = FALSE;
             else
                 x += 2;
         } else if (dir == TRANSITION_RL) {
             if (x <= 16)
-                game->is_changing_map = FALSE;
+                lobby->is_changing_map = FALSE;
             else
                 x -= 2;
         } else if (dir == TRANSITION_TB) {
             if (y >= 144 - 24)
-                game->is_changing_map = FALSE;
+                lobby->is_changing_map = FALSE;
             else
                 y += 2;
         } else if (dir == TRANSITION_BT) {
             if (y <= 16)
-                game->is_changing_map = FALSE;
+                lobby->is_changing_map = FALSE;
             else
                 y -= 2;
         }
@@ -43,7 +44,9 @@ transition_map_animation(OUT game_t *game,
         move_sprite(3, x + 16, y + 24);
         wait_vbl_done();
     }
-    game->player_x = x + 8;
-    game->player_y = y + 16;
-    set_bkg_tiles(0, 0, 20, 18, game->current_map);
+    lobby->player_x = x + 8;
+    lobby->player_y = y + 16;
+    set_bkg_tiles(0, 0, 20, 18, lobby->current_map);
+
+    (void)game;
 }
