@@ -14,7 +14,7 @@
 /**
  * @brief Zero all 256 bg tile slots, clear the tilemap and hide all sprites
  */
- void
+void
 vram_clear(void);
 
 #endif /* !VRAM_CLEAR_H_ */
