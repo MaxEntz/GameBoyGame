@@ -10,6 +10,9 @@
 
     #include "common/project_types.h"
 
-extern const UINT8 menu_void_tile[];
+#define MENU_BG_TILE_COUNT 256
 
-#endif /* !ASSET_MENU_H_ */
+extern const UINT8 menu_bg_tiles[];
+extern const UINT8 menu_bg_map[];
+
+#endif /* !asset_menu_H_ */

@@ -6,6 +6,7 @@
 */
 
 #include "lobby/lobby.h"
+#include "common/vram_clear.h"
 
 /**
  * @brief Load the lobby assets and handle the lobby state
@@ -16,6 +17,7 @@ static void
 load_assets(void)
 {
     SPRITES_8x8;
+    vram_clear();
 
     set_bkg_data(0, 1, grass_tile);
     set_bkg_data(1, 1, void_tile);
