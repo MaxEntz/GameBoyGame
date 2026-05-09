@@ -29,14 +29,17 @@ static const map_manager_t g_map_manager[11] = {
  * @return TRUE if the map was swapped, FALSE otherwise
  */
 static BOOLEAN
-swap_map_with_param(game_t *game, map_id_t new_map_id, transition_dir_t dir)
+swap_map_with_param(game_t *game,
+                    lobby_state_t *lobby,
+                    map_id_t new_map_id,
+                    transition_dir_t dir)
 {
     if (new_map_id < MAP_ID_TL || new_map_id > MAP_ID_BR)
         return FALSE;
-    game->current_map_id = new_map_id;
-    game->is_changing_map = TRUE;
+    lobby->current_map_id = new_map_id;
+    lobby->is_changing_map = TRUE;
     for (UINT16 i = 0; i < 20 * 18; i++)
-        game->current_map[i] = g_map_manager[game->current_map_id].map_data[i];
+        lobby->current_map[i] = g_map_manager[lobby->current_map_id].map_data[i];
     transition_map_animation(game, dir);
     return TRUE;
 }
@@ -47,18 +50,20 @@ switch_map(game_t *game,
            INT16 y,
            UINT8 tile)
 {
+    lobby_state_t *lobby = lobby_get_state();
+
     if ((x != 0 && y != 0) && (x != 160 - 16 && y != 144 - 16))
         return FALSE;
     if (tile != 14)
         return FALSE;
-    if (y == 0 && game->moving_dir == MOVING_SENS_UP) {
-        return swap_map_with_param(game, game->current_map_id + MAP_UP, TRANSITION_TB);
-    } else if (y >= 144 - 16 && game->moving_dir == MOVING_SENS_DOWN) {
-        return swap_map_with_param(game, game->current_map_id + MAP_DOWN, TRANSITION_BT);
-    } else if (x == 0 && game->moving_dir == MOVING_SENS_LEFT) {
-        return swap_map_with_param(game, game->current_map_id + MAP_LEFT, TRANSITION_LR);
-    } else if (x == 160 - 16 && game->moving_dir == MOVING_SENS_RIGHT) {
-        return swap_map_with_param(game, game->current_map_id + MAP_RIGHT, TRANSITION_RL);
+    if (y == 0 && lobby->moving_dir == MOVING_SENS_UP) {
+        return swap_map_with_param(game, lobby, lobby->current_map_id + MAP_UP, TRANSITION_TB);
+    } else if (y >= 144 - 16 && lobby->moving_dir == MOVING_SENS_DOWN) {
+        return swap_map_with_param(game, lobby, lobby->current_map_id + MAP_DOWN, TRANSITION_BT);
+    } else if (x == 0 && lobby->moving_dir == MOVING_SENS_LEFT) {
+        return swap_map_with_param(game, lobby, lobby->current_map_id + MAP_LEFT, TRANSITION_LR);
+    } else if (x == 160 - 16 && lobby->moving_dir == MOVING_SENS_RIGHT) {
+        return swap_map_with_param(game, lobby, lobby->current_map_id + MAP_RIGHT, TRANSITION_RL);
     }
     return FALSE;
 }

@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 This format is based on Keep a Changelog  
 and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
+
+---
+
+## [1.11.2] - 2026-05-08
+
+### Changed
+- `src/lobby*`: update all lobby file to delete the uneused function for the lobby
+
 ---
 
 ## [1.11.1] - 2026-05-06
