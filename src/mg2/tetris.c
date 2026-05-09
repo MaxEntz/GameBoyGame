@@ -69,7 +69,7 @@ handle_piece_lock(OUT game_t *game)
     }
     spawn_next();
     if (!piece_can_spawn(&g_tetris.curr_piece))
-        game_changer(game, GAME_STATE_LOBBY);
+        game_changer(game, GAME_STATE_LOBBY, TRUE);
     else
         piece_draw(&g_tetris.curr_piece);
 }
@@ -144,7 +144,7 @@ handle_input_tetris(OUT game_t *game,
                    IN UINT8 keys)
 {
     if (keys & J_SELECT) {
-        game_changer(game, GAME_STATE_LOBBY);
+        game_changer(game, GAME_STATE_LOBBY, TRUE);
         return;
     }
     if (!(keys & (J_A | J_B)))

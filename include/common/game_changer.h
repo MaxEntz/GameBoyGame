@@ -13,12 +13,12 @@
 
 /**
  * @brief Change the game state with a transition effect
- * 
+ *
  * @param game Pointer to the game structure
  * @param new_state The new game state to switch to
- * @return void
+ * @param clear_vram Whether to clear VRAM before loading the new state
  */
 void
-game_changer(game_t *game, game_state_t new_state);
+game_changer(game_t *game, game_state_t new_state, BOOLEAN clear_vram);
 
 #endif /* GAME_CHANGER_H_ */
