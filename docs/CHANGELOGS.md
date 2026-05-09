@@ -11,7 +11,7 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 ### Added
 - Start menu state with full 160×144 background (takes 256 tiles frmom the vram)
 - `asset/src/menu/asset_menu.c`: 256 2bpp tiles + 20×18 tilemap
-- `src/common/vram_clear.c`: `vram_clear()` utility to zero all 384 VRAM tile slots
+- `src/common/vram_clear.c`: `vram_clear()` utility to zero all 256 VRAM bg tile slots
 - `game_changer` now takes a boolean third argument; clears VRAM after fade-out when `TRUE`
 
 ### Changed
