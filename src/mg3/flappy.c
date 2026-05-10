@@ -10,23 +10,29 @@
 static flappy_t fbird;
 
 static void
+draw_color_pipe(IN pipe_t *pipe, UINT8 actual_col)
+{
+    for (UINT8 row = 0; row < 18; row++) {
+        if (row < pipe->pipe_y || row >= pipe->pipe_y + MG3_PIPE_GAP)
+            set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_PIPE);
+        else
+            set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_EMPTY);
+    }
+}
+
+static void
 draw_pipe(IN pipe_t *pipe)
 {
     UINT8 tile_x = pipe->pipe_x / 8;
     UINT8 col;
-    UINT8 row;
     UINT8 clear_col = (tile_x + MG3_PIPE_WIDTH) % 32;
+    UINT8 actual_col;
 
     for (col = tile_x; col < tile_x + MG3_PIPE_WIDTH; col++) {
-        UINT8 actual_col = col % 32;
-        for (row = 0; row < 18; row++) {
-            if (row < pipe->pipe_y || row >= pipe->pipe_y + MG3_PIPE_GAP)
-                set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_PIPE);
-            else
-                set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_EMPTY);
-        }
+        actual_col = col % 32;
+        draw_color_pipe(pipe, actual_col);
     }
-    for (row = 0; row < 18; row++)
+    for (UINT8 row = 0; row < 18; row++)
         set_bkg_tile_xy(clear_col, row, FLAPPY_TILE_EMPTY);
 }
 

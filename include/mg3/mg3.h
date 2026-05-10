@@ -15,13 +15,17 @@
 
     typedef struct pipe_s {
         INT16 pipe_x;
-        UINT8 pipe_y;
+        INT16 pipe_y;
     } pipe_t;
 
     typedef struct flappy_s {
-        UINT8 bird_y;
+        INT16 bird_y;
         pipe_t pipes[MG3_NB_PIPE];
     } flappy_t;
+
+
+static void
+draw_color_pipe(IN pipe_t *pipe, UINT8 actual_col);
 
 static void
 draw_pipe(IN pipe_t *pipe);
