@@ -57,9 +57,14 @@ void
 update_flappybird(OUT game_t *game)
 {
     (void)game;
-    move_sprite(0, MG3_BIRD_X, fbird.bird_y);
+
     fbird.bird_y += 1;
 
+    if (fbird.bird_y < 16)
+        fbird.bird_y = 16;
+    if (fbird.bird_y > MG3_SCREEN_Y)
+        fbird.bird_y = MG3_SCREEN_Y;
+    move_sprite(0, MG3_BIRD_X, (UINT8)fbird.bird_y);
     for (UINT8 i = 0; i < MG3_NB_PIPE; i++){
         fbird.pipes[i].pipe_x -= 1;
         draw_pipe(&fbird.pipes[i]);
