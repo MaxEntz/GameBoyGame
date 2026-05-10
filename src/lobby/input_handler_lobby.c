@@ -64,7 +64,8 @@ handle_a_input(IN game_t *game)
     }
     tile = get_tile_by_map(lobby, x, y);
     if (tile == 23 || tile == 24 || tile == 25 || tile == 26)
-        game_changer(game, GAME_STATE_MG2);
+        game_changer(game, GAME_STATE_MG2, TRUE);
+    
 }
 
 /**
@@ -129,7 +130,9 @@ handle_input_lobby(OUT game_t *game,
     if (keys & J_A)
         handle_a_input(game);
     if (keys & J_B)
-        game_changer(game, GAME_STATE_MG2);
+        game_changer(game, GAME_STATE_MG2, TRUE);
+    if (keys & J_SELECT)
+        game_changer(game, GAME_STATE_MENU, TRUE);
     if (keys & J_LEFT && !is_colliding_with_wall(game, MOVING_SENS_LEFT)) {
         lobby->player_x -= SPEED;
         lobby->is_moving = TRUE;

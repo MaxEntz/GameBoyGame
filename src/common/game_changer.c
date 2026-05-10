@@ -6,10 +6,11 @@
 */
 
 #include "common/game_changer.h"
+#include "common/vram_clear.h"
 #include "main/core.h"
 
 void
-game_changer(game_t *game, game_state_t new_game)
+game_changer(game_t *game, game_state_t new_game, BOOLEAN clear_vram)
 {
     if (game->state == new_game)
         return;
@@ -17,6 +18,8 @@ game_changer(game_t *game, game_state_t new_game)
         return;
     transition_sound(0);
     transition_fade_out();
+    if (clear_vram)
+        vram_clear();
     game->state = new_game;
     game->state_changed = TRUE;
     change_scene(game);

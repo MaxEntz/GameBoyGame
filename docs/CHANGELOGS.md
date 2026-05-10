@@ -14,6 +14,22 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.12.0] - 2026-05-09
+
+### Added
+- Start menu state with full 160×144 background (takes 256 tiles frmom the vram)
+- `asset/src/menu/asset_menu.c`: 256 2bpp tiles + 20×18 tilemap
+- `src/common/vram_clear.c`: `vram_clear()` utility to zero all 256 VRAM bg tile slots
+- `game_changer` now takes a boolean third argument; clears VRAM after fade-out when `TRUE`
+
+### Changed
+- `include/common/game_changer.h` / `src/common/game_changer.c`: added `clear_vram` parameter
+- All `game_changer` call sites updated for the new parameter:
+- `src/menu/menu.c`: removed `vram_clear()` call from load function
+- `src/lobby/lobby.c`: removed `vram_clear()` call from `load_assets`
+
+---
+
 ## [1.11.1] - 2026-05-06
 
 ### Changed

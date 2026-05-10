@@ -22,7 +22,7 @@
 
     // To update... about your game
     #define MASTER_SCORE_MG1 100
-    #define MASTER_SCORE_MG2 100
+    #define MASTER_SCORE_MG2 15000
     #define MASTER_SCORE_MG3 100
 
 /**
@@ -37,6 +37,7 @@ typedef enum {
     GAME_STATE_MG2,
     GAME_STATE_MG3,
     GAME_STATE_GAME_OVER,
+    GAME_STATE_MENU,
     GAME_STATE_COUNT
 } game_state_t;
 

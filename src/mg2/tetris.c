@@ -12,6 +12,21 @@ static tetris_t        g_tetris;
 static const UINT16    score_table[5] = {0, 100, 300, 500, 800};
 
 /**
+ * @brief Spawn the queued piece and pick the next one randomly
+ */
+static void
+spawn_next(void)
+{
+    g_tetris.curr_piece.type = g_tetris.next_type;
+    g_tetris.curr_piece.x = PIECE_SPAWN_X;
+    g_tetris.curr_piece.y = PIECE_SPAWN_Y;
+    g_tetris.curr_piece.rot = 0;
+    g_tetris.curr_piece.can_rotate = TRUE;
+    g_tetris.next_type = (piece_type_t)random_get(PIECE_COUNT);
+    draw_next_piece(g_tetris.next_type);
+}
+
+/**
  * @brief calculates the drop delay in frames for the given level
  * 
  * @param level level number
@@ -54,7 +69,7 @@ handle_piece_lock(OUT game_t *game)
     }
     spawn_next();
     if (!piece_can_spawn(&g_tetris.curr_piece))
-        game_changer(game, GAME_STATE_LOBBY);
+        game_changer(game, GAME_STATE_LOBBY, TRUE);
     else
         piece_draw(&g_tetris.curr_piece);
 }
@@ -84,21 +99,6 @@ handle_left_right(IN UINT8 keys)
             g_tetris.move_frame = MOVE_DELAY;
         }
     }
-}
-
-/**
- * @brief Spawn the queued piece and pick the next one randomly
- */
-static void
-spawn_next(void)
-{
-    g_tetris.curr_piece.type = g_tetris.next_type;
-    g_tetris.curr_piece.x = PIECE_SPAWN_X;
-    g_tetris.curr_piece.y = PIECE_SPAWN_Y;
-    g_tetris.curr_piece.rot = 0;
-    g_tetris.curr_piece.can_rotate = TRUE;
-    g_tetris.next_type = (piece_type_t)random_get(PIECE_COUNT);
-    draw_next_piece(g_tetris.next_type);
 }
 
 void
@@ -144,7 +144,7 @@ handle_input_tetris(OUT game_t *game,
                    IN UINT8 keys)
 {
     if (keys & J_SELECT) {
-        game_changer(game, GAME_STATE_LOBBY);
+        game_changer(game, GAME_STATE_LOBBY, TRUE);
         return;
     }
     if (!(keys & (J_A | J_B)))
