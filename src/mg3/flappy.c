@@ -44,7 +44,7 @@ draw_pipe(IN pipe_t *pipe)
     if (pipe->pipe_x <= 0) {
         for (col = 0; col < MG3_PIPE_WIDTH; col++) {
             actual_col = (UINT8)((tile_x_raw + col) % 32);
-            for (UINT8 row = 0; row < 12; row++)
+            for (UINT8 row = 0; row < 18; row++)
                 set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_EMPTY);
         }
         return;
