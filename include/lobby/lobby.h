@@ -32,6 +32,7 @@ typedef struct map_manager_s {
 } map_manager_t;
 
 typedef struct lobby_state_s {
+    BOOLEAN  inited;
     UINT8    fps_counter;
     UINT16   seconds_counter;
     UINT8    player_x;

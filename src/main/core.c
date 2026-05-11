@@ -38,7 +38,6 @@ init_game(OUT game_t *game)
     game->score_mg2 = 0;
     game->score_mg3 = 0;
     game->level = 1;
-    lobby_init_state();
 }
 
 

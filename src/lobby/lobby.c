@@ -12,6 +12,7 @@ static lobby_state_t g_lobby;
 void
 lobby_init_state(void)
 {
+    g_lobby.inited = TRUE;
     g_lobby.fps_counter = 0;
     g_lobby.seconds_counter = 0;
     g_lobby.player_x = 88;
@@ -66,17 +67,18 @@ load_assets(void)
     set_sprite_tile(3, 3);
 
 
-    move_sprite(0, 80, 80);
-    move_sprite(1, 88, 80);
-    move_sprite(2, 80, 88);
-    move_sprite(3, 88, 88);
-
+    move_sprite(0, g_lobby.player_x, g_lobby.player_y);
+    move_sprite(1, g_lobby.player_x + 8, g_lobby.player_y);
+    move_sprite(2, g_lobby.player_x, g_lobby.player_y + 8);
+    move_sprite(3, g_lobby.player_x + 8, g_lobby.player_y + 8);
 }
 
 void
 lobby(OUT game_t *game)
 {
     (void)game;
+    if (!g_lobby.inited)
+        lobby_init_state();
     load_assets();
 }
 
