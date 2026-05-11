@@ -20,6 +20,15 @@ draw_color_pipe(IN pipe_t *pipe, UINT8 actual_col)
     }
 }
 
+static UINT8
+next_pipe_y(void)
+{
+    static UINT8 seed = 3;
+
+    seed = (UINT8)((seed * 5 + 7) % 13);
+    return (UINT8)(MG3_PIPE_Y_MIN + seed % (MG3_PIPE_Y_MAX - MG3_PIPE_Y_MIN + 1));
+}
+
 static void
 draw_pipe(IN pipe_t *pipe)
 {
@@ -43,8 +52,8 @@ flappybird(OUT game_t *game)
 
     fbird.bird_y = MG3_SCREEN_Y / 2;
     for(UINT8 i = 0; i < MG3_NB_PIPE; i++){
-        fbird.pipes[i].pipe_x = MG3_SCREEN_X + (i * 80);
-        fbird.pipes[i].pipe_y = 9;
+        fbird.pipes[i].pipe_x = MG3_SCREEN_X + (i * MG3_PIPE_SPACING);
+        fbird.pipes[i].pipe_y = next_pipe_y();
     }
 
     set_bkg_data(0, FLAPPY_TILE_COUNT, flappy_tiles);
@@ -62,8 +71,8 @@ update_flappybird(OUT game_t *game)
 
     if (fbird.bird_y < 16)
         fbird.bird_y = 16;
-    if (fbird.bird_y > MG3_SCREEN_Y)
-        fbird.bird_y = MG3_SCREEN_Y;
+    if (fbird.bird_y > MG3_SCREEN_Y + 16)
+        fbird.bird_y = MG3_SCREEN_Y + 16;
     move_sprite(0, MG3_BIRD_X, (UINT8)fbird.bird_y);
     for (UINT8 i = 0; i < MG3_NB_PIPE; i++){
         fbird.pipes[i].pipe_x -= 1;

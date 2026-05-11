@@ -15,6 +15,9 @@
     #define MG3_PIPE_WIDTH  2
     #define MG3_PIPE_GAP    5
     #define MG3_NB_PIPE     2
+    #define MG3_PIPE_SPACING 90
+    #define MG3_PIPE_Y_MIN  11
+    #define MG3_PIPE_Y_MAX  11
 
     // others
     #define MG3_JUMP        4
