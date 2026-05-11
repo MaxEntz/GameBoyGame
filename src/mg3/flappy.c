@@ -23,10 +23,10 @@ draw_color_pipe(IN pipe_t *pipe, UINT8 actual_col)
 static UINT8
 next_pipe_y(void)
 {
-    static UINT8 seed = 3;
+    static UINT8 rand = 3;
 
-    seed = (UINT8)((seed * 5 + 7) % 13);
-    return (UINT8)(MG3_PIPE_Y_MIN + seed % (MG3_PIPE_Y_MAX - MG3_PIPE_Y_MIN + 1));
+    rand = (UINT8)((rand * 5 + 7) % 13);
+    return (UINT8)(MG3_PIPE_Y_MIN + rand % (MG3_PIPE_Y_MAX - MG3_PIPE_Y_MIN + 1));
 }
 
 static void
