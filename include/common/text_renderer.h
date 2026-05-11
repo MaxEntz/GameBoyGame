@@ -33,6 +33,12 @@ void
 text_renderer_init(void);
 
 /**
+ * @brief Destroy the text renderer, allowing it to be re-initialized if needed
+ */
+void
+text_renderer_destroy(void);
+
+/**
  * @brief Draw the given text on the background layer
  * 
  * @param render The text render configuration, including the text and its position

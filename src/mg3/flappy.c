@@ -32,17 +32,28 @@ next_pipe_y(void)
 static void
 draw_pipe(IN pipe_t *pipe)
 {
-    UINT8 tile_x = pipe->pipe_x / 8;
+    INT16 tile_x_raw = pipe->pipe_x / 8;
     UINT8 col;
-    UINT8 clear_col = (tile_x + MG3_PIPE_WIDTH) % 32;
     UINT8 actual_col;
+    UINT8 clear_col;
 
-    for (col = tile_x; col < tile_x + MG3_PIPE_WIDTH; col++) {
-        actual_col = col % 32;
-        draw_color_pipe(pipe, actual_col);
-    }
+    clear_col = (UINT8)((tile_x_raw + MG3_PIPE_WIDTH) % 32);
     for (UINT8 row = 0; row < 18; row++)
         set_bkg_tile_xy(clear_col, row, FLAPPY_TILE_EMPTY);
+
+    if (pipe->pipe_x <= 0) {
+        for (col = 0; col < MG3_PIPE_WIDTH; col++) {
+            actual_col = (UINT8)((tile_x_raw + col) % 32);
+            for (UINT8 row = 0; row < 12; row++)
+                set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_EMPTY);
+        }
+        return;
+    }
+
+    for (col = 0; col < MG3_PIPE_WIDTH; col++) {
+        actual_col = (UINT8)((tile_x_raw + col) % 32);
+        draw_color_pipe(pipe, actual_col);
+    }
 }
 
 void

@@ -15,6 +15,16 @@
     #define COMMON_SCREEN_WIDTH_TILES 20U               //20 tiles of 8 pixels = 160 pixels
     #define COMMON_SCREEN_HEIGHT_TILES 18U              //18 tiles of 8 pixels = 144 pixels
 
+    #define MOVING_SENS_UP 6
+    #define MOVING_SENS_DOWN 0
+    #define MOVING_SENS_LEFT 12
+    #define MOVING_SENS_RIGHT 18
+
+    // To update... about your game
+    #define MASTER_SCORE_MG1 100
+    #define MASTER_SCORE_MG2 15000
+    #define MASTER_SCORE_MG3 100
+
 /**
  * @brief Enum to represent different game states
  */
@@ -27,20 +37,35 @@ typedef enum {
     GAME_STATE_MG2,
     GAME_STATE_MG3,
     GAME_STATE_GAME_OVER,
+    GAME_STATE_MENU,
     GAME_STATE_COUNT
 } game_state_t;
 
+typedef enum map_id_e {
+    MAP_ID_TL = 1,
+    MAP_ID_TC = 2,
+    MAP_ID_TR = 3,
+    MAP_ID_CL = 4,
+    MAP_ID_CC = 5,
+    MAP_ID_CR = 6,
+    MAP_ID_BL = 7,
+    MAP_ID_BC = 8,
+    MAP_ID_BR = 9,
+    MAP_ID_INVALID = 0
+} map_id_t;
+
 /**
- * @brief Structure to manage the game state
- * And the player position for now, but we can add more stuff later
- * Like the score, the health, etc...
+ * @brief Structure to manage global game state and scores
  */
 typedef struct game_s {
     game_state_t state;
     BOOLEAN      is_running;
     BOOLEAN      state_changed;
-    UINT8        player_x;
-    UINT8        player_y;
+    INT16        total_score;
+    INT16        score_mg1;
+    INT16        score_mg2;
+    INT16        score_mg3;
+    UINT8        level;
 } game_t;
 
 /**

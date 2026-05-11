@@ -21,6 +21,7 @@
     typedef struct flappy_s {
         INT16 bird_y;
         pipe_t pipes[MG3_NB_PIPE];
+        UINT8 frame_count;
     } flappy_t;
 
 

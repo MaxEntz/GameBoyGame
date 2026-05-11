@@ -9,8 +9,8 @@
 #include "common/text_renderer.h"
 #include "common/dialogue.h"
 #include "lobby/lobby.h"
-#include "mg2/mg2.h"
-#include "mg3/mg3.h"
+#include "mg2/tetris.h"
+#include "menu/menu.h"
 
 /**
  * @brief Array of function pointers to handle different game states
@@ -22,18 +22,23 @@ static const management_state_t g_state_function[MAX_STATES] = {
     {GAME_STATE_VICTORY  ,NULL ,NULL              ,NULL}        ,
     {GAME_STATE_MG1      ,NULL ,NULL              ,NULL}        ,
     {GAME_STATE_MG2      ,tetris ,handle_input_tetris,update_tetris}        ,
-    {GAME_STATE_MG3      ,flappybird, handle_input_flappybird, update_flappybird}        ,
-    {GAME_STATE_GAME_OVER,NULL ,NULL              ,NULL}
+    {GAME_STATE_MG3      ,NULL ,NULL              ,NULL}        ,
+    {GAME_STATE_GAME_OVER,NULL ,NULL              ,NULL}        ,
+    {GAME_STATE_MENU     ,menu ,handle_input_menu ,update_menu}
 };
 
 static void
 init_game(OUT game_t *game)
 {
-    game->state = GAME_STATE_LOBBY;
+    game->state = GAME_STATE_MENU;
     game->is_running = TRUE;
     game->state_changed = FALSE;
-    game->player_x = 88;
-    game->player_y = 78;
+    game->total_score = 0;
+    game->score_mg1 = 0;
+    game->score_mg2 = 0;
+    game->score_mg3 = 0;
+    game->level = 1;
+    lobby_init_state();
 }
 
 
