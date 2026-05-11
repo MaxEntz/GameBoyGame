@@ -10,7 +10,7 @@
 static flappy_t fbird;
 
 static void
-draw_color_pipe(IN pipe_t *pipe, UINT8 actual_col)
+draw_color_pipe(IN pipe_t *pipe, IN UINT8 actual_col)
 {
     for (UINT8 row = 0; row < 18; row++) {
         if (row < pipe->pipe_y || row >= pipe->pipe_y + MG3_PIPE_GAP)
@@ -23,10 +23,7 @@ draw_color_pipe(IN pipe_t *pipe, UINT8 actual_col)
 static UINT8
 next_pipe_y(void)
 {
-    static UINT8 rand = 3;
-
-    rand = (UINT8)((rand * 5 + 7) % 13);
-    return (UINT8)(MG3_PIPE_Y_MIN + rand % (MG3_PIPE_Y_MAX - MG3_PIPE_Y_MIN + 1));
+    return (UINT8)(MG3_PIPE_Y_MIN + rand() % (MG3_PIPE_Y_MAX - MG3_PIPE_Y_MIN + 1));
 }
 
 static void
@@ -88,8 +85,10 @@ update_flappybird(OUT game_t *game)
     for (UINT8 i = 0; i < MG3_NB_PIPE; i++){
         fbird.pipes[i].pipe_x -= 1;
         draw_pipe(&fbird.pipes[i]);
-        if (fbird.pipes[i].pipe_x <= 0)
+        if (fbird.pipes[i].pipe_x <= 0){
             fbird.pipes[i].pipe_x = MG3_SCREEN_X;
+            fbird.pipes[i].pipe_y = next_pipe_y();
+        }
     }
 }
 
