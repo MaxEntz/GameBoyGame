@@ -211,6 +211,12 @@ dialogue_init(void)
 }
 
 void
+dialogue_destroy(void)
+{
+    g_dialogue_ready = FALSE;
+}
+
+void
 dialogue_start(INOUT dialogue_t *dlg, IN const CHAR *text)
 {
     dlg->text        = text;
