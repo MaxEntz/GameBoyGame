@@ -6,6 +6,7 @@
 */
 
 #include "lobby/lobby.h"
+#include "common/text_renderer.h"
 
 static lobby_state_t g_lobby;
 
@@ -24,6 +25,8 @@ lobby_init_state(void)
         g_lobby.current_map[i] = map_bl[i];
     g_lobby.current_map_id = MAP_ID_BL;
     g_lobby.rng_initialized = FALSE;
+    g_lobby.dialogue_index = 0;
+    g_lobby.dialogue.state = DIALOGUE_STATE_INACTIVE;
 }
 
 lobby_state_t
@@ -52,6 +55,10 @@ load_assets(void)
     set_bkg_data(19, 4, flower_tile);
     set_bkg_data(23, 4, ennemies1_tile);
     set_bkg_tiles(0, 0, 20, 18, map_bl);
+
+    text_renderer_init();
+    dialogue_init();
+
     set_sprite_data(0, 4, player_tiles_front);
     set_sprite_data(4, 2, player_tile_front_move);
     set_sprite_data(6, 4, player_tile_back);
@@ -131,6 +138,7 @@ void
 update_lobby(OUT game_t *game)
 {
     lobby_state_t *lobby = lobby_get_state();
+    dialogue_t *dlg;
 
     (void)game;
     lobby->fps_counter++;
@@ -138,7 +146,15 @@ update_lobby(OUT game_t *game)
         lobby->fps_counter = 0;
         lobby->seconds_counter++;
     }
-
+    if (lobby->dialogue_index < NB_DIALOGUES) {
+        dlg = &lobby->dialogue;
+        dialogue_update(dlg);
+        if (!dialogue_is_active(dlg) && dlg->chars_shown > 0) {
+            dlg->chars_shown = 0;
+            lobby->dialogue_index++;
+            game_changer(game, GAME_STATE_MG2, TRUE);
+        }
+    }
     move_sprite_personage(lobby);
     move_sprite(0, lobby->player_x, lobby->player_y);
     move_sprite(1, lobby->player_x + 8, lobby->player_y);

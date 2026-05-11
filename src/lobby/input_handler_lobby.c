@@ -8,6 +8,16 @@
 #include "lobby/lobby.h"
 #include "common/random.h"
 
+static const CHAR *g_lobby_dialogue_texts[NB_DIALOGUES] = {
+    "Welcome\nlittle Mole!\nBeat me and my bro\nat our games\nto escape the\nisland!",
+    "Haha!\n Gotcha!\nWanna try again?",
+    "Ouch!\n \nWell done little\nmole\nfind my bro\non the right side\n",
+    "You beat my bro?\nImpressive!\nBut can you beat\nme?",
+    "Pfff!\n \nDid you really\nbeat my bro ?\n You're not good\n enough !",
+    "Noooooo!\n \nYou beat us both?\nImpossible!\nWell done little\nmole, you can\nleave the island",
+    "Wait!\n \nYou want to leave?\n\nSure, \nbut I warn you,\nI won't go easy\n on you!\n"
+};
+
 /**
  * @brief Get the tile at the specified position in the map
  * @param lobby Pointer to the lobby state
@@ -28,6 +38,19 @@ get_tile_by_map(IN const lobby_state_t *lobby, INT16 x, INT16 y)
     if (tile_x >= 20 || tile_y >= 18)
         return 0;
     return lobby->current_map[tile_y * 20 + tile_x];
+}
+
+static void
+handle_lobby_dialogue(IN game_t *game)
+{
+    lobby_state_t *lobby = lobby_get_state();
+
+    (void)game;
+    if (lobby->dialogue_index >= NB_DIALOGUES)
+        return;
+    if (dialogue_is_active(&lobby->dialogue))
+        return;
+    dialogue_start(&lobby->dialogue, g_lobby_dialogue_texts[lobby->dialogue_index]);
 }
 
 /**
@@ -64,7 +87,7 @@ handle_a_input(IN game_t *game)
     }
     tile = get_tile_by_map(lobby, x, y);
     if (tile == 23 || tile == 24 || tile == 25 || tile == 26)
-        game_changer(game, GAME_STATE_MG2, TRUE);
+        handle_lobby_dialogue(game);
     
 }
 
@@ -127,6 +150,8 @@ handle_input_lobby(OUT game_t *game,
     }
     if (lobby->is_changing_map)
         return;
+    if (lobby->dialogue_index < NB_DIALOGUES && dialogue_is_active(&lobby->dialogue))
+        return dialogue_handle_input(&lobby->dialogue, keys);
     if (keys & J_A)
         handle_a_input(game);
     if (keys & J_B)
