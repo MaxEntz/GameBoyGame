@@ -23,5 +23,7 @@
     #define MG3_JUMP            4
     #define MG3_SCREEN_X        160
     #define MG3_SCREEN_Y        144
+    #define MG3_BKG_WIDTH_SIZE  32
+    #define MG3_SPRITE_Y_OFFSET 16
 
 #endif /* MG3_LAYOUT_H_ */
