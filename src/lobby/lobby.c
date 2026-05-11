@@ -153,6 +153,7 @@ update_lobby(OUT game_t *game)
             dlg->chars_shown = 0;
             lobby->dialogue_index++;
             game_changer(game, GAME_STATE_MG2, TRUE);
+            return;
         }
     }
     move_sprite_personage(lobby);
