@@ -73,6 +73,19 @@ load_assets(void)
     move_sprite(3, g_lobby.player_x + 8, g_lobby.player_y + 8);
 }
 
+/**
+ * @brief Load the current map tiles and the player sprite based on the current movement direction
+ */
+static void
+load_current_map(void)
+{
+    set_bkg_tiles(0, 0, 20, 18, g_lobby.current_map);
+    set_sprite_tile(0, g_lobby.moving_dir + 0);
+    set_sprite_tile(1, g_lobby.moving_dir + 1);
+    set_sprite_tile(2, g_lobby.moving_dir + 2);
+    set_sprite_tile(3, g_lobby.moving_dir + 3);
+}
+
 void
 lobby(OUT game_t *game)
 {
@@ -80,6 +93,7 @@ lobby(OUT game_t *game)
     if (!g_lobby.inited)
         lobby_init_state();
     load_assets();
+    load_current_map();
 }
 
 /**
