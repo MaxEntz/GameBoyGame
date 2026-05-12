@@ -24,8 +24,10 @@ static const management_state_t g_state_function[MAX_STATES] = {
     {GAME_STATE_MG1      ,trap_memory ,handle_input_trap_memory,update_trap_memory}        ,
     {GAME_STATE_MG2      ,tetris      ,handle_input_tetris     ,update_tetris}             ,
     {GAME_STATE_MG3      ,NULL        ,NULL                    ,NULL}                      ,
-    {GAME_STATE_GAME_OVER,NULL        ,NULL                    ,NULL}
+    {GAME_STATE_GAME_OVER,NULL        ,NULL                    ,NULL}                      ,
+    {GAME_STATE_MENU     ,menu        ,handle_input_menu       ,update_menu}
 };
+
 
 static void
 init_game(OUT game_t *game)
