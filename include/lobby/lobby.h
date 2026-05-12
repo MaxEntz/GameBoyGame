@@ -20,7 +20,7 @@
     #define MAP_UP (-3)
     #define MAP_DOWN (3)
 
-    #define NB_DIALOGUES 7
+    #define NB_DIALOGUES 9
 
 typedef enum transition_dir_e {
     TRANSITION_TB,
