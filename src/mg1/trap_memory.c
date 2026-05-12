@@ -8,7 +8,7 @@
 #include "mg1/trap_memory.h"
 
 static trap_memory_t g_tm;
-static UINT8 g_tm_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES] = {
+static const UINT8 g_tm_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES] = {
     6 ,7 ,6 ,7 ,6 ,7 ,6 ,7 ,6 ,7 ,6 ,7 ,6 ,7 ,6 ,7 ,6 ,7 ,6 ,7 ,
     8 ,9 ,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,8 ,9 ,
     6 ,13,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,12,7 ,
@@ -62,6 +62,9 @@ trap_memory(OUT game_t *game)
     g_tm.is_moving = FALSE;
     g_tm.moving_dir = MOVING_SENS_DOWN;
     g_tm.fps_counter = 0;
+    g_tm.seconds_counter = 0;
+    for (UINT16 i = 0; i < COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES; i++)
+        g_tm.current_map[i] = g_tm_map[i];
 
     SPRITES_8x8;
     set_bkg_data(0, 1, grass_tile);

@@ -12,6 +12,7 @@
     #include "common/game_changer.h"
     #include "common/text_renderer.h"
     #include "common/random.h"
+    #include "common/get_tile_by_map.h"
     #include "asset_lobby.h"
 
 typedef struct trap_memory_s {
@@ -20,6 +21,8 @@ typedef struct trap_memory_s {
     BOOLEAN    is_moving;
     UINT8      moving_dir;
     UINT8      fps_counter;
+    UINT16     seconds_counter;
+    UINT8      current_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES];
 } trap_memory_t;
 
 /**
