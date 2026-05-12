@@ -6,29 +6,6 @@
 */
 
 #include "lobby/lobby.h"
-#include "common/random.h"
-
-/**
- * @brief Get the tile at the specified position in the map
- * @param lobby Pointer to the lobby state
- * @param x X coordinate
- * @param y Y coordinate
- * @return The tile at the specified position
- */
-static UINT8
-get_tile_by_map(IN const lobby_state_t *lobby, INT16 x, INT16 y)
-{
-    UINT8 tile_x = 0;
-    UINT8 tile_y = 0;
-
-    if (x < 0 || y < 0)
-        return 0;
-    tile_x = x >> 3;
-    tile_y = y >> 3;
-    if (tile_x >= 20 || tile_y >= 18)
-        return 0;
-    return lobby->current_map[tile_y * 20 + tile_x];
-}
 
 /**
  * @brief Handle the A button input
@@ -62,7 +39,7 @@ handle_a_input(IN game_t *game)
         default:
             break;
     }
-    tile = get_tile_by_map(lobby, x, y);
+    tile =  get_tile_by_map(lobby->current_map, x, y);
     if (tile == 23 || tile == 24 || tile == 25 || tile == 26)
         game_changer(game, GAME_STATE_MG2, TRUE);
     
@@ -106,7 +83,7 @@ is_colliding_with_wall(IN game_t *game,
 
     if (x < 0 || y < 0 || x >= 160 || y >= 144)
         return TRUE;
-    tile = get_tile_by_map(lobby, x, y);
+    tile = get_tile_by_map(lobby->current_map, x, y);
     if (switch_map(game, x, y, tile))
         return FALSE;
     if (tile == 0 || tile == 1 || tile == 14)

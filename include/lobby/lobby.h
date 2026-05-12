@@ -12,6 +12,8 @@
     #include "common/common.h"
     #include "common/game_changer.h"
     #include "common/transition.h"
+    #include "common/random.h"
+    #include "common/get_tile_by_map.h"
 
     // Map manager macro
     #define MAP_LEFT (-1)
