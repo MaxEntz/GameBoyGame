@@ -65,7 +65,9 @@ handle_a_input(IN game_t *game)
             break;
     }
     tile = get_tile_by_map(lobby, x, y);
-    if (tile == 23 || tile == 24 || tile == 25 || tile == 26 || tile == 27 || tile == 28 || tile == 29 || tile == 30)
+    if (tile >= 23 && tile <= 26 && lobby->dialogue_index == 0)
+        lore_start_dialogue(game);
+    if (tile >= 27 && tile <= 30 && lobby->dialogue_index == 3)
         lore_start_dialogue(game);
     
 }

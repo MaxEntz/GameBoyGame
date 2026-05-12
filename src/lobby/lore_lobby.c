@@ -45,8 +45,12 @@ lore_update(OUT game_t *game)
         return;
     if (lobby->should_dialogue) {
         lobby->should_dialogue = FALSE;
-        lore_start_dialogue(game);
+        if (lobby->dialogue_index == 1 || lobby->dialogue_index == 4)
+            lore_start_dialogue(game);
     }
+    if (lobby->dialogue_index == 6 && lobby->current_map_id == MAP_ID_CC
+            && !dialogue_is_active(dlg))
+        lore_start_dialogue(game);
     dialogue_update(dlg);
     if (dialogue_is_active(dlg) || dlg->chars_shown == 0)
         return;
@@ -56,7 +60,7 @@ lore_update(OUT game_t *game)
         game_changer(game, GAME_STATE_MG2, TRUE);
         return;
     }
-    if (lobby->dialogue_index == 1 || lobby->dialogue_index == 4) {     // a changer dcp
+    if (lobby->dialogue_index == 1 || lobby->dialogue_index == 4) {
         game_changer(game, GAME_STATE_MG2, TRUE);
         return;
     }
