@@ -12,7 +12,7 @@
     #include "common/game_changer.h"
     #include "mg3/mg3_layout.h"
     #include "mg3/asset_flappy.h"
-    #include <rand.h>
+    #include "common/random.h"
 
     typedef struct pipe_s {
         INT16 pipe_x;
