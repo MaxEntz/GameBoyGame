@@ -7,6 +7,26 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.13.0] - 2026-06-12
+
+### Added
+- Flappy Bird logic: Implementation of the core gameplay loop for the `MG3` mini-game.
+- `asset/include/mg3/asset_flappy.h` & `src/mg3/asset_flappy.c`: New assets for the FlappyBird game.
+- `include/mg3/mg3_layout.h`: New layout definitions for the game interface.
+- `src/mg3/flappy.c`: Main game logic and pipe management.
+
+## Fixed
+- Overflow prevention: Changed the data type of `bird_y` to prevent calculation overflows.
+- Boundary Clamping: Added a limit to the bird's position to prevent it from leaving the screen area.
+- Visual fixes: Corrected an issue where pipes were displayed incorrectly at the start of the game.
+- Merge conflicts: Resolved conflicts in the latest integration.
+
+### Changed
+- `src/main/core.c`: Integrated the new game mode into the core engine.
+- Refactoring & Macros: Replaced hard-coded values with macros for better maintainability and renamed variables for clarity.
+- Randomization: Improved the pipe generation logic using a more robust `rand()` implementation.
+
+
 ## [1.11.2] - 2026-05-08
 
 ### Changed
