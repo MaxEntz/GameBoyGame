@@ -75,6 +75,8 @@ trap_memory(OUT game_t *game)
     set_bkg_data(14, 1, wall_crossing_tile);
     set_bkg_data(15, 4, bush_tile);
     set_bkg_data(19, 4, flower_tile);
+    set_bkg_data(0 + OFFSET_SAFER_TILE, 1, safe_tile_void);
+    set_bkg_data(1 + OFFSET_SAFER_TILE, 1, safe_tile_grass);
     set_bkg_tiles(0, 0, 20, 18, g_tm_map);
     set_sprite_tile(0, 0);
     set_sprite_tile(1, 1);

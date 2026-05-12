@@ -14,6 +14,9 @@
     #include "common/random.h"
     #include "common/get_tile_by_map.h"
     #include "asset_lobby.h"
+    #include "mg1/asset_tm.h"
+
+    #define OFFSET_SAFER_TILE 90
 
 typedef struct trap_memory_s {
     UINT8      player_x;
