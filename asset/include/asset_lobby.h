@@ -28,6 +28,7 @@ extern const UINT8 player_tile_left_move[];
 extern const UINT8 player_tile_right[];
 extern const UINT8 player_tile_right_move[];
 extern const UINT8 ennemies1_tile[];
+extern const UINT8 ennemies2_tile[];
 extern const UINT8 transition_map[];
 extern const UINT8 map_bl[];
 extern const UINT8 map_cl[];

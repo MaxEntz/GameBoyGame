@@ -56,6 +56,7 @@ load_assets(void)
     set_bkg_data(15, 4, bush_tile);
     set_bkg_data(19, 4, flower_tile);
     set_bkg_data(23, 4, ennemies1_tile);
+    set_bkg_data(27, 4, ennemies2_tile);
     set_bkg_tiles(0, 0, 20, 18, map_bl);
 
     text_renderer_init();
