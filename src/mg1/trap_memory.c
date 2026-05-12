@@ -57,6 +57,12 @@ trap_memory(OUT game_t *game)
     game->score_mg1 = 0;
     game->level = 1;
 
+    g_tm.player_x = 88;
+    g_tm.player_y = 78;
+    g_tm.is_moving = FALSE;
+    g_tm.moving_dir = MOVING_SENS_DOWN;
+    g_tm.fps_counter = 0;
+
     SPRITES_8x8;
     set_bkg_data(0, 1, grass_tile);
     set_bkg_data(1, 1, void_tile);
@@ -67,22 +73,31 @@ trap_memory(OUT game_t *game)
     set_bkg_data(15, 4, bush_tile);
     set_bkg_data(19, 4, flower_tile);
     set_bkg_tiles(0, 0, 20, 18, g_tm_map);
-    set_sprite_data(0, 1, square_tile);
-    for (UINT8 i = 0; i < 4; i++)
-        set_sprite_tile(i, 0);
+    set_sprite_tile(0, 0);
+    set_sprite_tile(1, 1);
+    set_sprite_tile(2, 2);
+    set_sprite_tile(3, 3);
     HIDE_WIN;
     text_renderer_init();
+}
+
+trap_memory_t
+*trap_memory_get(void)
+{
+    return &g_tm;
 }
 
 void
 update_trap_memory(OUT game_t *game)
 {
-
-}
-
-void
-handle_input_trap_memory(OUT game_t *game,
-                        IN UINT8 keys)
-{
-
+    (void)game;
+    g_tm.fps_counter++;
+    if (g_tm.fps_counter >= 60) {
+        g_tm.fps_counter = 0;
+    }
+    move_sprite_personage(&g_tm);
+    move_sprite(0, g_tm.player_x, g_tm.player_y);
+    move_sprite(1, g_tm.player_x + 8, g_tm.player_y);
+    move_sprite(2, g_tm.player_x, g_tm.player_y + 8);
+    move_sprite(3, g_tm.player_x + 8, g_tm.player_y + 8);
 }

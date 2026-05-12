@@ -17,6 +17,9 @@
 typedef struct trap_memory_s {
     UINT8      player_x;
     UINT8      player_y;
+    BOOLEAN    is_moving;
+    UINT8      moving_dir;
+    UINT8      fps_counter;
 } trap_memory_t;
 
 /**
@@ -44,5 +47,20 @@ update_trap_memory(OUT game_t *game);
 void
 handle_input_trap_memory(OUT game_t *game,
                         IN UINT8 keys);
+
+/**
+ * @brief Move the player sprite based on the current movement state
+ * @param game Pointer to the game structure
+ * @return void
+ */
+void
+move_sprite_personage(OUT trap_memory_t *game);
+
+/**
+ * @brief Get the Trap Memory state
+ * @return Pointer to the Trap Memory state
+ */
+trap_memory_t
+*trap_memory_get(void);
 
 #endif /* !TRAP_MEMORY_H_ */
