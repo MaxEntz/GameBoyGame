@@ -10,6 +10,19 @@
 
     #include "common/common.h"
     #include "common/game_changer.h"
+    #include "mg3/mg3_layout.h"
+    #include "mg3/asset_flappy.h"
+    #include "common/random.h"
+
+    typedef struct pipe_s {
+        INT16 pipe_x;
+        INT16 pipe_y;
+    } pipe_t;
+
+    typedef struct flappy_s {
+        INT16 bird_y;
+        pipe_t pipes[MG3_NB_PIPE];
+    } flappy_t;
 
 /**
  * @brief Load the Flappy Bird assets and handle its state
