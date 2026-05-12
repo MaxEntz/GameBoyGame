@@ -56,6 +56,12 @@ text_renderer_init(void)
 }
 
 void
+text_renderer_destroy(void)
+{
+    g_text_renderer_ready = FALSE;
+}
+
+void
 text_renderer_draw(OUT const text_render_t *render)
 {
     UINT8 index = 0;

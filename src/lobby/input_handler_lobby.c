@@ -8,18 +8,15 @@
 #include "lobby/lobby.h"
 #include "common/random.h"
 
-// MAXIME, met dans ta struct lobby quand tu la crée stp
-static BOOLEAN init_rng = FALSE;
-
 /**
  * @brief Get the tile at the specified position in the map
- * @param game Pointer to the game structure
+ * @param lobby Pointer to the lobby state
  * @param x X coordinate
  * @param y Y coordinate
  * @return The tile at the specified position
  */
 static UINT8
-get_tile_by_map(game_t *game, INT16 x, INT16 y)
+get_tile_by_map(IN const lobby_state_t *lobby, INT16 x, INT16 y)
 {
     UINT8 tile_x = 0;
     UINT8 tile_y = 0;
@@ -30,7 +27,7 @@ get_tile_by_map(game_t *game, INT16 x, INT16 y)
     tile_y = y >> 3;
     if (tile_x >= 20 || tile_y >= 18)
         return 0;
-    return game->current_map[tile_y * 20 + tile_x];
+    return lobby->current_map[tile_y * 20 + tile_x];
 }
 
 /**
@@ -40,15 +37,16 @@ get_tile_by_map(game_t *game, INT16 x, INT16 y)
 static void
 handle_a_input(IN game_t *game)
 {
-    INT16 x = game->player_x - 8;
-    INT16 y = game->player_y - 16;
+    lobby_state_t *lobby = lobby_get_state();
+    INT16 x = lobby->player_x - 8;
+    INT16 y = lobby->player_y - 16;
     UINT8 tile = 0;
 
     if (x < 0 || y < 0)
         return;
     if (x >= 160 || y >= 144)
         return;
-    switch (game->moving_dir) {
+    switch (lobby->moving_dir) {
         case MOVING_SENS_UP:
             y -= 8;
             break;
@@ -64,9 +62,9 @@ handle_a_input(IN game_t *game)
         default:
             break;
     }
-    tile = get_tile_by_map(game, x, y);
+    tile = get_tile_by_map(lobby, x, y);
     if (tile == 23 || tile == 24 || tile == 25 || tile == 26)
-        game_changer(game, GAME_STATE_MG2);
+        game_changer(game, GAME_STATE_MG2, TRUE);
     
 }
 
@@ -80,8 +78,9 @@ static BOOLEAN
 is_colliding_with_wall(IN game_t *game,
                        IN UINT8 sens)
 {
-    INT16 x = game->player_x - 8;
-    INT16 y = game->player_y - 16;
+    lobby_state_t *lobby = lobby_get_state();
+    INT16 x = lobby->player_x - 8;
+    INT16 y = lobby->player_y - 16;
     UINT8 tile = 0;
 
     switch (sens) {
@@ -107,7 +106,7 @@ is_colliding_with_wall(IN game_t *game,
 
     if (x < 0 || y < 0 || x >= 160 || y >= 144)
         return TRUE;
-    tile = get_tile_by_map(game, x, y);
+    tile = get_tile_by_map(lobby, x, y);
     if (switch_map(game, x, y, tile))
         return FALSE;
     if (tile == 0 || tile == 1 || tile == 14)
@@ -119,35 +118,39 @@ void
 handle_input_lobby(OUT game_t *game,
                    IN UINT8 keys)
 {
-    game->is_moving = FALSE;
-    if (!init_rng && keys) {
+    lobby_state_t *lobby = lobby_get_state();
+
+    lobby->is_moving = FALSE;
+    if (!lobby->rng_initialized && keys) {
         random_init(keys);
-        init_rng = TRUE;
+        lobby->rng_initialized = TRUE;
     }
-    if (game->is_changing_map)
+    if (lobby->is_changing_map)
         return;
     if (keys & J_A)
         handle_a_input(game);
     if (keys & J_B)
-        game_changer(game, GAME_STATE_MG1);
+        game_changer(game, GAME_STATE_MG1, TRUE);
+    if (keys & J_SELECT)
+        game_changer(game, GAME_STATE_MENU, TRUE);
     if (keys & J_LEFT && !is_colliding_with_wall(game, MOVING_SENS_LEFT)) {
-        game->player_x -= SPEED;
-        game->is_moving = TRUE;
-        game->moving_dir = MOVING_SENS_LEFT;
+        lobby->player_x -= SPEED;
+        lobby->is_moving = TRUE;
+        lobby->moving_dir = MOVING_SENS_LEFT;
     }
     if (keys & J_RIGHT && !is_colliding_with_wall(game, MOVING_SENS_RIGHT)) {
-        game->player_x += SPEED;
-        game->is_moving = TRUE;
-        game->moving_dir = MOVING_SENS_RIGHT;
+        lobby->player_x += SPEED;
+        lobby->is_moving = TRUE;
+        lobby->moving_dir = MOVING_SENS_RIGHT;
     }
     if (keys & J_UP && !is_colliding_with_wall(game, MOVING_SENS_UP)) {
-        game->player_y -= SPEED;
-        game->is_moving = TRUE;
-        game->moving_dir = MOVING_SENS_UP;
+        lobby->player_y -= SPEED;
+        lobby->is_moving = TRUE;
+        lobby->moving_dir = MOVING_SENS_UP;
     }
     if (keys & J_DOWN && !is_colliding_with_wall(game, MOVING_SENS_DOWN)) {
-        game->player_y += SPEED;
-        game->is_moving = TRUE;
-        game->moving_dir = MOVING_SENS_DOWN;
+        lobby->player_y += SPEED;
+        lobby->is_moving = TRUE;
+        lobby->moving_dir = MOVING_SENS_DOWN;
     }
 }

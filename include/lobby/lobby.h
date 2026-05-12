@@ -31,6 +31,25 @@ typedef struct map_manager_s {
     const UINT8 *map_data;
 } map_manager_t;
 
+typedef struct lobby_state_s {
+    UINT8    fps_counter;
+    UINT16   seconds_counter;
+    UINT8    player_x;
+    UINT8    player_y;
+    BOOLEAN  is_moving;
+    UINT8    moving_dir;
+    BOOLEAN  is_changing_map;
+    UINT8    current_map[20 * 18];
+    map_id_t current_map_id;
+    BOOLEAN  rng_initialized;
+} lobby_state_t;
+
+void
+lobby_init_state(void);
+
+lobby_state_t
+*lobby_get_state(void);
+
 /**
  * @brief Load the lobby assets and handle the lobby state
  * We can see it like a creator in CPP

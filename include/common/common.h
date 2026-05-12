@@ -22,7 +22,7 @@
 
     // To update... about your game
     #define MASTER_SCORE_MG1 100
-    #define MASTER_SCORE_MG2 100
+    #define MASTER_SCORE_MG2 15000
     #define MASTER_SCORE_MG3 100
 
 /**
@@ -37,6 +37,7 @@ typedef enum {
     GAME_STATE_MG2,
     GAME_STATE_MG3,
     GAME_STATE_GAME_OVER,
+    GAME_STATE_MENU,
     GAME_STATE_COUNT
 } game_state_t;
 
@@ -54,23 +55,12 @@ typedef enum map_id_e {
 } map_id_t;
 
 /**
- * @brief Structure to manage the game state
- * And the player position for now, but we can add more stuff later
- * Like the score, the health, etc...
+ * @brief Structure to manage global game state and scores
  */
 typedef struct game_s {
     game_state_t state;
     BOOLEAN      is_running;
     BOOLEAN      state_changed;
-    UINT8        fps_counter;
-    UINT16       seconds_counter;
-    UINT8        player_x;
-    UINT8        player_y;
-    BOOLEAN      is_moving;
-    UINT8        moving_dir;
-    BOOLEAN      is_changing_map;
-    UINT8        current_map[20 * 18];
-    map_id_t     current_map_id;
     INT16        total_score;
     INT16        score_mg1;
     INT16        score_mg2;

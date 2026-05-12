@@ -11,11 +11,13 @@
 #include "lobby/lobby.h"
 #include "mg1/trap_memory.h"
 #include "mg2/tetris.h"
+#include "menu/menu.h"
 
 /**
  * @brief Array of function pointers to handle different game states
  */
 static const management_state_t g_state_function[MAX_STATES] = {
+<<<<<<< HEAD
     {GAME_STATE_LOBBY    ,lobby       ,handle_input_lobby      ,update_lobby}              ,
     {GAME_STATE_PLAYING  ,NULL        ,NULL                    ,NULL}                      ,
     {GAME_STATE_PAUSED   ,NULL        ,NULL                    ,NULL}                      ,
@@ -24,29 +26,31 @@ static const management_state_t g_state_function[MAX_STATES] = {
     {GAME_STATE_MG2      ,tetris      ,handle_input_tetris     ,update_tetris}             ,
     {GAME_STATE_MG3      ,NULL        ,NULL                    ,NULL}                      ,
     {GAME_STATE_GAME_OVER,NULL        ,NULL                    ,NULL}
+=======
+    {GAME_STATE_LOBBY    ,lobby,handle_input_lobby,update_lobby},
+    {GAME_STATE_PLAYING  ,NULL ,NULL              ,NULL}        ,
+    {GAME_STATE_PAUSED   ,NULL ,NULL              ,NULL}        ,
+    {GAME_STATE_VICTORY  ,NULL ,NULL              ,NULL}        ,
+    {GAME_STATE_MG1      ,NULL ,NULL              ,NULL}        ,
+    {GAME_STATE_MG2      ,tetris ,handle_input_tetris,update_tetris}        ,
+    {GAME_STATE_MG3      ,NULL ,NULL              ,NULL}        ,
+    {GAME_STATE_GAME_OVER,NULL ,NULL              ,NULL}        ,
+    {GAME_STATE_MENU     ,menu ,handle_input_menu ,update_menu}
+>>>>>>> ccb16b7928d85afb8c172ea53514daf0e76e856c
 };
 
 static void
 init_game(OUT game_t *game)
 {
-    game->state = GAME_STATE_LOBBY;
+    game->state = GAME_STATE_MENU;
     game->is_running = TRUE;
     game->state_changed = FALSE;
-    game->player_x = 88;
-    game->player_y = 78;
-    game->fps_counter = 0;
-    game->seconds_counter = 0;
-    game->is_moving = FALSE;
-    game->moving_dir = MOVING_SENS_DOWN;
-    game->is_changing_map = FALSE;
-    for (UINT16 i = 0; i < 20 * 18; i++)
-        game->current_map[i] = map_bl[i];
-    game->current_map_id = MAP_ID_BL;
     game->total_score = 0;
     game->score_mg1 = 0;
     game->score_mg2 = 0;
     game->score_mg3 = 0;
     game->level = 1;
+    lobby_init_state();
 }
 
 
