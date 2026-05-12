@@ -6,6 +6,7 @@
 */
 
 #include "lobby/lobby.h"
+#include "lobby/lore_lobby.h"
 #include "common/text_renderer.h"
 
 static lobby_state_t g_lobby;
@@ -26,6 +27,7 @@ lobby_init_state(void)
     g_lobby.current_map_id = MAP_ID_BL;
     g_lobby.rng_initialized = FALSE;
     g_lobby.dialogue_index = 0;
+    g_lobby.should_dialogue = FALSE;
     g_lobby.dialogue.state = DIALOGUE_STATE_INACTIVE;
 }
 
@@ -99,6 +101,8 @@ lobby(OUT game_t *game)
     (void)game;
     if (!g_lobby.inited)
         lobby_init_state();
+    else
+        g_lobby.should_dialogue = TRUE;
     load_assets();
     load_current_map();
 }
@@ -138,24 +142,15 @@ void
 update_lobby(OUT game_t *game)
 {
     lobby_state_t *lobby = lobby_get_state();
-    dialogue_t *dlg;
 
-    (void)game;
     lobby->fps_counter++;
     if (lobby->fps_counter >= 60) {
         lobby->fps_counter = 0;
         lobby->seconds_counter++;
     }
-    if (lobby->dialogue_index < NB_DIALOGUES) {
-        dlg = &lobby->dialogue;
-        dialogue_update(dlg);
-        if (!dialogue_is_active(dlg) && dlg->chars_shown > 0) {
-            dlg->chars_shown = 0;
-            lobby->dialogue_index++;
-            game_changer(game, GAME_STATE_MG2, TRUE);
-            return;
-        }
-    }
+    lore_update(game);
+    if (game->state != GAME_STATE_LOBBY)
+        return;
     move_sprite_personage(lobby);
     move_sprite(0, lobby->player_x, lobby->player_y);
     move_sprite(1, lobby->player_x + 8, lobby->player_y);

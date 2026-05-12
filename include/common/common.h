@@ -22,7 +22,7 @@
 
     // To update... about your game
     #define MASTER_SCORE_MG1 100
-    #define MASTER_SCORE_MG2 15000
+    #define MASTER_SCORE_MG2 1500
     #define MASTER_SCORE_MG3 100
 
 /**
