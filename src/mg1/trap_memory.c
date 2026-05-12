@@ -30,13 +30,11 @@ static const UINT8 g_tm_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TIL
 };
 
 static CHAR g_tm_score_text[] = "SCORE 000";
-static CHAR g_tm_time_text[] = "TIME 00";
-static CHAR g_tm_round_text[] = "ROUND 01";
+static CHAR g_tm_level_text[] = "LEVEL 01";
 static CHAR g_tm_gameover_text[] = "GAME OVER";
 
-static const text_render_t g_tm_score_render = {g_tm_score_text, 0, 0};
-static const text_render_t g_tm_time_render = {g_tm_time_text, 12, 0};
-static const text_render_t g_tm_round_render = {g_tm_round_text, 0, 1};
+static const text_render_t g_tm_score_render = {g_tm_score_text, 1, 0};
+static const text_render_t g_tm_level_render = {g_tm_level_text, 11, 0};
 static const text_render_t g_tm_gameover_render = {g_tm_gameover_text, 5, 9};
 
 static void
@@ -49,6 +47,17 @@ tm_write_number(CHAR *dst, UINT8 digits, UINT16 value)
         dst[i] = (CHAR)('0' + (value % 10U));
         value /= 10U;
     }
+}
+
+static void
+tm_draw_hud(IN const game_t *game)
+{
+    UINT16 score = (game->score_mg1 < 0) ? 0U : (UINT16)game->score_mg1;
+
+    tm_write_number(&g_tm_score_text[6], 3, score);
+    tm_write_number(&g_tm_level_text[6], 2, game->level);
+    text_renderer_draw(&g_tm_score_render);
+    text_renderer_draw(&g_tm_level_render);
 }
 
 void
@@ -84,6 +93,7 @@ trap_memory(OUT game_t *game)
     set_sprite_tile(3, 3);
     HIDE_WIN;
     text_renderer_init();
+    tm_draw_hud(game);
 }
 
 trap_memory_t
@@ -95,7 +105,7 @@ trap_memory_t
 void
 update_trap_memory(OUT game_t *game)
 {
-    (void)game;
+    tm_draw_hud(game);
     g_tm.fps_counter++;
     if (g_tm.fps_counter >= 60) {
         g_tm.fps_counter = 0;
