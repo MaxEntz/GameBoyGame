@@ -6,12 +6,16 @@
 */
 
 #include "lobby/lobby.h"
+#include "lobby/lore_lobby.h"
+#include "lobby/scoreboard_lobby.h"
+#include "common/text_renderer.h"
 
 static lobby_state_t g_lobby;
 
 void
 lobby_init_state(void)
 {
+    g_lobby.inited = TRUE;
     g_lobby.fps_counter = 0;
     g_lobby.seconds_counter = 0;
     g_lobby.player_x = 88;
@@ -23,6 +27,9 @@ lobby_init_state(void)
         g_lobby.current_map[i] = map_bl[i];
     g_lobby.current_map_id = MAP_ID_BL;
     g_lobby.rng_initialized = FALSE;
+    g_lobby.dialogue_index = 0;
+    g_lobby.should_dialogue = FALSE;
+    g_lobby.dialogue.state = DIALOGUE_STATE_INACTIVE;
 }
 
 lobby_state_t
@@ -50,7 +57,12 @@ load_assets(void)
     set_bkg_data(15, 4, bush_tile);
     set_bkg_data(19, 4, flower_tile);
     set_bkg_data(23, 4, ennemies1_tile);
+    set_bkg_data(27, 4, ennemies2_tile);
     set_bkg_tiles(0, 0, 20, 18, map_bl);
+
+    text_renderer_init();
+    dialogue_init();
+
     set_sprite_data(0, 4, player_tiles_front);
     set_sprite_data(4, 2, player_tile_front_move);
     set_sprite_data(6, 4, player_tile_back);
@@ -66,18 +78,36 @@ load_assets(void)
     set_sprite_tile(3, 3);
 
 
-    move_sprite(0, 80, 80);
-    move_sprite(1, 88, 80);
-    move_sprite(2, 80, 88);
-    move_sprite(3, 88, 88);
+    move_sprite(0, g_lobby.player_x, g_lobby.player_y);
+    move_sprite(1, g_lobby.player_x + 8, g_lobby.player_y);
+    move_sprite(2, g_lobby.player_x, g_lobby.player_y + 8);
+    move_sprite(3, g_lobby.player_x + 8, g_lobby.player_y + 8);
+}
 
+/**
+ * @brief Load the current map tiles and the player sprite based on the current movement direction
+ */
+static void
+load_current_map(void)
+{
+    set_bkg_tiles(0, 0, 20, 18, g_lobby.current_map);
+    set_sprite_tile(0, g_lobby.moving_dir + 0);
+    set_sprite_tile(1, g_lobby.moving_dir + 1);
+    set_sprite_tile(2, g_lobby.moving_dir + 2);
+    set_sprite_tile(3, g_lobby.moving_dir + 3);
 }
 
 void
 lobby(OUT game_t *game)
 {
-    (void)game;
+    if (!g_lobby.inited)
+        lobby_init_state();
+    else
+        g_lobby.should_dialogue = TRUE;
     load_assets();
+    load_current_map();
+    if (g_lobby.current_map_id == MAP_ID_TC)
+        draw_scoreboard(game);
 }
 
 /**
@@ -116,13 +146,14 @@ update_lobby(OUT game_t *game)
 {
     lobby_state_t *lobby = lobby_get_state();
 
-    (void)game;
     lobby->fps_counter++;
     if (lobby->fps_counter >= 60) {
         lobby->fps_counter = 0;
         lobby->seconds_counter++;
     }
-
+    lore_update(game);
+    if (game->state != GAME_STATE_LOBBY)
+        return;
     move_sprite_personage(lobby);
     move_sprite(0, lobby->player_x, lobby->player_y);
     move_sprite(1, lobby->player_x + 8, lobby->player_y);

@@ -7,6 +7,40 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.14.0] - 2026-05-12
+
+### Added
+- `src/lobby/lore_lobby.c` / `include/lobby/lore_lobby.h`: new files for all lore logic (dialogue texts, NPC interaction, post-dialogue transitions)
+- Full 9 dialogues (left bro (0-2), right bro (3-5), center room boss (6-8)), each with a lose loop and a win branch
+- `should_dialogue` bool in `lobby_state_tused on return from games
+- Center room (`MAP_ID_CC`) auto-triggers dialogue 6 when the player enters
+- Player repositioned to `y=72` before center room dialogue to avoid sprite overlapping the dialogue box
+- Scoreboard added on TC map, showing best and current scores for all mini-games
+
+### Changed
+- `src/lobby/input_handler_lobby.c`: separated functions in smaller helpers
+---
+
+## [1.13.0] - 2026-06-12
+
+### Added
+- Flappy Bird logic: Implementation of the core gameplay loop for the `MG3` mini-game.
+- `asset/include/mg3/asset_flappy.h` & `src/mg3/asset_flappy.c`: New assets for the FlappyBird game.
+- `include/mg3/mg3_layout.h`: New layout definitions for the game interface.
+- `src/mg3/flappy.c`: Main game logic and pipe management.
+
+## Fixed
+- Overflow prevention: Changed the data type of `bird_y` to prevent calculation overflows.
+- Boundary Clamping: Added a limit to the bird's position to prevent it from leaving the screen area.
+- Visual fixes: Corrected an issue where pipes were displayed incorrectly at the start of the game.
+- Merge conflicts: Resolved conflicts in the latest integration.
+
+### Changed
+- `src/main/core.c`: Integrated the new game mode into the core engine.
+- Refactoring & Macros: Replaced hard-coded values with macros for better maintainability and renamed variables for clarity.
+- Randomization: Improved the pipe generation logic using a more robust `rand()` implementation.
+
+
 ## [1.11.2] - 2026-05-08
 
 ### Changed

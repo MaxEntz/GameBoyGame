@@ -14,6 +14,7 @@
     #include "common/transition.h"
     #include "common/random.h"
     #include "common/get_tile_by_map.h"
+    #include "common/dialogue.h"
 
     // Map manager macro
     #define MAP_LEFT (-1)
@@ -34,16 +35,20 @@ typedef struct map_manager_s {
 } map_manager_t;
 
 typedef struct lobby_state_s {
-    UINT8    fps_counter;
-    UINT16   seconds_counter;
-    UINT8    player_x;
-    UINT8    player_y;
-    BOOLEAN  is_moving;
-    UINT8    moving_dir;
-    BOOLEAN  is_changing_map;
-    UINT8    current_map[20 * 18];
-    map_id_t current_map_id;
-    BOOLEAN  rng_initialized;
+    BOOLEAN    inited;
+    UINT8      fps_counter;
+    UINT16     seconds_counter;
+    UINT8      player_x;
+    UINT8      player_y;
+    BOOLEAN    is_moving;
+    UINT8      moving_dir;
+    BOOLEAN    is_changing_map;
+    UINT8      current_map[20 * 18];
+    map_id_t   current_map_id;
+    BOOLEAN    rng_initialized;
+    UINT8      dialogue_index;
+    BOOLEAN    should_dialogue;
+    dialogue_t dialogue;
 } lobby_state_t;
 
 void
