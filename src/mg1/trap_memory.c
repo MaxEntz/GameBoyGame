@@ -79,13 +79,14 @@ trap_memory(OUT game_t *game)
     g_tm.fps_counter = 0;
     g_tm.seconds_counter = 0;
     g_tm.time_round = ROUND_TIME - 1;
-    g_tm.nb_safe_tiles = 5;
+    g_tm.nb_safe_tiles = MAX_SAFE_TILES;
     g_tm.hud_ready = FALSE;
     g_tm.last_score = 0;
     g_tm.last_level = 1;
+    g_tm.see_safe_tile = TIME_SEE_SAFE_TILE;
+    g_tm.total_time_round = ROUND_TIME;
     for (UINT16 i = 0; i < COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES; i++)
         g_tm.current_map[i] = g_tm_map[i];
-
     SPRITES_8x8;
     set_bkg_data(0, 1, grass_tile);
     set_bkg_data(1, 1, void_tile);
@@ -120,9 +121,11 @@ find_new_safe_tile(OUT UINT8 *map)
     UINT16 index_y = 0;
     UINT8 tile = 0;
 
-    for (INT8 i = 0; i < g_tm.nb_safe_tiles; i++) {
+    for (INT16 i = 0; i < (INT16)g_tm.nb_safe_tiles; i++) {
         index_x = (UINT16)(random_get(COMMON_SCREEN_WIDTH_TILES - 4)) + 1;
         index_y = (UINT16)(random_get(COMMON_SCREEN_HEIGHT_TILES - 4)) + 1;
+        g_tm.hitbox_safe_tile[i][0] = index_x;
+        g_tm.hitbox_safe_tile[i][1] = index_y;
         tile = map[index_y * COMMON_SCREEN_WIDTH_TILES + index_x];
         if (tile == 0) {
             map[index_y * COMMON_SCREEN_WIDTH_TILES + index_x] = 1 + OFFSET_SAFER_TILE;
@@ -149,18 +152,37 @@ clear_map(OUT UINT8 *map)
     }
 }
 
+static BOOLEAN
+check_game_over(IN const game_t *game)
+{
+    UINT8 pos_x = (UINT8)(g_tm.player_x >> 3);
+    UINT8 pos_y = (UINT8)(g_tm.player_y >> 3);
+
+    if (game->score_mg1 <= 0)
+        return FALSE;
+    for (UINT8 i = 0; i < g_tm.nb_safe_tiles; i++) {
+        if (pos_x + 1 > g_tm.hitbox_safe_tile[i][0] && pos_x < g_tm.hitbox_safe_tile[i][0] + 2
+            && pos_y + 1 > g_tm.hitbox_safe_tile[i][1] && pos_y < g_tm.hitbox_safe_tile[i][1] + 2)
+            return FALSE;
+    }
+    text_renderer_draw(&g_tm_gameover_render);
+    return TRUE;
+}
+
 static void
 handle_new_round(OUT game_t *game)
 {
-    if (g_tm.time_round >= ROUND_TIME) {
+    if (g_tm.time_round >= g_tm.total_time_round) {
+        if (check_game_over(game))
+            return;
         g_tm.time_round = 0;
         clear_map(g_tm.current_map);
         find_new_safe_tile(g_tm.current_map);
         set_bkg_tiles(0, 0, 20, 18, g_tm.current_map);
-        g_tm.hud_ready = FALSE;
+        game->score_mg1 += 10 * game->level;
         tm_draw_hud(game);
     }
-    if (g_tm.time_round == 2 && g_tm.fps_counter == 0) {
+    if (g_tm.time_round == g_tm.see_safe_tile && g_tm.fps_counter == 0) {
         clear_map(g_tm.current_map);
         set_bkg_tiles(0, 0, 20, 18, g_tm.current_map);
         g_tm.hud_ready = FALSE;

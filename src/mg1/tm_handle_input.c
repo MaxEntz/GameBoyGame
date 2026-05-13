@@ -17,6 +17,7 @@ static BOOLEAN
 is_colliding_with_wall(IN game_t *game,
                        IN UINT8 sens)
 {
+    (void)game;
     trap_memory_t *tm = trap_memory_get();
     INT16 x = tm->player_x - 8;
     INT16 y = tm->player_y - 16;
@@ -46,7 +47,8 @@ is_colliding_with_wall(IN game_t *game,
     if (x < 0 || y < 0 || x >= 160 || y >= 144)
         return TRUE;
     tile = get_tile_by_map(tm->current_map, x, y);
-    if (tile == 0 || tile == 1 || tile == 14)
+    if (tile == 0 || tile == 1 || tile == 14 ||
+        tile == 0 + OFFSET_SAFER_TILE || tile == 1 + OFFSET_SAFER_TILE)
         return FALSE;
     return TRUE;
 }

@@ -18,6 +18,8 @@
 
     #define OFFSET_SAFER_TILE 90
     #define ROUND_TIME 8
+    #define MAX_SAFE_TILES 5
+    #define TIME_SEE_SAFE_TILE 2
 
 typedef struct trap_memory_s {
     UINT8      player_x;
@@ -31,6 +33,9 @@ typedef struct trap_memory_s {
     BOOLEAN    hud_ready;
     UINT16     last_score;
     UINT8      last_level;
+    UINT8      hitbox_safe_tile[MAX_SAFE_TILES][2];
+    UINT8      see_safe_tile;
+    UINT8      total_time_round;
     UINT8      current_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES];
 } trap_memory_t;
 
