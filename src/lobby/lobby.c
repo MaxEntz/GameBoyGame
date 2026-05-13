@@ -7,6 +7,7 @@
 
 #include "lobby/lobby.h"
 #include "lobby/lore_lobby.h"
+#include "lobby/scoreboard_lobby.h"
 #include "common/text_renderer.h"
 
 static lobby_state_t g_lobby;
@@ -99,13 +100,14 @@ load_current_map(void)
 void
 lobby(OUT game_t *game)
 {
-    (void)game;
     if (!g_lobby.inited)
         lobby_init_state();
     else
         g_lobby.should_dialogue = TRUE;
     load_assets();
     load_current_map();
+    if (g_lobby.current_map_id == MAP_ID_TC)
+        draw_scoreboard(game);
 }
 
 /**

@@ -15,6 +15,7 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 - `should_dialogue` bool in `lobby_state_tused on return from games
 - Center room (`MAP_ID_CC`) auto-triggers dialogue 6 when the player enters
 - Player repositioned to `y=72` before center room dialogue to avoid sprite overlapping the dialogue box
+- Scoreboard added on TC map, showing best and current scores for all mini-games
 
 ### Changed
 - `src/lobby/input_handler_lobby.c`: separated functions in smaller helpers

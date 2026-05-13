@@ -34,7 +34,9 @@ init_game(OUT game_t *game)
     game->state = GAME_STATE_MENU;
     game->is_running = TRUE;
     game->state_changed = FALSE;
-    game->total_score = 0;
+    game->best_score_mg1 = MASTER_SCORE_MG1;
+    game->best_score_mg2 = MASTER_SCORE_MG2;        //a changer dans save
+    game->best_score_mg3 = MASTER_SCORE_MG3;
     game->score_mg1 = 0;
     game->score_mg2 = 0;
     game->score_mg3 = 0;
