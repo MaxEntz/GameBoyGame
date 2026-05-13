@@ -17,6 +17,7 @@
     #include "mg1/asset_tm.h"
 
     #define OFFSET_SAFER_TILE 90
+    #define ROUND_TIME 8
 
 typedef struct trap_memory_s {
     UINT8      player_x;
