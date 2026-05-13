@@ -76,6 +76,8 @@ handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
         game_changer(game, GAME_STATE_MG2, TRUE);
         return;
     }
+    if (lobby->dialogue_index == 8)
+        game_changer(game, GAME_STATE_MENU, TRUE);          //tmp, faudra que la taupe passe dans le trou au milieu pr trigger
     lobby->dialogue_index++;
 }
 
