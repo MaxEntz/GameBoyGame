@@ -155,14 +155,14 @@ clear_map(OUT UINT8 *map)
 static BOOLEAN
 check_game_over(IN const game_t *game)
 {
-    UINT8 pos_x = (UINT8)(g_tm.player_x >> 3);
-    UINT8 pos_y = (UINT8)(g_tm.player_y >> 3);
+    UINT8 pos_x = (UINT8)(g_tm.player_x + 8 >> 3);
+    UINT8 pos_y = (UINT8)(g_tm.player_y + 8 >> 3);
 
     if (game->score_mg1 <= 0)
         return FALSE;
     for (UINT8 i = 0; i < g_tm.nb_safe_tiles; i++) {
-        if (pos_x + 1 > g_tm.hitbox_safe_tile[i][0] && pos_x < g_tm.hitbox_safe_tile[i][0] + 2
-            && pos_y + 1 > g_tm.hitbox_safe_tile[i][1] && pos_y < g_tm.hitbox_safe_tile[i][1] + 2)
+        if (pos_x >= g_tm.hitbox_safe_tile[i][0] && pos_x <= g_tm.hitbox_safe_tile[i][0] + 2
+            && pos_y >= g_tm.hitbox_safe_tile[i][1] && pos_y <= g_tm.hitbox_safe_tile[i][1] + 2)
             return FALSE;
     }
     text_renderer_draw(&g_tm_gameover_render);
