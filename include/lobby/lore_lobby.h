@@ -10,6 +10,19 @@
 
     #include "common/common.h"
 
+typedef enum lore_step_e {
+    LORE_LEFT_INTRO  = 0,
+    LORE_LEFT_LOSE   = 1,
+    LORE_LEFT_WIN    = 2,
+    LORE_RIGHT_INTRO = 3,
+    LORE_RIGHT_LOSE  = 4,
+    LORE_RIGHT_WIN   = 5,
+    LORE_CC_INTRO    = 6,
+    LORE_CC_LOSE     = 7,
+    LORE_CC_WIN      = 8,
+    LORE_STEP_COUNT  = 9
+} lore_step_t;
+
 /**
  * @brief Start the dialogue when the player interacts with an NPC.
  * 

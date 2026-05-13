@@ -94,9 +94,9 @@ handle_a_input(IN game_t *game)
     lobby_state_t *lobby = lobby_get_state();
     UINT8 tile = get_faced_tile(lobby);
 
-    if (tile >= 23 && tile <= 26 && lobby->dialogue_index == 0)
+    if (tile >= 23 && tile <= 26 && lobby->dialogue_index == LORE_LEFT_INTRO)
         lore_start_dialogue(game);
-    if (tile >= 27 && tile <= 30 && lobby->dialogue_index == 3)
+    if (tile >= 27 && tile <= 30 && lobby->dialogue_index == LORE_RIGHT_INTRO)
         lore_start_dialogue(game);
 }
 
@@ -140,7 +140,7 @@ handle_input_lobby(OUT game_t *game, IN UINT8 keys)
     }
     if (lobby->is_changing_map)
         return;
-    if (lobby->dialogue_index < NB_DIALOGUES && dialogue_is_active(&lobby->dialogue))
+    if (lobby->dialogue_index < LORE_STEP_COUNT && dialogue_is_active(&lobby->dialogue))
         return dialogue_handle_input(&lobby->dialogue, keys);
     if (keys & J_A)
         handle_a_input(game);
