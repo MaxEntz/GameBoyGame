@@ -16,8 +16,8 @@ static const UINT8 g_tm_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TIL
     6 ,13,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,12,7 ,
     8 ,13,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,12,9 ,
     6 ,13,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,12,7 ,
-    8 ,13,0 ,1 ,0 ,1 ,0 ,1 ,2 ,3 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,12,9 ,
-    6 ,13,1 ,0 ,1 ,0 ,1 ,0 ,4 ,5 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,12,7 ,
+    8 ,13,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,12,9 ,
+    6 ,13,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,12,7 ,
     8 ,13,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,12,9 ,
     6 ,13,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,12,7 ,
     8 ,13,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,0 ,1 ,12,9 ,
@@ -54,10 +54,16 @@ tm_draw_hud(IN const game_t *game)
 {
     UINT16 score = (game->score_mg1 < 0) ? 0U : (UINT16)game->score_mg1;
 
+    if (g_tm.hud_ready && g_tm.last_score == (UINT16)score
+        && g_tm.last_level == game->level)
+        return;
     tm_write_number(&g_tm_score_text[6], 3, score);
     tm_write_number(&g_tm_level_text[6], 2, game->level);
     text_renderer_draw(&g_tm_score_render);
     text_renderer_draw(&g_tm_level_render);
+    g_tm.last_score = (UINT16)score;
+    g_tm.last_level = game->level;
+    g_tm.hud_ready = TRUE;
 }
 
 void
@@ -65,13 +71,18 @@ trap_memory(OUT game_t *game)
 {
     game->score_mg1 = 0;
     game->level = 1;
-
+    
     g_tm.player_x = 88;
     g_tm.player_y = 78;
     g_tm.is_moving = FALSE;
     g_tm.moving_dir = MOVING_SENS_DOWN;
     g_tm.fps_counter = 0;
     g_tm.seconds_counter = 0;
+    g_tm.time_round = 0;
+    g_tm.nb_safe_tiles = 5;
+    g_tm.hud_ready = FALSE;
+    g_tm.last_score = 0;
+    g_tm.last_level = 1;
     for (UINT16 i = 0; i < COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES; i++)
         g_tm.current_map[i] = g_tm_map[i];
 
@@ -102,6 +113,55 @@ trap_memory_t
     return &g_tm;
 }
 
+static void
+find_new_safe_tile(OUT UINT8 *map)
+{
+    UINT16 index_x = 0;
+    UINT16 index_y = 0;
+    UINT8 tile = 0;
+
+    for (INT8 i = 0; i < g_tm.nb_safe_tiles; i++) {
+        index_x = (UINT16)(random_get(COMMON_SCREEN_WIDTH_TILES - 4)) + 1;
+        index_y = (UINT16)(random_get(COMMON_SCREEN_HEIGHT_TILES - 4)) + 1;
+        tile = map[index_y * COMMON_SCREEN_WIDTH_TILES + index_x];
+        if (tile == 0) {
+            map[index_y * COMMON_SCREEN_WIDTH_TILES + index_x] = 1 + OFFSET_SAFER_TILE;
+            map[index_y * COMMON_SCREEN_WIDTH_TILES + index_x + 1] = 0 + OFFSET_SAFER_TILE;
+            map[(index_y + 1) * COMMON_SCREEN_WIDTH_TILES + index_x] = 0 + OFFSET_SAFER_TILE;
+            map[(index_y + 1) * COMMON_SCREEN_WIDTH_TILES + index_x + 1] = 1 + OFFSET_SAFER_TILE;
+        } else if (tile == 1) {
+            map[index_y * COMMON_SCREEN_WIDTH_TILES + index_x] = 0 + OFFSET_SAFER_TILE;
+            map[index_y * COMMON_SCREEN_WIDTH_TILES + index_x + 1] = 1 + OFFSET_SAFER_TILE;
+            map[(index_y + 1) * COMMON_SCREEN_WIDTH_TILES + index_x] = 1 + OFFSET_SAFER_TILE;
+            map[(index_y + 1) * COMMON_SCREEN_WIDTH_TILES + index_x + 1] = 0 + OFFSET_SAFER_TILE;
+        } else
+            i--;
+    }
+
+    return;
+}
+
+static void
+clear_map(OUT UINT8 *map)
+{
+    for (UINT16 i = 0; i < COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES; i++) {
+        if (map[i] == 0 + OFFSET_SAFER_TILE || map[i] == 1 + OFFSET_SAFER_TILE)
+            map[i] = (map[i] == 0 + OFFSET_SAFER_TILE) ? 0 : 1;
+    }
+}
+
+static void
+handle_new_round(OUT game_t *game)
+{
+    if (g_tm.time_round >= 5) {
+        g_tm.time_round = 0;
+        clear_map(g_tm.current_map);
+        find_new_safe_tile(g_tm.current_map);
+        set_bkg_tiles(0, 0, 20, 18, g_tm.current_map);
+        game->score_mg1 += 100;
+    }
+}
+
 void
 update_trap_memory(OUT game_t *game)
 {
@@ -109,7 +169,10 @@ update_trap_memory(OUT game_t *game)
     g_tm.fps_counter++;
     if (g_tm.fps_counter >= 60) {
         g_tm.fps_counter = 0;
+        g_tm.seconds_counter++;
+        g_tm.time_round++;
     }
+    handle_new_round(game);
     move_sprite_personage(&g_tm);
     move_sprite(0, g_tm.player_x, g_tm.player_y);
     move_sprite(1, g_tm.player_x + 8, g_tm.player_y);

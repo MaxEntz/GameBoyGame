@@ -25,6 +25,11 @@ typedef struct trap_memory_s {
     UINT8      moving_dir;
     UINT8      fps_counter;
     UINT16     seconds_counter;
+    UINT16     time_round;
+    UINT8      nb_safe_tiles;
+    BOOLEAN    hud_ready;
+    UINT16     last_score;
+    UINT8      last_level;
     UINT8      current_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES];
 } trap_memory_t;
 
