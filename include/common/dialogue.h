@@ -54,6 +54,12 @@ void
 dialogue_init(void);
 
 /**
+ * @brief Allow dialogue_init to reload tiles (call before vram_clear)
+ */
+void
+dialogue_destroy(void);
+
+/**
  * @brief Open the dialogue box and begin rendering the given text
  * 
  * Too long lines arent displayed fully, sorryyyyyy
