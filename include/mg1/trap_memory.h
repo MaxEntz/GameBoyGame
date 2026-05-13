@@ -36,6 +36,7 @@ typedef struct trap_memory_s {
     UINT8      hitbox_safe_tile[MAX_SAFE_TILES][2];
     UINT8      see_safe_tile;
     UINT8      total_time_round;
+    UINT8      nb_round;
     UINT8      current_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES];
 } trap_memory_t;
 

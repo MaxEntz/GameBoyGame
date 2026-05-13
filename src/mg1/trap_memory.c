@@ -175,11 +175,18 @@ handle_new_round(OUT game_t *game)
     if (g_tm.time_round >= g_tm.total_time_round) {
         if (check_game_over(game))
             return;
+        if (g_tm.nb_round == 5) {
+            g_tm.nb_round = 0;
+            g_tm.total_time_round -= 1;
+            game->level++;
+            g_tm.nb_safe_tiles--;
+        }
         g_tm.time_round = 0;
         clear_map(g_tm.current_map);
         find_new_safe_tile(g_tm.current_map);
         set_bkg_tiles(0, 0, 20, 18, g_tm.current_map);
         game->score_mg1 += 10 * game->level;
+        g_tm.nb_round++;
         tm_draw_hud(game);
     }
     if (g_tm.time_round == g_tm.see_safe_tile && g_tm.fps_counter == 0) {
