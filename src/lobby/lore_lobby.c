@@ -15,7 +15,7 @@ static const CHAR *g_dialogue_texts[NB_DIALOGUES] = {
     "Ouch!\n \nWell done little\nmole\nfind my bro\non the right side\n",
     "You beat my bro?\nImpressive!\nBut can you beat\nme?",
     "Pfff!\n \nDid you really\nbeat my bro ?\n You're not good\n enough !",
-    "Noooooo!\n \nYou beat us both?\nImpossible!\nWell done little\nmole, you can\nleave the island",
+    "Noooooo!\n \nYou beat us both?\nImpossible!\nWell done little\nmole, you can\nleave the island\nFind the hole\nin the center!",
     "Wait!\n \nYou want to leave?\n\nSure, \nbut I warn you,\nI won't go easy\n on you!\n",
     "Too slow!\n \nYou won't escape\nthat easily!\nTry again!",
     "Incredible...\n \nYou truly earned\nyour freedom!\nGoodbye little\nmole!"

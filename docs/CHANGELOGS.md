@@ -7,6 +7,27 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.14.0] - 2026-05-12
+
+### Added
+- `src/lobby/lore_lobby.c` / `include/lobby/lore_lobby.h`: new module holding all lore logic (dialogue texts, NPC interaction, post-dialogue transitions)
+- Full 9-dialogue lore state machine: left NPC (indices 0-2), right NPC (indices 3-5), center room final boss (indices 6-8), each with a lose loop and a win branch
+- `should_dialogue` flag in `lobby_state_t`: auto-plays the win/lose dialogue immediately on return from Tetris (indices 1, 4, 7)
+- Center room (`MAP_ID_CC`) auto-triggers dialogue 6 when the player enters, then chains to Tetris
+- Player repositioned to `y=72` before center room dialogue to avoid sprite overlapping the dialogue box
+
+### Fixed
+- Player sprite remaining visible in Tetris after a lobby→Tetris transition triggered inside `lore_update` — `update_lobby` now checks `game->state` before executing sprite moves
+- Center room dialogue infinite re-trigger loop — trigger now requires `chars_shown == 0` to avoid re-firing while the completed dialogue is still being dismissed
+
+### Changed
+- `lobby_state_t`: replaced `dialogue_t lobby_dialogues[NB_DIALOGUES]` global array with a single `dialogue_t dialogue` field and a `should_dialogue` flag
+- `NB_DIALOGUES`: 7 → 9
+- `src/lobby/lore_lobby.c`: refactored into helpers — `check_win`, `check_auto`, `handle_dialogue_end`
+- `src/lobby/input_handler_lobby.c`: extracted `get_faced_tile` and `handle_movement`; NPC interaction gated by `dialogue_index` (left NPC only at index 0, right NPC only at index 3)
+
+---
+
 ## [1.13.0] - 2026-06-12
 
 ### Added
