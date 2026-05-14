@@ -7,11 +7,6 @@
 
 #include "mg1/trap_memory.h"
 
-/**
- * @brief Move the player sprite based on the current movement state
- * @param game Pointer to the game structure
- * @return void
- */
 void
 move_sprite_personage(OUT trap_memory_t *game)
 {

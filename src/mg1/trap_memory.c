@@ -39,6 +39,13 @@ static const text_render_t g_tm_level_render = {g_tm_level_text, 11, 0};
 static const text_render_t g_tm_gameover_render = {g_tm_gameover_text, 5, 9};
 static const text_render_t g_tm_victory_render = {g_tm_victory_text, 5, 9};
 
+/**
+ * @brief Write a number into a string with leading zeros
+ * @param dst The destination string (must have enough space for the digits)
+ * @param digits The number of digits to write (leading zeros will be added if necessary)
+ * @param value The number to write
+ * @return void
+ */
 static void
 tm_write_number(CHAR *dst, UINT8 digits, UINT16 value)
 {
@@ -51,6 +58,11 @@ tm_write_number(CHAR *dst, UINT8 digits, UINT16 value)
     }
 }
 
+/**
+ * @brief Draw the heads-up display (HUD)
+ * @param game The game instance
+ * @return void
+ */
 static void
 tm_draw_hud(IN const game_t *game)
 {
@@ -68,12 +80,13 @@ tm_draw_hud(IN const game_t *game)
     g_tm.hud_ready = TRUE;
 }
 
-void
-trap_memory(OUT game_t *game)
+/**
+ * @brief Initialize the trap memory structure
+ * @return void
+ */
+static void
+init_tm_struct(void)
 {
-    game->score_mg1 = 0;
-    game->level = 1;
-    
     g_tm.player_x = 88;
     g_tm.player_y = 78;
     g_tm.is_moving = FALSE;
@@ -91,6 +104,15 @@ trap_memory(OUT game_t *game)
     g_tm.block_movement = FALSE;
     for (UINT16 i = 0; i < COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES; i++)
         g_tm.current_map[i] = g_tm_map[i];
+} 
+
+void
+trap_memory(OUT game_t *game)
+{
+    game->score_mg1 = 0;
+    game->level = 1;
+    
+    init_tm_struct();
     SPRITES_8x8;
     set_bkg_data(0, 1, grass_tile);
     set_bkg_data(1, 1, void_tile);
@@ -118,6 +140,11 @@ trap_memory_t
     return &g_tm;
 }
 
+/**
+ * @brief Find a new safe tile position
+ * @param map The map array
+ * @return void
+ */
 static void
 find_new_safe_tile(OUT UINT8 *map)
 {
@@ -148,6 +175,11 @@ find_new_safe_tile(OUT UINT8 *map)
     return;
 }
 
+/**
+ * @brief Clear the map
+ * @param map The map array
+ * @return void
+ */
 static void
 clear_map(OUT UINT8 *map)
 {
@@ -156,6 +188,12 @@ clear_map(OUT UINT8 *map)
     }
 }
 
+/**
+ * @brief Check if the player is colliding with a wall in the given direction
+ * @param game Pointer to the game structure
+ * @param sens The direction of movement (left, right, up, down)
+ * @return TRUE if colliding with a wall, FALSE otherwise
+ */
 static BOOLEAN
 check_game_over(IN const game_t *game)
 {
@@ -183,6 +221,11 @@ check_game_over(IN const game_t *game)
     return TRUE;
 }
 
+/**
+ * @brief Handle the logic for a new round
+ * @param game The game instance
+ * @return void
+ */
 static void
 handle_new_round(OUT game_t *game)
 {
