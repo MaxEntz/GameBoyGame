@@ -63,19 +63,21 @@ static void
 handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
 {
     if (lobby->dialogue_index == LORE_LEFT_INTRO) {
-        lobby->dialogue_index = LORE_LEFT_LOSE;
+        lobby->dialogue_index++;
         game_changer(game, GAME_STATE_MG2, TRUE);
+        return;
+    } else if (lobby->dialogue_index == LORE_RIGHT_INTRO) {
+        lobby->dialogue_index++;
+        game_changer(game, GAME_STATE_MG2, TRUE);
+        return;
+    } else if (lobby->dialogue_index == LORE_CC_INTRO) {
+        lobby->dialogue_index++;
+        game_changer(game, GAME_STATE_MG1, TRUE);
         return;
     }
     if (lobby->dialogue_index == LORE_LEFT_LOSE
             || lobby->dialogue_index == LORE_RIGHT_LOSE
             || lobby->dialogue_index == LORE_CC_LOSE) {
-        game_changer(game, GAME_STATE_MG2, TRUE);
-        return;
-    }
-    if (lobby->dialogue_index == LORE_RIGHT_INTRO
-            || lobby->dialogue_index == LORE_CC_INTRO) {
-        lobby->dialogue_index++;
         game_changer(game, GAME_STATE_MG2, TRUE);
         return;
     }
