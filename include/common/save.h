@@ -44,7 +44,7 @@ void save_load(INOUT game_t *game);
  * 
  * @param game Pointer to the game structure containing the data to save
  */
-void save_write(IN const game_t *game);
+void save_write(INOUT game_t *game);
 
 /**
  * @brief Reset the save data in SRAM by clearing the magic value

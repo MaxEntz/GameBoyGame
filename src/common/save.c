@@ -41,11 +41,17 @@ save_reset(void)
 }
 
 void
-save_write(IN const game_t *game)
+save_write(INOUT game_t *game)
 {
     const lobby_state_t *lobby = lobby_get_state();
     save_data_t tmp;
 
+    if (game->score_mg1 > game->best_score_mg1)
+        game->best_score_mg1 = game->score_mg1;
+    if (game->score_mg2 > game->best_score_mg2)
+        game->best_score_mg2 = game->score_mg2;
+    if (game->score_mg3 > game->best_score_mg3)
+        game->best_score_mg3 = game->score_mg3;
     tmp.best_mg1 = game->best_score_mg1;
     tmp.best_mg2 = game->best_score_mg2;
     tmp.best_mg3 = game->best_score_mg3;
