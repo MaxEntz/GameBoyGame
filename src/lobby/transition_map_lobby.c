@@ -6,6 +6,7 @@
 */
 
 #include "lobby/lobby.h"
+#include "lobby/scoreboard_lobby.h"
 
 void
 transition_map_animation(OUT game_t *game,
@@ -47,6 +48,6 @@ transition_map_animation(OUT game_t *game,
     lobby->player_x = x + 8;
     lobby->player_y = y + 16;
     set_bkg_tiles(0, 0, 20, 18, lobby->current_map);
-
-    (void)game;
+    if (lobby->current_map_id == MAP_ID_TC)
+        draw_scoreboard(game);
 }

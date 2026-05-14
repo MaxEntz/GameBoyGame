@@ -7,6 +7,47 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.16.0] - 2026-05-14
+
+### Added
+- **Collision logic in `src/mg3/flappy.c`**: Implemented `check_collision()` to detect impacts between the bird and pipes.
+
+---
+
+## [1.15.0] - 2026-05-14
+
+### Added
+- Trap Memory game enhancements:
+  - Game finished state and victory condition handling
+  - Round tracking with adjustable round logic
+  - Block movement flag to control player movement during game state transitions
+  - Enhanced safe tile visibility logic with progression through levels
+  - Game over detection and player position recalculation
+
+### Changed
+- `include/mg1/trap_memory.h`: Updated `TIME_SEE_SAFE_TILE` definition for improved level progression
+- `src/mg1/trap_memory.c`: Enhanced game structure and added round timing logic with map clearing functionality
+
+### Fixed
+- Player position calculation in game over checks
+- Safe tile visibility adjustments for proper level difficulty progression
+
+---
+
+## [1.14.0] - 2026-05-12
+
+### Added
+- `src/lobby/lore_lobby.c` / `include/lobby/lore_lobby.h`: new files for all lore logic (dialogue texts, NPC interaction, post-dialogue transitions)
+- Full 9 dialogues (left bro (0-2), right bro (3-5), center room boss (6-8)), each with a lose loop and a win branch
+- `should_dialogue` bool in `lobby_state_tused on return from games
+- Center room (`MAP_ID_CC`) auto-triggers dialogue 6 when the player enters
+- Player repositioned to `y=72` before center room dialogue to avoid sprite overlapping the dialogue box
+- Scoreboard added on TC map, showing best and current scores for all mini-games
+
+### Changed
+- `src/lobby/input_handler_lobby.c`: separated functions in smaller helpers
+---
+
 ## [1.13.0] - 2026-06-12
 
 ### Added

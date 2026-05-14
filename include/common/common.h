@@ -22,7 +22,7 @@
 
     // To update... about your game
     #define MASTER_SCORE_MG1 100
-    #define MASTER_SCORE_MG2 15000
+    #define MASTER_SCORE_MG2 1500
     #define MASTER_SCORE_MG3 100
 
 /**
@@ -61,7 +61,9 @@ typedef struct game_s {
     game_state_t state;
     BOOLEAN      is_running;
     BOOLEAN      state_changed;
-    INT16        total_score;
+    INT16        best_score_mg1;
+    INT16        best_score_mg2;
+    INT16        best_score_mg3;
     INT16        score_mg1;
     INT16        score_mg2;
     INT16        score_mg3;

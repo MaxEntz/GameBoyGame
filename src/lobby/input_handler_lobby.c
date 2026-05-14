@@ -6,46 +6,20 @@
 */
 
 #include "lobby/lobby.h"
+#include "lobby/lore_lobby.h"
 #include "common/random.h"
 
 /**
- * @brief Get the tile at the specified position in the map
- * @param lobby Pointer to the lobby state
- * @param x X coordinate
- * @param y Y coordinate
- * @return The tile at the specified position
+ * @brief Get the tile immediately in front of the player based on their facing direction
  */
 static UINT8
-get_tile_by_map(IN const lobby_state_t *lobby, INT16 x, INT16 y)
+get_faced_tile(IN const lobby_state_t *lobby)
 {
-    UINT8 tile_x = 0;
-    UINT8 tile_y = 0;
-
-    if (x < 0 || y < 0)
-        return 0;
-    tile_x = x >> 3;
-    tile_y = y >> 3;
-    if (tile_x >= 20 || tile_y >= 18)
-        return 0;
-    return lobby->current_map[tile_y * 20 + tile_x];
-}
-
-/**
- * @brief Handle the A button input
- * @param game Pointer to the game structure
- */
-static void
-handle_a_input(IN game_t *game)
-{
-    lobby_state_t *lobby = lobby_get_state();
     INT16 x = lobby->player_x - 8;
     INT16 y = lobby->player_y - 16;
-    UINT8 tile = 0;
 
-    if (x < 0 || y < 0)
-        return;
-    if (x >= 160 || y >= 144)
-        return;
+    if (x < 0 || y < 0 || x >= 160 || y >= 144)
+        return 0;
     switch (lobby->moving_dir) {
         case MOVING_SENS_UP:
             y -= 8;
@@ -62,21 +36,14 @@ handle_a_input(IN game_t *game)
         default:
             break;
     }
-    tile = get_tile_by_map(lobby, x, y);
-    if (tile == 23 || tile == 24 || tile == 25 || tile == 26)
-        game_changer(game, GAME_STATE_MG2, TRUE);
-    
+    return get_tile_by_map(lobby->current_map, x, y);
 }
 
 /**
  * @brief Check if the player is colliding with a wall in the given direction
- * @param game Pointer to the game structure
- * @param sens The direction of movement (left, right, up, down)
- * @return TRUE if colliding with a wall, FALSE otherwise
  */
 static BOOLEAN
-is_colliding_with_wall(IN game_t *game,
-                       IN UINT8 sens)
+is_colliding_with_wall(IN game_t *game, IN UINT8 sens)
 {
     lobby_state_t *lobby = lobby_get_state();
     INT16 x = lobby->player_x - 8;
@@ -84,29 +51,15 @@ is_colliding_with_wall(IN game_t *game,
     UINT8 tile = 0;
 
     switch (sens) {
-        case MOVING_SENS_LEFT:
-            x -= SPEED;
-            y += 8;
-            break;
-        case MOVING_SENS_RIGHT:
-            x += SPEED + 16;
-            y += 8;
-            break;
-        case MOVING_SENS_UP:
-            x += 8;
-            y -= SPEED;
-            break;
-        case MOVING_SENS_DOWN:
-            x += 8;
-            y += SPEED + 16;
-            break;
-        default:
-            break;
+        case MOVING_SENS_LEFT:  x -= SPEED;        y += 8;          break;
+        case MOVING_SENS_RIGHT: x += SPEED + 16;   y += 8;          break;
+        case MOVING_SENS_UP:    x += 8;             y -= SPEED;      break;
+        case MOVING_SENS_DOWN:  x += 8;             y += SPEED + 16; break;
+        default: break;
     }
-
     if (x < 0 || y < 0 || x >= 160 || y >= 144)
         return TRUE;
-    tile = get_tile_by_map(lobby, x, y);
+    tile = get_tile_by_map(lobby->current_map, x, y);
     if (switch_map(game, x, y, tile))
         return FALSE;
     if (tile == 0 || tile == 1 || tile == 14)
@@ -114,25 +67,27 @@ is_colliding_with_wall(IN game_t *game,
     return TRUE;
 }
 
-void
-handle_input_lobby(OUT game_t *game,
-                   IN UINT8 keys)
+/**
+ * @brief Trigger NPC dialogue if the player is facing an interactable NPC
+ */
+static void
+handle_a_input(IN game_t *game)
 {
     lobby_state_t *lobby = lobby_get_state();
+    UINT8 tile = get_faced_tile(lobby);
 
-    lobby->is_moving = FALSE;
-    if (!lobby->rng_initialized && keys) {
-        random_init(keys);
-        lobby->rng_initialized = TRUE;
-    }
-    if (lobby->is_changing_map)
-        return;
-    if (keys & J_A)
-        handle_a_input(game);
-    if (keys & J_B)
-        game_changer(game, GAME_STATE_MG2, TRUE);
-    if (keys & J_SELECT)
-        game_changer(game, GAME_STATE_MENU, TRUE);
+    if (tile >= 23 && tile <= 26 && lobby->dialogue_index == LORE_LEFT_INTRO)
+        lore_start_dialogue(game);
+    if (tile >= 27 && tile <= 30 && lobby->dialogue_index == LORE_RIGHT_INTRO)
+        lore_start_dialogue(game);
+}
+
+/**
+ * @brief Apply directional movement if not colliding with a wall
+ */
+static void
+handle_movement(INOUT game_t *game, INOUT lobby_state_t *lobby, IN UINT8 keys)
+{
     if (keys & J_LEFT && !is_colliding_with_wall(game, MOVING_SENS_LEFT)) {
         lobby->player_x -= SPEED;
         lobby->is_moving = TRUE;
@@ -153,4 +108,25 @@ handle_input_lobby(OUT game_t *game,
         lobby->is_moving = TRUE;
         lobby->moving_dir = MOVING_SENS_DOWN;
     }
+}
+
+void
+handle_input_lobby(OUT game_t *game, IN UINT8 keys)
+{
+    lobby_state_t *lobby = lobby_get_state();
+
+    lobby->is_moving = FALSE;
+    if (!lobby->rng_initialized && keys) {
+        random_init(keys);
+        lobby->rng_initialized = TRUE;
+    }
+    if (lobby->is_changing_map)
+        return;
+    if (lobby->dialogue_index < LORE_STEP_COUNT && dialogue_is_active(&lobby->dialogue))
+        return dialogue_handle_input(&lobby->dialogue, keys);
+    if (keys & J_A)
+        handle_a_input(game);
+    if (keys & J_SELECT)
+        game_changer(game, GAME_STATE_MENU, TRUE);
+    handle_movement(game, lobby, keys);
 }

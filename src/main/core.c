@@ -9,6 +9,7 @@
 #include "common/text_renderer.h"
 #include "common/dialogue.h"
 #include "lobby/lobby.h"
+#include "mg1/trap_memory.h"
 #include "mg2/tetris.h"
 #include "menu/menu.h"
 #include "mg3/mg3.h"
@@ -21,7 +22,7 @@ static const management_state_t g_state_function[MAX_STATES] = {
     {GAME_STATE_PLAYING  ,NULL ,NULL              ,NULL}        ,
     {GAME_STATE_PAUSED   ,NULL ,NULL              ,NULL}        ,
     {GAME_STATE_VICTORY  ,NULL ,NULL              ,NULL}        ,
-    {GAME_STATE_MG1      ,NULL ,NULL              ,NULL}        ,
+    {GAME_STATE_MG1      ,trap_memory ,handle_input_trap_memory,update_trap_memory}        ,
     {GAME_STATE_MG2      ,tetris ,handle_input_tetris,update_tetris}        ,
     {GAME_STATE_MG3      ,flappybird, handle_input_flappybird, update_flappybird}        ,
     {GAME_STATE_GAME_OVER,NULL ,NULL              ,NULL}        ,
@@ -34,14 +35,14 @@ init_game(OUT game_t *game)
     game->state = GAME_STATE_MENU;
     game->is_running = TRUE;
     game->state_changed = FALSE;
-    game->total_score = 0;
+    game->best_score_mg1 = 0;
+    game->best_score_mg2 = 0;        //a changer dans save
+    game->best_score_mg3 = 0;
     game->score_mg1 = 0;
     game->score_mg2 = 0;
     game->score_mg3 = 0;
     game->level = 1;
-    lobby_init_state();
 }
-
 
 /**
  * @brief Set the display configuration
