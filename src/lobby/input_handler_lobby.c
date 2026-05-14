@@ -126,8 +126,6 @@ handle_input_lobby(OUT game_t *game, IN UINT8 keys)
         return dialogue_handle_input(&lobby->dialogue, keys);
     if (keys & J_A)
         handle_a_input(game);
-    if (keys & J_B)
-        game_changer(game, GAME_STATE_MG1, TRUE);
     if (keys & J_SELECT)
         game_changer(game, GAME_STATE_MENU, TRUE);
     handle_movement(game, lobby, keys);
