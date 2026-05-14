@@ -38,6 +38,7 @@ typedef struct trap_memory_s {
     UINT8      total_time_round;
     UINT8      nb_round;
     BOOLEAN    game_finished;
+    BOOLEAN    block_movement;
     UINT8      current_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES];
 } trap_memory_t;
 

@@ -88,6 +88,7 @@ trap_memory(OUT game_t *game)
     g_tm.see_safe_tile = TIME_SEE_SAFE_TILE;
     g_tm.total_time_round = ROUND_TIME;
     g_tm.game_finished = FALSE;
+    g_tm.block_movement = FALSE;
     for (UINT16 i = 0; i < COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES; i++)
         g_tm.current_map[i] = g_tm_map[i];
     SPRITES_8x8;
@@ -197,6 +198,7 @@ handle_new_round(OUT game_t *game)
             g_tm.nb_safe_tiles--;
         }
         g_tm.time_round = 0;
+        g_tm.block_movement = TRUE;
         clear_map(g_tm.current_map);
         find_new_safe_tile(g_tm.current_map);
         set_bkg_tiles(0, 0, 20, 18, g_tm.current_map);
@@ -208,6 +210,7 @@ handle_new_round(OUT game_t *game)
         clear_map(g_tm.current_map);
         set_bkg_tiles(0, 0, 20, 18, g_tm.current_map);
         g_tm.hud_ready = FALSE;
+        g_tm.block_movement = FALSE;
         tm_draw_hud(game);
     }
 }

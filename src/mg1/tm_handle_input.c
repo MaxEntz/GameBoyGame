@@ -60,6 +60,8 @@ handle_input_trap_memory(OUT game_t *game,
     (void)game;
     trap_memory_t *tm = trap_memory_get();
 
+    if (tm->block_movement)
+        return;
     if (keys & J_LEFT && !is_colliding_with_wall(game, MOVING_SENS_LEFT)) {
         tm->player_x -= SPEED;
         tm->is_moving = TRUE;
