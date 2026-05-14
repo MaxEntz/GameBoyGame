@@ -197,8 +197,10 @@ clear_map(OUT UINT8 *map)
 static BOOLEAN
 check_game_over(IN const game_t *game)
 {
-    UINT8 pos_x = (UINT8)(g_tm.player_x + 8 >> 3);
-    UINT8 pos_y = (UINT8)(g_tm.player_y + 8 >> 3);
+    INT16 bg_x = (INT16)g_tm.player_x - 8;
+    INT16 bg_y = (INT16)g_tm.player_y - 16;
+    UINT8 pos_x = (UINT8)(bg_x >> 3);
+    UINT8 pos_y = (UINT8)(bg_y >> 3);
 
     if (game->level > 5) {
         text_renderer_draw(&g_tm_victory_render);
