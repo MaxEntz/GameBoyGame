@@ -14,7 +14,8 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ### Changed
 - `include/common/common.h`: scores now saved as UINT16 instead of INT16
-- `Makefile`: flags for save support m
+- `Makefile`: flags for save support 
+- `src/lobby/map_manager_lobby.c`: set_map function to update the current map and load its assets without transition screen
 
 ---
 
