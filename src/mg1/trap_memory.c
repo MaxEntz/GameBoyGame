@@ -32,10 +32,12 @@ static const UINT8 g_tm_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TIL
 static CHAR g_tm_score_text[] = "SCORE 000";
 static CHAR g_tm_level_text[] = "LEVEL 01";
 static CHAR g_tm_gameover_text[] = "GAME OVER";
+static CHAR g_tm_victory_text[] = "VICTORY !";
 
 static const text_render_t g_tm_score_render = {g_tm_score_text, 1, 0};
 static const text_render_t g_tm_level_render = {g_tm_level_text, 11, 0};
 static const text_render_t g_tm_gameover_render = {g_tm_gameover_text, 5, 9};
+static const text_render_t g_tm_victory_render = {g_tm_victory_text, 5, 9};
 
 static void
 tm_write_number(CHAR *dst, UINT8 digits, UINT16 value)
@@ -85,6 +87,7 @@ trap_memory(OUT game_t *game)
     g_tm.last_level = 1;
     g_tm.see_safe_tile = TIME_SEE_SAFE_TILE;
     g_tm.total_time_round = ROUND_TIME;
+    g_tm.game_finished = FALSE;
     for (UINT16 i = 0; i < COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TILES; i++)
         g_tm.current_map[i] = g_tm_map[i];
     SPRITES_8x8;
@@ -158,14 +161,24 @@ check_game_over(IN const game_t *game)
     UINT8 pos_x = (UINT8)(g_tm.player_x + 8 >> 3);
     UINT8 pos_y = (UINT8)(g_tm.player_y + 8 >> 3);
 
+    if (game->level > 5) {
+        text_renderer_draw(&g_tm_victory_render);
+        g_tm.game_finished = TRUE;
+        g_tm.time_round = g_tm.see_safe_tile + 1;
+        g_tm.total_time_round = g_tm.see_safe_tile + 3;
+        return TRUE;
+    }
     if (game->score_mg1 <= 0)
         return FALSE;
     for (UINT8 i = 0; i < g_tm.nb_safe_tiles; i++) {
-        if (pos_x >= g_tm.hitbox_safe_tile[i][0] && pos_x <= g_tm.hitbox_safe_tile[i][0] + 2
-            && pos_y >= g_tm.hitbox_safe_tile[i][1] && pos_y <= g_tm.hitbox_safe_tile[i][1] + 2)
+        if (pos_x + 1 >= g_tm.hitbox_safe_tile[i][0] && pos_x - 1 <= g_tm.hitbox_safe_tile[i][0] + 2
+            && pos_y + 1 >= g_tm.hitbox_safe_tile[i][1] && pos_y - 1 <= g_tm.hitbox_safe_tile[i][1] + 2)
             return FALSE;
     }
     text_renderer_draw(&g_tm_gameover_render);
+    g_tm.game_finished = TRUE;
+    g_tm.time_round = g_tm.see_safe_tile + 1;
+    g_tm.total_time_round = g_tm.see_safe_tile + 3;
     return TRUE;
 }
 
@@ -173,6 +186,8 @@ static void
 handle_new_round(OUT game_t *game)
 {
     if (g_tm.time_round >= g_tm.total_time_round) {
+        if (g_tm.game_finished)
+            return game_changer(game, GAME_STATE_MENU, TRUE);
         if (check_game_over(game))
             return;
         if (g_tm.nb_round == 5) {
