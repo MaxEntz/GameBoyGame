@@ -33,6 +33,14 @@ save_load(INOUT game_t *game)
 }
 
 void
+save_reset(void)
+{
+    ENABLE_RAM;
+    ((save_data_t *)SRAM_BASE)->magic = 0x0000U;
+    DISABLE_RAM;
+}
+
+void
 save_write(IN const game_t *game)
 {
     const lobby_state_t *lobby = lobby_get_state();
