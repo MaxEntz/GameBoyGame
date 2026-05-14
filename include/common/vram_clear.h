@@ -10,6 +10,7 @@
 
 #include "common/common.h"
 #include "common/text_renderer.h"
+#include "common/dialogue.h"
 
 /**
  * @brief Zero all 256 bg tile slots, clear the tilemap and hide all sprites
