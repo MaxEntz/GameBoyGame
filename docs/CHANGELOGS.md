@@ -11,11 +11,13 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ### Added
 - `include/common/save.h`: new save struct
+- `src/common/save.c`: save, reset and load functions
 
 ### Changed
 - `include/common/common.h`: scores now saved as UINT16 instead of INT16
 - `Makefile`: flags for save support 
 - `src/lobby/map_manager_lobby.c`: set_map function to update the current map and load its assets without transition screen
+- `src/lobby/input_handler_lobby.c`: added a save/reset input on start button
 
 ---
 
