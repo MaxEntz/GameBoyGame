@@ -53,6 +53,25 @@ draw_pipe(IN pipe_t *pipe)
     }
 }
 
+static BOOLEAN
+check_collision(void)
+{
+    UINT8 bird_tile_x  = MG3_BIRD_X / 8;
+    UINT8 bird_tile_y1 = (UINT8)((fbird.bird_y - MG3_SPRITE_Y_OFFSET) / 8);
+    UINT8 bird_tile_y2 = bird_tile_y1 + 1;
+    UINT8 tile_x = 0;
+
+    for (UINT8 i = 0; i < MG3_NB_PIPE; i++) {
+        tile_x = (UINT8)(fbird.pipes[i].pipe_x / 8);
+        if (bird_tile_x < tile_x || bird_tile_x >= tile_x + MG3_PIPE_WIDTH)
+            continue;
+        if (bird_tile_y1 < fbird.pipes[i].pipe_y ||
+            bird_tile_y2 >= fbird.pipes[i].pipe_y + MG3_PIPE_GAP)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 void
 flappybird(OUT game_t *game)
 {
@@ -73,7 +92,8 @@ flappybird(OUT game_t *game)
 void
 update_flappybird(OUT game_t *game)
 {
-    (void)game;
+    if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET)
+        game_changer(game, GAME_STATE_LOBBY, TRUE);
 
     fbird.bird_y += 1;
 
