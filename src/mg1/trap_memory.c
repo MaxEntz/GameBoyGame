@@ -94,6 +94,7 @@ init_tm_struct(void)
     g_tm.fps_counter = 0;
     g_tm.seconds_counter = 0;
     g_tm.time_round = ROUND_TIME - 1;
+    g_tm.nb_round = 0;
     g_tm.nb_safe_tiles = MAX_SAFE_TILES;
     g_tm.hud_ready = FALSE;
     g_tm.last_score = 0;
