@@ -11,15 +11,12 @@
     #include "common/common.h"
 
     #define SAVE_MAGIC 0x1A71U
+    #define SRAM_BASE  ((UINT8 *)0xA000U)
 
 /**
- * @brief Battery-backed SRAM layout stored at 0xA000
+ * @brief structure to hold the save data for the game
  *
- * magic must equal SAVE_MAGIC; any other value means
- * the cartridge is fresh or the save is corrupt.
- * best_mg* tracks the all-time high score for each mini-game.
- * run_mg*  stores the score locked in after defeating each boss
- * in the current (or last completed) run.
+ * magic must equal SAVE_MAGIC
  */
 typedef struct save_data_s {
     UINT16   magic;
@@ -34,5 +31,19 @@ typedef struct save_data_s {
     UINT8    player_y;
     UINT8    current_map_id;
 } save_data_t;
+
+/**
+ * @brief Load the save data from SRAM and update the game and lobby state
+ * 
+ * @param game Pointer to the game structure to update with the loaded save data
+ */
+void save_load(INOUT game_t *game);
+
+/**
+ * @brief Write the current game and lobby state to SRAM as save data
+ * 
+ * @param game Pointer to the game structure containing the data to save
+ */
+void save_write(IN const game_t *game);
 
 #endif /* !SAVE_H_ */
