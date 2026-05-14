@@ -66,7 +66,7 @@ tm_write_number(CHAR *dst, UINT8 digits, UINT16 value)
 static void
 tm_draw_hud(IN const game_t *game)
 {
-    UINT16 score = (game->score_mg1 < 0) ? 0U : (UINT16)game->score_mg1;
+    UINT16 score = game->score_mg1;
 
     if (g_tm.hud_ready && g_tm.last_score == (UINT16)score
         && g_tm.last_level == game->level)
@@ -210,7 +210,7 @@ check_game_over(IN const game_t *game)
         g_tm.total_time_round = g_tm.see_safe_tile + 3;
         return TRUE;
     }
-    if (game->score_mg1 <= 0)
+    if (game->score_mg1 == 0)
         return FALSE;
     for (UINT8 i = 0; i < g_tm.nb_safe_tiles; i++) {
         if (pos_x + 1 >= g_tm.hitbox_safe_tile[i][0] && pos_x - 1 <= g_tm.hitbox_safe_tile[i][0] + 2
@@ -234,7 +234,7 @@ handle_new_round(OUT game_t *game)
 {
     if (g_tm.time_round >= g_tm.total_time_round) {
         if (g_tm.game_finished)
-            return game_changer(game, GAME_STATE_MENU, TRUE);
+            return game_changer(game, GAME_STATE_LOBBY, TRUE);
         if (check_game_over(game))
             return;
         if (g_tm.nb_round == 5) {

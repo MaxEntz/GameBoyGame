@@ -29,9 +29,9 @@ check_win(INOUT lobby_state_t *lobby, IN game_t *game)
 {
     if (lobby->dialogue_index == LORE_LEFT_LOSE && game->score_mg2 >= MASTER_SCORE_MG2)
         lobby->dialogue_index = LORE_LEFT_WIN;
-    else if (lobby->dialogue_index == LORE_RIGHT_LOSE && game->score_mg2 >= MASTER_SCORE_MG2)
+    else if (lobby->dialogue_index == LORE_RIGHT_LOSE && game->score_mg2 >= MASTER_SCORE_MG2) //a changer pr flappy
         lobby->dialogue_index = LORE_RIGHT_WIN;
-    else if (lobby->dialogue_index == LORE_CC_LOSE && game->score_mg2 >= MASTER_SCORE_MG2)
+    else if (lobby->dialogue_index == LORE_CC_LOSE && game->score_mg1 >= MASTER_SCORE_MG1)
         lobby->dialogue_index = LORE_CC_WIN;
 }
 
@@ -75,10 +75,16 @@ handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
         game_changer(game, GAME_STATE_MG1, TRUE);
         return;
     }
-    if (lobby->dialogue_index == LORE_LEFT_LOSE
-            || lobby->dialogue_index == LORE_RIGHT_LOSE
-            || lobby->dialogue_index == LORE_CC_LOSE) {
+    if (lobby->dialogue_index == LORE_LEFT_LOSE) {
         game_changer(game, GAME_STATE_MG2, TRUE);
+        return;
+    }
+    if (lobby->dialogue_index == LORE_RIGHT_LOSE) {
+        game_changer(game, GAME_STATE_MG2, TRUE);           // a changer pr flappy
+        return;
+    }
+    if (lobby->dialogue_index == LORE_CC_LOSE) {
+        game_changer(game, GAME_STATE_MG1, TRUE);
         return;
     }
     if (lobby->dialogue_index == LORE_CC_WIN)
