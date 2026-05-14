@@ -44,6 +44,18 @@ swap_map_with_param(game_t *game,
     return TRUE;
 }
 
+void
+set_map(INOUT lobby_state_t *lobby, IN map_id_t map_id)
+{
+    UINT16 i;
+
+    if (map_id < MAP_ID_TL || map_id > MAP_ID_BR)
+        map_id = MAP_ID_BL;
+    lobby->current_map_id = map_id;
+    for (i = 0; i < 20 * 18; i++)
+        lobby->current_map[i] = g_map_manager[map_id].map_data[i];
+}
+
 BOOLEAN
 switch_map(game_t *game,
            INT16 x,

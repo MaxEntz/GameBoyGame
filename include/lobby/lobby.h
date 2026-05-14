@@ -105,4 +105,13 @@ switch_map(game_t *game,
            INT16 y,
            UINT8 tile);
 
+/**
+ * @brief Set the current map of the lobby
+ * 
+ * @param lobby Pointer to the lobby state
+ * @param map_id The ID of the map to set
+ */
+void
+set_map(INOUT lobby_state_t *lobby, IN map_id_t map_id);
+
 #endif /* !LOBBY_H_ */
