@@ -29,7 +29,6 @@ static const management_state_t g_state_function[MAX_STATES] = {
     {GAME_STATE_MENU     ,menu ,handle_input_menu ,update_menu}
 };
 
-
 static void
 init_game(OUT game_t *game)
 {
@@ -44,7 +43,6 @@ init_game(OUT game_t *game)
     game->score_mg3 = 0;
     game->level = 1;
 }
-
 
 /**
  * @brief Set the display configuration
