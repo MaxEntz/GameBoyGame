@@ -92,8 +92,10 @@ flappybird(OUT game_t *game)
 void
 update_flappybird(OUT game_t *game)
 {
-    if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET)
+    if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
         game_changer(game, GAME_STATE_LOBBY, TRUE);
+        return;
+    }
 
     fbird.bird_y += 1;
 
