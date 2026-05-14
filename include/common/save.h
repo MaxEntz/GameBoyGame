@@ -46,4 +46,9 @@ void save_load(INOUT game_t *game);
  */
 void save_write(IN const game_t *game);
 
+/**
+ * @brief Reset the save data in SRAM by clearing the magic value
+ */
+void save_reset(void);
+
 #endif /* !SAVE_H_ */
