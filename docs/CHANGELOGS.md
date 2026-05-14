@@ -7,6 +7,13 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.16.0] - 2026-05-14
+
+### Added
+- **Collision logic in `src/mg3/flappy.c`**: Implemented `check_collision()` to detect impacts between the bird and pipes.
+
+---
+
 ## [1.15.0] - 2026-05-14
 
 ### Added
