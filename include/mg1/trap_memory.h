@@ -19,7 +19,7 @@
     #define OFFSET_SAFER_TILE 90
     #define ROUND_TIME 8
     #define MAX_SAFE_TILES 5
-    #define TIME_SEE_SAFE_TILE 1
+    #define TIME_SEE_SAFE_TILE 2
 
 typedef struct trap_memory_s {
     UINT8      player_x;

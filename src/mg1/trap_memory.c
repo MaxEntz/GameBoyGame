@@ -195,6 +195,8 @@ handle_new_round(OUT game_t *game)
             g_tm.nb_round = 0;
             g_tm.total_time_round -= 1;
             game->level++;
+            if (game->level == 3)
+                g_tm.see_safe_tile = 1;
             g_tm.nb_safe_tiles--;
         }
         g_tm.time_round = 0;
