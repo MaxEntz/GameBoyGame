@@ -7,7 +7,7 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
-## [1.16.0] - 2026-06-14
+## [1.17.0] - 2026-06-14
 
 ### Added
 - `include/common/save.h`: new save struct
