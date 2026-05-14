@@ -7,6 +7,17 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.15.0] - 2026-06-14
+
+### Added
+- `include/common/save.h`: new save struct
+
+### Changed
+- `include/common/common.h`: scores now saved as UINT16 instead of INT16
+- `Makefile`: flags for save support m
+
+---
+
 ## [1.14.0] - 2026-05-12
 
 ### Added
