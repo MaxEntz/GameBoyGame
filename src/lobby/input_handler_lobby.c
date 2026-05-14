@@ -142,7 +142,7 @@ handle_input_lobby(OUT game_t *game, IN UINT8 keys)
         handle_a_input(game);
     if (keys & J_START) {
         if (lobby->dialogue_index >= LORE_STEP_COUNT)
-            save_reset();
+            save_reset(game);
         else
             save_write(game);
     }

@@ -33,10 +33,23 @@ save_load(INOUT game_t *game)
 }
 
 void
-save_reset(void)
+save_reset(IN const game_t *game)
 {
+    save_data_t tmp;
+
+    tmp.magic = SAVE_MAGIC;
+    tmp.best_mg1= game->best_score_mg1;
+    tmp.best_mg2 = game->best_score_mg2;
+    tmp.best_mg3 = game->best_score_mg3;
+    tmp.run_mg1 = 0;
+    tmp.run_mg2 = 0;
+    tmp.run_mg3 = 0;
+    tmp.dialogue_index = 0;
+    tmp.player_x = 88;
+    tmp.player_y = 78;
+    tmp.current_map_id = (UINT8)MAP_ID_BL;
     ENABLE_RAM;
-    ((save_data_t *)SRAM_BASE)->magic = 0x0000U;
+    memcpy((void *)SRAM_BASE, &tmp, sizeof(save_data_t));
     DISABLE_RAM;
 }
 
