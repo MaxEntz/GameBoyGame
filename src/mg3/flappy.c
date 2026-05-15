@@ -1,5 +1,11 @@
+/*
+** EPITECH PROJECT, 2026
+** GameBoyGame
+** File description:
+** flappy.c
+*/
+
 #include "mg3/mg3.h"
-#include "../../asset/include/common/asset_common_font.h"
 
 static flappy_t fbird;
 
@@ -31,7 +37,6 @@ draw_pipe(pipe_t *pipe)
     for (UINT8 row = 0; row < COMMON_SCREEN_HEIGHT_TILES; row++)
         set_bkg_tile_xy(clear_col, row, FLAPPY_TILE_EMPTY);
 
-    // 2. Ton "Kill Switch" : Si le tuyau touche ou dépasse la gauche, on efface tout
     if (pipe->pipe_x <= 0) {
         for (col = 0; col < MG3_PIPE_WIDTH; col++) {
             actual_col = (tile_x + col) & 31;
@@ -41,7 +46,6 @@ draw_pipe(pipe_t *pipe)
         return;
     }
 
-    // 3. Dessin normal (si le tuyau est sur l'écran)
     for (col = 0; col < MG3_PIPE_WIDTH; col++) {
         actual_col = (tile_x + col) & 31;
         draw_color_pipe(pipe, actual_col);
@@ -67,6 +71,18 @@ check_collision(void)
     return FALSE;
 }
 
+static void
+uint_to_str(UINT16 val, CHAR *buf, UINT8 width)
+{
+    INT8 i;
+
+    for (i = (INT8)(width - 1); i >= 0; i--) {
+        buf[i] = '0' + (CHAR)(val % 10);
+        val /= 10;
+    }
+    buf[width] = '\0';
+}
+
 void
 flappybird(game_t *game)
 {
@@ -83,15 +99,27 @@ flappybird(game_t *game)
     }
 
     set_bkg_data(0, FLAPPY_TILE_COUNT, flappy_tiles);
-    set_bkg_data(100, FTILE_COUNT, font_tiles);
     set_bkg_tiles(0, 0, COMMON_SCREEN_WIDTH_TILES, COMMON_SCREEN_HEIGHT_TILES, flappy_bg_map);
     set_sprite_data(0, 1, &flappy_tiles[FLAPPY_TILE_BIRD * MG3_SPRITE_Y_OFFSET]);
     set_sprite_tile(0, 0);
+
+    text_renderer_init();
 }
 
 void
 update_flappybird(game_t *game)
 {
+    CHAR          buf[4];
+    text_render_t render;
+
+    render.text = buf;
+    render.x = 5;
+    render.y = 5;
+
+    (void)game;
+
+    uint_to_str((UINT16)fbird.pipes_passed, buf, 3);
+    text_renderer_draw(&render);
    if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
         game_changer(game, GAME_STATE_LOBBY, TRUE);
         return;

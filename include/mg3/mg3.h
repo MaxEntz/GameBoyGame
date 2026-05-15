@@ -13,6 +13,8 @@
     #include "mg3/mg3_layout.h"
     #include "mg3/asset_flappy.h"
     #include "common/random.h"
+    #include "common/asset_common_font.h"
+    #include "common/text_renderer.h"
 
     typedef struct pipe_s {
         INT16 pipe_x;
