@@ -92,11 +92,7 @@ flappybird(game_t *game)
 void
 update_flappybird(game_t *game)
 {
-    // HUD : Offset 100 (Font) + 27 (Index de '0') = 127
-    set_bkg_tile_xy(1, 1, 127 + fbird.pipe_speed);
-    set_bkg_tile_xy(5, 5, 127 + fbird.pipes_passed);
-
-    if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
+   if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
         game_changer(game, GAME_STATE_LOBBY, TRUE);
         return;
     }
@@ -104,14 +100,15 @@ update_flappybird(game_t *game)
     fbird.bird_y += 1;
     move_sprite(0, MG3_BIRD_X, fbird.bird_y);
 
-    for (UINT8 i = 0; i < MG3_NB_PIPE; i++){
+    for (UINT8 i = 0; i < MG3_NB_PIPE; i++) {
         fbird.pipes[i].pipe_x -= fbird.pipe_speed;
         draw_pipe(&fbird.pipes[i]);
 
-        if (fbird.pipes[i].pipe_x / MG3_PX_TO_TILE == MG3_BIRD_X / MG3_PX_TO_TILE - 1) {
-            fbird.pipes[i].pipe_x = MG3_SCREEN_X_PX;
-            fbird.pipes[i].pipe_y = next_pipe_y();
+        if (fbird.pipes[i].pipe_x < MG3_BIRD_X && 
+            fbird.pipes[i].pipe_x + fbird.pipe_speed >= MG3_BIRD_X) {
+            
             fbird.pipes_passed++;
+            
             if (fbird.pipes_passed % MG3_PIPE_SPEED_STEP == 0) {
                 if (fbird.pipe_speed < MG3_PIPE_SPEED_MAX) {
                     fbird.pipe_speed++;
@@ -120,6 +117,11 @@ update_flappybird(game_t *game)
                         fbird.pipe_gap++;
                 }
             }
+        }
+
+        if (fbird.pipes[i].pipe_x <= 0) {
+            fbird.pipes[i].pipe_x = MG3_SCREEN_X_PX;
+            fbird.pipes[i].pipe_y = next_pipe_y();
         }
     }
 }
