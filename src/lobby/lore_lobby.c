@@ -11,6 +11,7 @@
 #include "common/save.h"
 
 static const CHAR *g_dialogue_texts[LORE_STEP_COUNT] = {
+    "Ouch...\nMy head...\nThose crabs\nkidnapped me!\nI need to\nfind a way out!",
     "Welcome\nlittle Mole!\nBeat me and my bro\nat our games\nto escape the\nisland!",
     "Haha!\n Gotcha!\nWanna try again?",
     "Ouch!\n \nWell done little\nmole\nfind my bro\non the right side\n",
@@ -43,6 +44,8 @@ static void
 check_auto(INOUT game_t *game, INOUT lobby_state_t *lobby,
                     IN dialogue_t *dlg)
 {
+    if (lobby->dialogue_index == LORE_SPAWN_INTRO && !dialogue_is_active(dlg) && dlg->chars_shown == 0)
+        lore_start_dialogue(game);
     if (lobby->should_dialogue) {
         lobby->should_dialogue = FALSE;
         if (lobby->dialogue_index == LORE_LEFT_LOSE
