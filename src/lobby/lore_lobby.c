@@ -8,6 +8,7 @@
 #include "lobby/lobby.h"
 #include "lobby/lore_lobby.h"
 #include "common/game_changer.h"
+#include "common/save.h"
 
 static const CHAR *g_dialogue_texts[LORE_STEP_COUNT] = {
     "Welcome\nlittle Mole!\nBeat me and my bro\nat our games\nto escape the\nisland!",
@@ -87,8 +88,17 @@ handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
         game_changer(game, GAME_STATE_MG1, TRUE);
         return;
     }
-    if (lobby->dialogue_index == LORE_CC_WIN)
+    if (lobby->dialogue_index == LORE_LEFT_WIN || lobby->dialogue_index == LORE_RIGHT_WIN) {
+        lobby->dialogue_index++;
+        save_write(game);
+        return;
+    }
+    if (lobby->dialogue_index == LORE_CC_WIN) {
+        lobby->dialogue_index++;
+        save_write(game);
         game_changer(game, GAME_STATE_MENU, TRUE);
+        return;
+    }
     lobby->dialogue_index++;
 }
 
