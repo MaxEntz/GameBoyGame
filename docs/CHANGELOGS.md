@@ -7,6 +7,14 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.18.0] - 2026-06-16
+
+### Changed
+- `src/mg3/flappy.c`: added difficulties to game and added score to the game
+- `include/mg3/mg3_layout.h`: increased the number of `MG3_PIPE_SPEED_STEP`
+
+---
+
 ## [1.17.0] - 2026-06-14
 
 ### Added
