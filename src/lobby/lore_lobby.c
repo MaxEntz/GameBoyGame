@@ -13,12 +13,12 @@
 static const CHAR *g_dialogue_texts[LORE_STEP_COUNT] = {
     "Ouch...\nMy head...\nThose crabs\nkidnapped me!\nI need to\nfind a way out!",
     "Welcome\nlittle Mole!\nBeat me and my bro\nat our games\nto escape the\nisland!",
-    "Haha!\n Gotcha!\nWanna try again?",
-    "Ouch!\n \nWell done little\nmole\nfind my bro\non the right side\n",
-    "You beat my bro?\nImpressive!\nBut can you beat\nme?",
-    "Pfff!\n \nDid you really\nbeat my bro ?\n You're not good\n enough !",
-    "Noooooo!\n \nYou beat us both?\nImpossible!\nWell done little\nmole, you can\nleave the island\nFind the hole\nin the center!",
-    "Wait!\n \nYou want to leave?\n\nSure, \nbut I warn you,\nI won't go easy\n on you!\n",
+    "Hahaha!\n \nToo easy!\nWanna try again?",
+    "Ouch!\n \nWell done\nlittle mole!\nNow find my bro\non the right!",
+    "You beat my bro?\nImpressive!\nBut can you\nbeat me?",
+    "Pfff!\n \nYou beat my bro\nbut not me!\nTry harder,\nlittle mole!",
+    "Noooo!\n \nYou beat us both!\nHead to the\ncenter if you\nwant to escape!",
+    "The ground...\n \nIt's moving!\nI must find\nsafe tiles!",
     "Too slow!\n \nYou won't escape\nthat easily!\nTry again!",
     "Incredible...\n \nYou truly earned\nyour freedom!\nGoodbye little\nmole!"
 };
