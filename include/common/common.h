@@ -38,6 +38,7 @@ typedef enum {
     GAME_STATE_MG3,
     GAME_STATE_GAME_OVER,
     GAME_STATE_MENU,
+    GAME_STATE_SAVE_SELECT,
     GAME_STATE_COUNT
 } game_state_t;
 
