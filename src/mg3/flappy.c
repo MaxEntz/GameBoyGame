@@ -36,7 +36,6 @@ draw_pipe(pipe_t *pipe)
 
     for (UINT8 row = 0; row < COMMON_SCREEN_HEIGHT_TILES; row++)
         set_bkg_tile_xy(clear_col, row, FLAPPY_TILE_EMPTY);
-
     if (pipe->pipe_x <= 0) {
         for (col = 0; col < MG3_PIPE_WIDTH; col++) {
             actual_col = (tile_x + col) & 31;
@@ -45,7 +44,6 @@ draw_pipe(pipe_t *pipe)
         }
         return;
     }
-
     for (col = 0; col < MG3_PIPE_WIDTH; col++) {
         actual_col = (tile_x + col) & 31;
         draw_color_pipe(pipe, actual_col);
@@ -74,9 +72,7 @@ check_collision(void)
 static void
 uint_to_str(UINT16 val, CHAR *buf, UINT8 width)
 {
-    INT8 i;
-
-    for (i = (INT8)(width - 1); i >= 0; i--) {
+    for (INT8 i = (INT8)(width - 1); i >= 0; i--) {
         buf[i] = '0' + (CHAR)(val % 10);
         val /= 10;
     }
@@ -109,14 +105,16 @@ flappybird(game_t *game)
 void
 update_flappybird(game_t *game)
 {
-    CHAR          buf[4];
+    CHAR buf[4];
     text_render_t render;
 
     render.text = buf;
-    render.x = 5;
-    render.y = 5;
+    render.x = 1;
+    render.y = 1;
 
     (void)game;
+    uint_to_str((UINT16)fbird.pipes_passed, buf, 3);
+    text_renderer_draw(&render);
 
     uint_to_str((UINT16)fbird.pipes_passed, buf, 3);
     text_renderer_draw(&render);
