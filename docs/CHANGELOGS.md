@@ -7,6 +7,21 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.18.0] - 2026-05-15
+
+### Added
+- `src/lobby/lore_lobby.c`: added a "won't talk" dialogue when speaking to a npc not in the correct lore state
+- `include/lobby/lobby.h`: bool flag in `lobby_state_t` to prevent idle dialogues from advancing the lore state
+- `include/lobby/lore_lobby.h`: `LORE_ESCAPE` step and updated `LORE_STEP_COUNT`
+- `asset/src/asset_lobby.c`: `ennemies1_tile_2` and `ennemies2_tile_2` — breathing animation frames for the NPCs
+- `src/lobby/lobby.c`: `animate_npcs` animates the 2 npcs
+
+### Changed
+- `src/lobby/lore_lobby.c`: changed some dialogues and added a final dialogue for the escape
+- `src/lobby/input_handler_lobby.c`: SELECT now saves and returns to menu; START removed
+
+---
+
 ## [1.17.0] - 2026-06-14
 
 ### Added
