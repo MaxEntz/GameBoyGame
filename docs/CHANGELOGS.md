@@ -7,6 +7,21 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.17.0] - 2026-06-14
+
+### Added
+- `include/common/save.h`: new save struct
+- `src/common/save.c`: save, reset and load functions
+
+### Changed
+- `include/common/common.h`: scores now saved as UINT16 instead of INT16
+- `Makefile`: flags for save support 
+- `src/lobby/map_manager_lobby.c`: set_map function to update the current map and load its assets without transition screen
+- `src/lobby/input_handler_lobby.c`: added a save/reset input on start button
+- `src/lobby/lore_lobby.c`: auto save on each boss win
+
+---
+
 ## [1.16.0] - 2026-05-14
 
 ### Added

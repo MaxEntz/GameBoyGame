@@ -57,7 +57,7 @@ handle_piece_lock(OUT game_t *game)
     cleared = grid_clear_lines();
     if (cleared > 0) {
         grid_draw_playfield();
-        game->score_mg2 += (INT16)(score_table[cleared] * game->level);
+        game->score_mg2 += score_table[cleared] * game->level;
         g_tetris.cleared_lines += cleared;
         new_level = (UINT8)(1 + g_tetris.cleared_lines / LINES_PER_LEVEL);
         if (new_level != game->level) {

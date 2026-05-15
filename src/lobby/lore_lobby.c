@@ -8,6 +8,7 @@
 #include "lobby/lobby.h"
 #include "lobby/lore_lobby.h"
 #include "common/game_changer.h"
+#include "common/save.h"
 
 static const CHAR *g_dialogue_texts[LORE_STEP_COUNT] = {
     "Welcome\nlittle Mole!\nBeat me and my bro\nat our games\nto escape the\nisland!",
@@ -29,9 +30,9 @@ check_win(INOUT lobby_state_t *lobby, IN game_t *game)
 {
     if (lobby->dialogue_index == LORE_LEFT_LOSE && game->score_mg2 >= MASTER_SCORE_MG2)
         lobby->dialogue_index = LORE_LEFT_WIN;
-    else if (lobby->dialogue_index == LORE_RIGHT_LOSE && game->score_mg2 >= MASTER_SCORE_MG2)
+    else if (lobby->dialogue_index == LORE_RIGHT_LOSE && game->score_mg2 >= MASTER_SCORE_MG2) //a changer pr flappy
         lobby->dialogue_index = LORE_RIGHT_WIN;
-    else if (lobby->dialogue_index == LORE_CC_LOSE && game->score_mg2 >= MASTER_SCORE_MG2)
+    else if (lobby->dialogue_index == LORE_CC_LOSE && game->score_mg1 >= MASTER_SCORE_MG1)
         lobby->dialogue_index = LORE_CC_WIN;
 }
 
@@ -75,14 +76,29 @@ handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
         game_changer(game, GAME_STATE_MG1, TRUE);
         return;
     }
-    if (lobby->dialogue_index == LORE_LEFT_LOSE
-            || lobby->dialogue_index == LORE_RIGHT_LOSE
-            || lobby->dialogue_index == LORE_CC_LOSE) {
+    if (lobby->dialogue_index == LORE_LEFT_LOSE) {
         game_changer(game, GAME_STATE_MG2, TRUE);
         return;
     }
-    if (lobby->dialogue_index == LORE_CC_WIN)
+    if (lobby->dialogue_index == LORE_RIGHT_LOSE) {
+        game_changer(game, GAME_STATE_MG2, TRUE);           // a changer pr flappy
+        return;
+    }
+    if (lobby->dialogue_index == LORE_CC_LOSE) {
+        game_changer(game, GAME_STATE_MG1, TRUE);
+        return;
+    }
+    if (lobby->dialogue_index == LORE_LEFT_WIN || lobby->dialogue_index == LORE_RIGHT_WIN) {
+        lobby->dialogue_index++;
+        save_write(game);
+        return;
+    }
+    if (lobby->dialogue_index == LORE_CC_WIN) {
+        lobby->dialogue_index++;
+        save_write(game);
         game_changer(game, GAME_STATE_MENU, TRUE);
+        return;
+    }
     lobby->dialogue_index++;
 }
 

@@ -9,6 +9,7 @@
 #include "lobby/lore_lobby.h"
 #include "lobby/scoreboard_lobby.h"
 #include "common/text_renderer.h"
+#include "common/save.h"
 
 static lobby_state_t g_lobby;
 
@@ -23,9 +24,7 @@ lobby_init_state(void)
     g_lobby.is_moving = FALSE;
     g_lobby.moving_dir = MOVING_SENS_DOWN;
     g_lobby.is_changing_map = FALSE;
-    for (UINT16 i = 0; i < 20 * 18; i++)
-        g_lobby.current_map[i] = map_bl[i];
-    g_lobby.current_map_id = MAP_ID_BL;
+    set_map(&g_lobby, MAP_ID_BL);
     g_lobby.rng_initialized = FALSE;
     g_lobby.dialogue_index = 0;
     g_lobby.should_dialogue = FALSE;
@@ -100,9 +99,10 @@ load_current_map(void)
 void
 lobby(OUT game_t *game)
 {
-    if (!g_lobby.inited)
+    if (!g_lobby.inited) {
         lobby_init_state();
-    else
+        save_load(game);
+    } else
         g_lobby.should_dialogue = TRUE;
     load_assets();
     load_current_map();

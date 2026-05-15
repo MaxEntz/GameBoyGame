@@ -13,7 +13,11 @@ LCC     ?=   $(GBDK_HOME)/bin/lcc
 SRC     =   $(shell find src/ -name "*.c")
 ASSET   =   $(shell find asset/src/ -name "*.c")
 
-CFLAGS  =   -Wa-l -Wl-m -Wl-j -Iinclude/ -Iasset/include/
+# yt 3 = MBC1 + RAM + BATTERY
+# yo x = x rom banks (16KB) 8 c'est ptet overkill
+# ya x = x ram banks (8KB)
+CFLAGS  =   -Wa-l -Wl-m -Wl-j -Iinclude/ -Iasset/include/ \
+            -Wm-yt3 -Wm-yo8 -Wm-ya1
 
 all: $(TARGET).gb
 

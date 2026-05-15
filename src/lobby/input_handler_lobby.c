@@ -8,6 +8,7 @@
 #include "lobby/lobby.h"
 #include "lobby/lore_lobby.h"
 #include "common/random.h"
+#include "common/save.h"
 
 /**
  * @brief Get the tile immediately in front of the player based on their facing direction
@@ -51,11 +52,24 @@ is_colliding_with_wall(IN game_t *game, IN UINT8 sens)
     UINT8 tile = 0;
 
     switch (sens) {
-        case MOVING_SENS_LEFT:  x -= SPEED;        y += 8;          break;
-        case MOVING_SENS_RIGHT: x += SPEED + 16;   y += 8;          break;
-        case MOVING_SENS_UP:    x += 8;             y -= SPEED;      break;
-        case MOVING_SENS_DOWN:  x += 8;             y += SPEED + 16; break;
-        default: break;
+        case MOVING_SENS_LEFT:
+            x -= SPEED;
+            y += 8;
+            break;
+        case MOVING_SENS_RIGHT:
+            x += SPEED + 16;
+            y += 8;
+            break;
+        case MOVING_SENS_UP:
+            x += 8;
+            y -= SPEED;
+            break;
+        case MOVING_SENS_DOWN:
+            x += 8;
+            y += SPEED + 16;
+            break;
+        default:
+            break;
     }
     if (x < 0 || y < 0 || x >= 160 || y >= 144)
         return TRUE;
@@ -126,6 +140,12 @@ handle_input_lobby(OUT game_t *game, IN UINT8 keys)
         return dialogue_handle_input(&lobby->dialogue, keys);
     if (keys & J_A)
         handle_a_input(game);
+    if (keys & J_START) {
+        if (lobby->dialogue_index >= LORE_STEP_COUNT)
+            save_reset(game);
+        else
+            save_write(game);
+    }
     if (keys & J_SELECT)
         game_changer(game, GAME_STATE_MENU, TRUE);
     handle_movement(game, lobby, keys);

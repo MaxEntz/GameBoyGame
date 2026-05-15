@@ -61,12 +61,12 @@ typedef struct game_s {
     game_state_t state;
     BOOLEAN      is_running;
     BOOLEAN      state_changed;
-    INT16        best_score_mg1;
-    INT16        best_score_mg2;
-    INT16        best_score_mg3;
-    INT16        score_mg1;
-    INT16        score_mg2;
-    INT16        score_mg3;
+    UINT16       best_score_mg1;
+    UINT16       best_score_mg2;
+    UINT16       best_score_mg3;
+    UINT16       score_mg1;
+    UINT16       score_mg2;
+    UINT16       score_mg3;
     UINT8        level;
 } game_t;
 
