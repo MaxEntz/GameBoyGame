@@ -28,6 +28,7 @@ lobby_init_state(void)
     g_lobby.rng_initialized = FALSE;
     g_lobby.dialogue_index = 0;
     g_lobby.should_dialogue = FALSE;
+    g_lobby.is_idle_dialogue = FALSE;
     g_lobby.dialogue.state = DIALOGUE_STATE_INACTIVE;
 }
 

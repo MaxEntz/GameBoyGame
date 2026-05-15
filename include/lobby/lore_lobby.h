@@ -25,8 +25,16 @@ typedef enum lore_step_e {
 } lore_step_t;
 
 /**
+ * @brief Show "won't talk" dialogue without advancing the lore state.
+ *
+ * @param game Pointer to the game structure
+ */
+void
+lore_start_idle_dialogue(OUT game_t *game);
+
+/**
  * @brief Start the dialogue when the player interacts with an NPC.
- * 
+ *
  * @param game Pointer to the game structure
  */
 void

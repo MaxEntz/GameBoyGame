@@ -23,6 +23,9 @@ static const CHAR *g_dialogue_texts[LORE_STEP_COUNT] = {
     "Yes!\n \nI made it through!\nI'm finally free!\nTime to go home!"
 };
 
+static const CHAR *idle_text = "Hmm...\n \nLooks like he\ndoesn't want\nto talk\nright now.";
+
+
 /**
  * @brief Advance dialogue_index to the win branch if the score threshold is met
  */
@@ -106,6 +109,18 @@ handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
 }
 
 void
+lore_start_idle_dialogue(OUT game_t *game)
+{
+    lobby_state_t *lobby = lobby_get_state();
+
+    (void)game;
+    if (dialogue_is_active(&lobby->dialogue))
+        return;
+    lobby->is_idle_dialogue = TRUE;
+    dialogue_start(&lobby->dialogue, idle_text);
+}
+
+void
 lore_start_dialogue(OUT game_t *game)
 {
     lobby_state_t *lobby = lobby_get_state();
@@ -131,5 +146,9 @@ lore_update(OUT game_t *game)
     if (dialogue_is_active(dlg) || dlg->chars_shown == 0)
         return;
     dlg->chars_shown = 0;
+    if (lobby->is_idle_dialogue) {
+        lobby->is_idle_dialogue = FALSE;
+        return;
+    }
     handle_dialogue_end(game, lobby);
 }
