@@ -149,13 +149,9 @@ handle_input_lobby(OUT game_t *game, IN UINT8 keys)
         return dialogue_handle_input(&lobby->dialogue, keys);
     if (keys & J_A)
         handle_a_input(game);
-    if (keys & J_START) {
-        if (lobby->dialogue_index >= LORE_STEP_COUNT)
-            save_reset(game);
-        else
-            save_write(game);
-    }
-    if (keys & J_SELECT)
+    if (keys & J_SELECT) {
+        save_write(game);
         game_changer(game, GAME_STATE_MENU, TRUE);
+    }
     handle_movement(game, lobby, keys);
 }
