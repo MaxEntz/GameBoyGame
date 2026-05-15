@@ -18,6 +18,7 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 - `Makefile`: flags for save support 
 - `src/lobby/map_manager_lobby.c`: set_map function to update the current map and load its assets without transition screen
 - `src/lobby/input_handler_lobby.c`: added a save/reset input on start button
+- `src/lobby/lore_lobby.c`: auto save on each boss win
 
 ---
 
