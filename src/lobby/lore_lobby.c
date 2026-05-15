@@ -19,8 +19,8 @@ static const CHAR *g_dialogue_texts[LORE_STEP_COUNT] = {
     "Pfff!\n \nYou beat my bro\nbut not me!\nTry harder,\nlittle mole!",
     "Noooo!\n \nYou beat us both!\nHead to the\ncenter if you\nwant to escape!",
     "The ground...\n \nIt's moving!\nI must find\nsafe tiles!",
-    "Too slow!\n \nYou won't escape\nthat easily!\nTry again!",
-    "Incredible...\n \nYou truly earned\nyour freedom!\nGoodbye little\nmole!"
+    "Ugh!\n \nThe ground got me!\nI must try\nagain!",
+    "Yes!\n \nI made it through!\nI'm finally free!\nTime to go home!"
 };
 
 /**
