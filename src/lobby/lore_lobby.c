@@ -18,9 +18,10 @@ static const CHAR *g_dialogue_texts[LORE_STEP_COUNT] = {
     "You beat my bro?\nImpressive!\nBut can you\nbeat me?",
     "Pfff!\n \nYou beat my bro\nbut not me!\nTry harder,\nlittle mole!",
     "Noooo!\n \nYou beat us both!\nHead to the\ncenter if you\nwant to escape!",
-    "The ground...\n \nIt's moving!\nI must find\nsafe tiles!",
+    "The ground...\n \nIt's moving!\nI must find\nsafe places!",
     "Ugh!\n \nThe ground got me!\nI must try\nagain!",
-    "Yes!\n \nI made it through!\nI'm finally free!\nTime to go home!"
+    "Yes!\n \nI made it through!\nThe exit must\nbe at the top\nof the island!",
+    "And so...\n \nGab the mole\nleft the island.\n"
 };
 
 static const CHAR *idle_text = "Hmm...\n \nLooks like he\ndoesn't want\nto talk\nright now.";
@@ -94,14 +95,14 @@ handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
         game_changer(game, GAME_STATE_MG1, TRUE);
         return;
     }
-    if (lobby->dialogue_index == LORE_LEFT_WIN || lobby->dialogue_index == LORE_RIGHT_WIN) {
+    if (lobby->dialogue_index == LORE_LEFT_WIN || lobby->dialogue_index == LORE_RIGHT_WIN || lobby->dialogue_index == LORE_CC_WIN) {
         lobby->dialogue_index++;
         save_write(game);
         return;
     }
-    if (lobby->dialogue_index == LORE_CC_WIN) {
+    if (lobby->dialogue_index == LORE_ESCAPE) {
         lobby->dialogue_index++;
-        save_write(game);
+        save_reset(game);
         game_changer(game, GAME_STATE_MENU, TRUE);
         return;
     }

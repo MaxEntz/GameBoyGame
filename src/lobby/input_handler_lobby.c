@@ -101,6 +101,8 @@ handle_a_input(IN game_t *game)
         else
             lore_start_idle_dialogue(game);
     }
+    if (tile == 10 && lobby->current_map_id == MAP_ID_TC && lobby->dialogue_index == LORE_ESCAPE)
+        lore_start_dialogue(game);
 }
 
 /**

@@ -21,7 +21,8 @@ typedef enum lore_step_e {
     LORE_CC_INTRO    = 7,
     LORE_CC_LOSE     = 8,
     LORE_CC_WIN      = 9,
-    LORE_STEP_COUNT  = 10
+    LORE_ESCAPE      = 10,
+    LORE_STEP_COUNT  = 11
 } lore_step_t;
 
 /**
