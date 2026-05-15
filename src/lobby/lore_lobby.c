@@ -110,11 +110,10 @@ handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
 }
 
 void
-lore_start_idle_dialogue(OUT game_t *game)
+lore_start_idle_dialogue(void)
 {
     lobby_state_t *lobby = lobby_get_state();
 
-    (void)game;
     if (dialogue_is_active(&lobby->dialogue))
         return;
     lobby->is_idle_dialogue = TRUE;

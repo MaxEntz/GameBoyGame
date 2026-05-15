@@ -121,7 +121,7 @@ animate_npcs(IN const lobby_state_t *lobby)
 {
     static BOOLEAN up = TRUE;
 
-    if (lobby->fps_counter != 0)
+    if (lobby->fps_counter != 0 || (lobby->current_map_id != MAP_ID_CL && lobby->current_map_id != MAP_ID_CR))
         return;
     if (up == TRUE) {
         set_bkg_data(23, 4, ennemies1_tile_2);

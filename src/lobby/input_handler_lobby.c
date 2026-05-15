@@ -94,12 +94,12 @@ handle_a_input(IN game_t *game)
         if (lobby->dialogue_index == LORE_LEFT_INTRO)
             lore_start_dialogue(game);
         else
-            lore_start_idle_dialogue(game);
+            lore_start_idle_dialogue();
     if (tile >= 27 && tile <= 30) {
         if (lobby->dialogue_index == LORE_RIGHT_INTRO)
             lore_start_dialogue(game);
         else
-            lore_start_idle_dialogue(game);
+            lore_start_idle_dialogue();
     }
     if (tile == 10 && lobby->current_map_id == MAP_ID_TC && lobby->dialogue_index == LORE_ESCAPE)
         lore_start_dialogue(game);
