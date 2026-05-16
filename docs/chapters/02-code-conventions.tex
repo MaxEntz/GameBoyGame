@@ -1,0 +1,64 @@
+\chapter{Code Conventions}
+
+\section{Naming Conventions}
+
+The codebase uses C with EPITECH-style file headers, include guards, and Doxygen-like comments. Real examples from the repository show the following conventions.
+
+\begin{description}
+  \item[Functions] Lowercase \texttt{snake\_case}: \texttt{change\_scene}, \texttt{text\_renderer\_draw}, \texttt{game\_changer}, \texttt{save\_write}, \texttt{grid\_clear\_lines}. Scene loader functions may be noun-like, such as \texttt{menu}, \texttt{lobby}, \texttt{tetris}, \texttt{trap\_memory}, and \texttt{flappybird}.
+  \item[Input handlers] Scene input handlers use \texttt{handle\_input\_<scene>}, for example \texttt{handle\_input\_lobby}, \texttt{handle\_input\_tetris}, and \texttt{handle\_input\_save\_select}.
+  \item[Update handlers] Scene update handlers use \texttt{update\_<scene>}, for example \texttt{update\_lobby}, \texttt{update\_tetris}, and \texttt{update\_flappybird}.
+  \item[Static globals] Static globals use the \texttt{g\_} prefix: \texttt{g\_state\_function}, \texttt{g\_lobby}, \texttt{g\_tm}, \texttt{g\_tetris}, \texttt{g\_dialogue\_ready}.
+  \item[Types] Typedef names end in \texttt{\_t}: \texttt{game\_t}, \texttt{lobby\_state\_t}, \texttt{trap\_memory\_t}, \texttt{piece\_t}. Struct and enum tags end in \texttt{\_s} and \texttt{\_e}: \texttt{struct game\_s}, \texttt{enum piece\_type\_e}.
+  \item[Constants and macros] Uppercase with underscores: \texttt{COMMON\_SCREEN\_WIDTH\_TILES}, \texttt{MOVING\_SENS\_UP}, \texttt{SAVE\_MAGIC}, \texttt{TETRIS\_GRID\_W}, \texttt{MG3\_PIPE\_GAP}.
+  \item[Enums] Enum values use uppercase prefixes that identify the domain: \texttt{GAME\_STATE\_MG1}, \texttt{MAP\_ID\_BL}, \texttt{DIFFICULTY\_HARD}, \texttt{PIECE\_T}, \texttt{LORE\_ESCAPE}.
+  \item[Asset symbols] Asset arrays are lowercase descriptive names, such as \texttt{menu\_bg\_tiles}, \texttt{tetris\_bg\_map}, \texttt{player\_tiles\_front}, and \texttt{dialogue\_box\_tiles}.
+\end{description}
+
+\section{File Organization Rules}
+
+\begin{description}
+  \item[\texttt{src/main/}] Owns the entry point and the global state-machine loop.
+  \item[\texttt{src/common/}] Contains reusable services that do not belong to one scene: rendering text, dialogue boxes, transitions, save RAM, RNG, tile lookup, and VRAM clearing.
+  \item[\texttt{src/menu/}] Contains menu-like scenes that run before the lobby.
+  \item[\texttt{src/lobby/}] Contains the overworld/lobby state, map switching, player movement, dialogue progression, and scoreboard.
+  \item[\texttt{src/mgN/}] Contains minigame \texttt{N}. Current minigames are \texttt{mg1} Trap Memory, \texttt{mg2} Tetris, and \texttt{mg3} Flappy Bird.
+  \item[\texttt{include/}] Mirrors source ownership and exposes only cross-module types and functions.
+  \item[\texttt{asset/src/} and \texttt{asset/include/}] Store ROM assets as C arrays. Logic files include asset headers but do not define asset data inline.
+\end{description}
+
+The Makefile compiles every \texttt{.c} file under \texttt{src/} and \texttt{asset/src/}, so adding a source file under those trees automatically includes it in the link. A new public interface still needs a matching header under \texttt{include/} and includes from the state table or caller.
+
+\section{Comment Style}
+
+Files begin with a block header:
+
+\begin{lstlisting}[caption={File header style}]
+/*
+** EPITECH PROJECT, 2026
+** GameBoyGame
+** File description:
+** core.c
+*/
+\end{lstlisting}
+
+Most public functions and many static helpers have Doxygen-style comments with \texttt{@brief}, \texttt{@param}, and sometimes \texttt{@return}. The common parameter marker macros \texttt{IN}, \texttt{OUT}, and \texttt{INOUT} are documentation aids defined as empty macros in \texttt{include/common/project\_types.h}.
+
+Some comments are in French, especially in the VBlank placeholder and a few TODO-like notes, but the dominant API documentation language is English.
+
+\section{Hardware-Specific Coding Rules}
+
+\begin{description}
+  \item[Frame pacing] The core loop waits for VBlank with \texttt{wait\_vbl\_done()} before changing scenes, reading input, and updating the active scene.
+  \item[VBlank handler] \texttt{src/main/core.c} registers \texttt{vbl\_interrupt} with \texttt{add\_VBL}. The handler is intentionally empty and comments warn that only short work should be done there.
+  \item[VRAM writes] Scenes load tiles and tilemaps during scene setup, with display disabled by \texttt{change\_scene}. Several update paths also call \texttt{set\_bkg\_tile\_xy} or \texttt{set\_bkg\_tiles}; these should remain small enough for the frame budget.
+  \item[Sprite budget] The Game Boy has 40 OAM sprite entries. The project uses OAM indices \texttt{0}--\texttt{3} for the 16x16 lobby and Trap Memory player composed from four 8x8 sprites, and index \texttt{0} for the Flappy bird.
+  \item[Tile budget] DMG background tile IDs are one byte. Shared font tiles load at tile \texttt{128}; dialogue box tiles load at tile \texttt{171}. Scene-specific tiles loaded into lower tile IDs must not overlap shared text/dialogue tiles when text or dialogue is visible.
+  \item[External RAM] Save data is read and written only after \texttt{ENABLE\_RAM} and before \texttt{DISABLE\_RAM}. The save starts at \texttt{\$A000}.
+  \item[ROM banking] The Makefile configures 8 ROM banks, but the C code does not contain explicit \texttt{SWITCH\_ROM} calls.
+  % TODO: not found in codebase: explicit ROM bank ownership boundaries.
+  \item[HRAM routines] No project-defined \texttt{HRAM} routine or DMA trampoline is present in the source.
+  % TODO: not found in codebase: HRAM-only project routine.
+  \item[Cycle budgets] No function-level cycle counts are documented.
+  % TODO: not found in codebase: cycle cost annotations.
+\end{description}

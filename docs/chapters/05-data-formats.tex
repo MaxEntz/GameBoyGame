@@ -1,0 +1,102 @@
+\chapter{Data Formats}
+
+\section{Tile and Sprite Format}
+
+All graphics assets are C arrays of \texttt{UINT8}. Tile data follows the Game Boy 2bpp 8x8 tile format: 16 bytes per tile, two bytes per pixel row, with two bitplanes forming four DMG color indices. No compression or runtime decompression is present in the codebase.
+
+\begin{description}
+  \item[Background tiles] Loaded with \texttt{set\_bkg\_data(first\_tile, count, data)}. Examples include lobby terrain at tile IDs 0--30, Tetris tiles at tile IDs 0--17, Flappy tiles at tile IDs 0--2, common font at tile ID 128, and dialogue box tiles at tile ID 171.
+  \item[Sprite tiles] Loaded with \texttt{set\_sprite\_data}. The lobby player uses 8x8 sprite mode and composes a 16x16 character from four sprites. Flappy Bird uses one 8x8 sprite for the bird.
+  \item[Palette] The project uses DMG palettes. Fade transitions write only \texttt{BGP\_REG}; no CGB background or object palette data is present.
+  \item[Compression] None found.
+  % TODO: not found in codebase: compressed asset format.
+\end{description}
+
+\section{Current VRAM Tile Allocation}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{2.3cm}p{3.2cm}p{3.4cm}p{5.0cm}}
+\toprule
+\textbf{Tile IDs} & \textbf{Owner} & \textbf{Loaded by} & \textbf{Notes} \\
+\midrule
+\texttt{0--255} & Menu background & \texttt{menu} & \texttt{MENU\_BG\_TILE\_COUNT} is 256; fills the BG tile ID space. \\
+\texttt{0} & Save/difficulty background & \texttt{save\_select}, \texttt{choose\_difficulty} & Loads only \texttt{void\_tile}; text uses common font. \\
+\texttt{0--30} & Lobby terrain/NPC tiles & \texttt{lobby} & Terrain and NPC animation tiles. \\
+\texttt{0--23} & Lobby player sprite tiles & \texttt{lobby} & Sprite tile IDs for four-direction player animation. \\
+\texttt{0--23} & Trap Memory player sprite tiles & Asset dependency from lobby player tiles & Trap Memory sets sprite tile IDs but does not call \texttt{set\_sprite\_data} locally. \\
+\texttt{90--91} & Trap Memory safe overlays & \texttt{trap\_memory} & \texttt{OFFSET\_SAFER\_TILE} plus two safe tile variants. \\
+\texttt{0--17} & Tetris tiles & \texttt{tetris} & \texttt{TETRIS\_TILE\_COUNT}. \\
+\texttt{0--2} & Flappy tiles & \texttt{flappybird} & Empty, pipe, bird. Bird is also copied into sprite tile 0. \\
+\texttt{128--170} & Common font & \texttt{text\_renderer\_init} & \texttt{FTILE\_COUNT} is 43. \\
+\texttt{171--179} & Dialogue box & \texttt{dialogue\_init} & \texttt{DTILE\_COUNT} is 9. \\
+\texttt{180--255} & Unreserved by shared systems & None & Available unless the active scene loads overlapping tiles. \\
+\bottomrule
+\end{tabular}
+\caption{Observed VRAM tile ID usage}
+\end{table}
+
+Because each scene reloads tiles after \texttt{game\_changer} can clear VRAM, tile IDs are scene-local except for shared text and dialogue systems. Any minigame that uses \texttt{text\_renderer\_draw} must avoid tile IDs \texttt{128--170}. Any minigame that uses dialogue must also avoid \texttt{171--179}.
+
+\section{Tilemap Format}
+
+Tilemaps are flat \texttt{UINT8} arrays of tile IDs. Visible screens are written as 20 columns by 18 rows, matching \texttt{COMMON\_SCREEN\_WIDTH\_TILES} and \texttt{COMMON\_SCREEN\_HEIGHT\_TILES}. The project writes these maps with:
+
+\begin{lstlisting}[caption={Tilemap load pattern}]
+set_bkg_tiles(0, 0, 20, 18, some_map);
+\end{lstlisting}
+
+The lobby stores nine maps named \texttt{map\_tl}, \texttt{map\_tc}, \texttt{map\_tr}, \texttt{map\_cl}, \texttt{map\_cc}, \texttt{map\_cr}, \texttt{map\_bl}, \texttt{map\_bc}, and \texttt{map\_br}. Runtime lobby collision uses a mutable copy in \texttt{lobby\_state\_t.current\_map}. Trap Memory similarly uses a mutable 20x18 map to reveal and hide safe tiles.
+
+Tetris uses a separate logical grid:
+
+\begin{description}
+  \item[\texttt{tetris\_grid}] A 10x18 \texttt{UINT8} matrix. Zero means empty; nonzero values are Tetris tile IDs.
+  \item[Screen placement] Grid cells render at background X offset \texttt{MG2\_PLAYFIELD\_X}, with row 0 at screen tile Y 0.
+\end{description}
+
+Flappy Bird uses the background tilemap as mutable pipe columns. Pipe X is tracked in pixels and converted to tile columns; columns wrap through a 32-tile background width using \texttt{MG3\_BKG\_WIDTH\_SIZE}.
+
+\section{Audio Data}
+
+There is no hUGEDriver, GBT Player, tracker export, song table, or SFX table in the repository.
+% TODO: not found in codebase: music driver and song data format.
+
+Audio is custom direct register programming for short channel 1 effects:
+
+\begin{description}
+  \item[Dialogue typing] \texttt{dialogue\_update} triggers a short sound for each non-space character by writing \texttt{NR50}, \texttt{NR51}, \texttt{NR52}, and channel 1 registers \texttt{NR10}--\texttt{NR14}.
+  \item[Transitions] \texttt{transition\_sound} writes the same channel 1 setup while varying \texttt{NR13} by transition stage.
+\end{description}
+
+\section{Save Data}
+
+The cartridge is configured with one 8 KiB external RAM bank. Save data starts at \texttt{\$A000}, defined as \texttt{SRAM\_BASE}. The magic value \texttt{SAVE\_MAGIC} is \texttt{0x1A71}. The code enables RAM before \texttt{memcpy} and disables RAM afterward.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{3.0cm}p{2.5cm}p{2.2cm}p{5.5cm}}
+\toprule
+\textbf{Field} & \textbf{Type} & \textbf{Size} & \textbf{Role} \\
+\midrule
+\texttt{magic} & \texttt{UINT16} & 2 B & Must equal \texttt{SAVE\_MAGIC}. \\
+\texttt{best\_mg1} & \texttt{UINT16} & 2 B & Best Trap Memory score. \\
+\texttt{best\_mg2} & \texttt{UINT16} & 2 B & Best Tetris score. \\
+\texttt{best\_mg3} & \texttt{UINT16} & 2 B & Best Flappy score. \\
+\texttt{run\_mg1} & \texttt{UINT16} & 2 B & Current Trap Memory run score. \\
+\texttt{run\_mg2} & \texttt{UINT16} & 2 B & Current Tetris run score. \\
+\texttt{run\_mg3} & \texttt{UINT16} & 2 B & Current Flappy run score. \\
+\texttt{dialogue\_index} & \texttt{UINT8} & 1 B & Current lore step. \\
+\texttt{player\_x} & \texttt{UINT8} & 1 B & Lobby player sprite X coordinate. \\
+\texttt{player\_y} & \texttt{UINT8} & 1 B & Lobby player sprite Y coordinate. \\
+\texttt{current\_map\_id} & \texttt{UINT8} & 1 B & Current lobby map ID. \\
+\texttt{difficulty} & \texttt{difficulty\_t} & implementation-defined & Selected difficulty. \\
+\bottomrule
+\end{tabular}
+\caption{\texttt{save\_data\_t} layout at \texttt{\$A000}}
+\end{table}
+
+The exact storage width of \texttt{difficulty\_t} is compiler-defined because it is a C enum.
+% TODO: not found in codebase: asserted compiled size of difficulty_t and total sizeof(save_data_t).

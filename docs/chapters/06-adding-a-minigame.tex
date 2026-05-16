@@ -1,0 +1,244 @@
+\chapter{Step-by-Step Guide: Adding a Minigame}
+
+This guide shows how to add a fourth minigame using the current state-machine pattern. The example names the game \texttt{mg4} and follows the existing conventions.
+
+\section{1. Create the Source and Header}
+
+Create a new source directory and header directory:
+
+\begin{lstlisting}[language=bash,caption={Create module directories}]
+mkdir -p src/mg4 include/mg4 asset/src/mg4 asset/include/mg4
+\end{lstlisting}
+
+Use lowercase \texttt{snake\_case} file names. For example:
+
+\begin{description}
+  \item[\texttt{include/mg4/mg4.h}] Public scene loader, input handler, and update function.
+  \item[\texttt{src/mg4/mg4.c}] Runtime state and minigame logic.
+  \item[\texttt{asset/include/mg4/asset\_mg4.h}] Tile and tilemap declarations.
+  \item[\texttt{asset/src/mg4/asset\_mg4.c}] Tile and tilemap byte arrays.
+\end{description}
+
+\section{2. Register It in the Build System}
+
+No Makefile source list edit is needed if the files are under \texttt{src/} and \texttt{asset/src/}. The Makefile uses:
+
+\begin{lstlisting}[caption={Existing Makefile source discovery}]
+SRC     =   $(shell find src/ -name "*.c")
+ASSET   =   $(shell find asset/src/ -name "*.c")
+\end{lstlisting}
+
+Add include paths are already broad enough:
+
+\begin{lstlisting}[caption={Existing include flags}]
+-Iinclude/ -Iasset/include/
+\end{lstlisting}
+
+\section{3. Add a Game State}
+
+Add a new value before \texttt{GAME\_STATE\_COUNT} in \texttt{include/common/common.h}:
+
+\begin{lstlisting}[caption={Add a state value}]
+typedef enum {
+    GAME_STATE_LOBBY,
+    GAME_STATE_PLAYING,
+    GAME_STATE_PAUSED,
+    GAME_STATE_VICTORY,
+    GAME_STATE_MG1,
+    GAME_STATE_MG2,
+    GAME_STATE_MG3,
+    GAME_STATE_MG4,
+    GAME_STATE_GAME_OVER,
+    GAME_STATE_MENU,
+    GAME_STATE_SAVE_SELECT,
+    GAME_STATE_CHOOSE_DIFFICULTY,
+    GAME_STATE_COUNT
+} game_state_t;
+\end{lstlisting}
+
+Then include the new header and add the state to \texttt{g\_state\_function} in \texttt{src/main/core.c}:
+
+\begin{lstlisting}[caption={Register scene callbacks}]
+#include "mg4/mg4.h"
+
+static const management_state_t g_state_function[MAX_STATES] = {
+    /* existing entries */
+    {GAME_STATE_MG4, mg4, handle_input_mg4, update_mg4},
+    /* existing entries */
+};
+\end{lstlisting}
+
+\section{4. Make It Reachable}
+
+The lobby currently starts minigames from \texttt{src/lobby/lore\_lobby.c} after dialogue steps. To route to the new minigame, call \texttt{game\_changer} with the new state from the appropriate story branch:
+
+\begin{lstlisting}[caption={Enter the new minigame from lore}]
+game_changer(game, GAME_STATE_MG4, TRUE);
+\end{lstlisting}
+
+For a temporary test hook, route an unused lobby input in \texttt{handle\_input\_lobby}; remove it before shipping:
+
+\begin{lstlisting}[caption={Temporary debug entry point}]
+if (keys & J_START) {
+    game_changer(game, GAME_STATE_MG4, TRUE);
+    return;
+}
+\end{lstlisting}
+
+The current code already uses \texttt{J\_SELECT} to save and return to the menu from the lobby, so avoid reusing Select for this hook.
+
+\section{5. Allocate VRAM Without Conflicts}
+
+The current shared VRAM map is:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{2.6cm}p{4.0cm}p{6.8cm}}
+\toprule
+\textbf{Tile IDs} & \textbf{Owner} & \textbf{Use in a new minigame} \\
+\midrule
+\texttt{0--127} & Scene-local graphics & Best place for minigame tiles. \\
+\texttt{128--170} & Common font & Do not overwrite if using \texttt{text\_renderer\_draw}. \\
+\texttt{171--179} & Dialogue box & Do not overwrite if using dialogue. \\
+\texttt{180--255} & Currently free shared range & Usable if the scene does not need many tiles; keep documented. \\
+\bottomrule
+\end{tabular}
+\caption{Minigame-safe VRAM planning}
+\end{table}
+
+For a normal minigame, load its tiles from tile 0 and keep the count below 128 if it uses text. If the minigame needs more than 128 background tiles and does not use the common text renderer, it may use more of the tile ID range after calling \texttt{vram\_clear} through \texttt{game\_changer(..., TRUE)}.
+
+\section{6. Load and Display a Tilemap}
+
+Use the same 20x18 tilemap convention as the other scenes:
+
+\begin{lstlisting}[caption={Tile and tilemap loading}]
+set_bkg_data(0, MG4_TILE_COUNT, mg4_tiles);
+set_bkg_tiles(0, 0,
+              COMMON_SCREEN_WIDTH_TILES,
+              COMMON_SCREEN_HEIGHT_TILES,
+              mg4_bg_map);
+\end{lstlisting}
+
+The map array should contain \texttt{20 * 18} tile IDs unless you intentionally use scrolling or the full 32x32 Game Boy background map.
+
+\section{7. Read Joypad Input}
+
+Do not call \texttt{joypad()} in the minigame. The core loop already reads it once per frame in \texttt{handle\_keys} and passes the mask to your scene input handler. Use the existing \texttt{J\_*} masks:
+
+\begin{lstlisting}[caption={Input handler pattern}]
+void
+handle_input_mg4(OUT game_t *game, IN UINT8 keys)
+{
+    if (keys & J_SELECT) {
+        game_changer(game, GAME_STATE_LOBBY, TRUE);
+        return;
+    }
+    if (keys & J_A) {
+        /* action */
+    }
+}
+\end{lstlisting}
+
+\section{8. Handle VBlank Correctly}
+
+The project has one VBlank ISR registered in \texttt{core}; it is empty. A minigame should not install its own ISR unless the core architecture is changed. Keep minigame work in the scene callbacks:
+
+\begin{description}
+  \item[Loader] Bulk-load tiles and tilemaps in \texttt{mg4}. It is called with the display off during scene changes.
+  \item[Input] Consume the passed \texttt{keys} mask in \texttt{handle\_input\_mg4}.
+  \item[Update] Do small per-frame work in \texttt{update\_mg4}. The core loop already calls it after \texttt{wait\_vbl\_done}.
+\end{description}
+
+Avoid long loops in \texttt{update\_mg4}. If an animation must block like \texttt{transition\_map\_animation}, call \texttt{wait\_vbl\_done()} inside the loop.
+
+\section{9. Return to the Main Flow}
+
+Return to the lobby through the same transition helper used by current minigames:
+
+\begin{lstlisting}[caption={Return to lobby}]
+game_changer(game, GAME_STATE_LOBBY, TRUE);
+\end{lstlisting}
+
+If the minigame contributes to persistent progress, update the appropriate score fields before returning and call \texttt{save\_write(game)} from the lobby/story flow or directly if the design requires immediate persistence.
+
+\section{10. Minimal Working Skeleton}
+
+\begin{lstlisting}[caption={include/mg4/mg4.h}]
+#ifndef MG4_H_
+    #define MG4_H_
+
+    #include "common/common.h"
+    #include "common/game_changer.h"
+    #include "common/text_renderer.h"
+    #include "mg4/asset_mg4.h"
+
+void
+mg4(OUT game_t *game);
+
+void
+handle_input_mg4(OUT game_t *game, IN UINT8 keys);
+
+void
+update_mg4(OUT game_t *game);
+
+#endif /* !MG4_H_ */
+\end{lstlisting}
+
+\begin{lstlisting}[caption={src/mg4/mg4.c}]
+/*
+** EPITECH PROJECT, 2026
+** GameBoyGame
+** File description:
+** mg4.c
+*/
+
+#include "mg4/mg4.h"
+
+typedef struct mg4_state_s {
+    UINT8 frame;
+    BOOLEAN finished;
+} mg4_state_t;
+
+static mg4_state_t g_mg4;
+
+void
+mg4(OUT game_t *game)
+{
+    (void)game;
+    g_mg4.frame = 0;
+    g_mg4.finished = FALSE;
+
+    set_bkg_data(0, MG4_TILE_COUNT, mg4_tiles);
+    set_bkg_tiles(0, 0,
+                  COMMON_SCREEN_WIDTH_TILES,
+                  COMMON_SCREEN_HEIGHT_TILES,
+                  mg4_bg_map);
+    text_renderer_init();
+}
+
+void
+handle_input_mg4(OUT game_t *game, IN UINT8 keys)
+{
+    if (keys & J_SELECT) {
+        game_changer(game, GAME_STATE_LOBBY, TRUE);
+        return;
+    }
+    if (keys & J_A) {
+        game->score_mg3++;
+    }
+}
+
+void
+update_mg4(OUT game_t *game)
+{
+    g_mg4.frame++;
+    if (g_mg4.finished) {
+        game_changer(game, GAME_STATE_LOBBY, TRUE);
+        return;
+    }
+}
+\end{lstlisting}
+
+The skeleton intentionally uses real project functions: \texttt{text\_renderer\_init}, \texttt{game\_changer}, and the core scene-callback signatures. Replace \texttt{game->score\_mg3} with a new score field if the project adds persistent support for a fourth minigame.
