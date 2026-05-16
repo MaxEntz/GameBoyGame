@@ -28,6 +28,7 @@ lobby_init_state(void)
     g_lobby.rng_initialized = FALSE;
     g_lobby.dialogue_index = 0;
     g_lobby.should_dialogue = FALSE;
+    g_lobby.is_idle_dialogue = FALSE;
     g_lobby.dialogue.state = DIALOGUE_STATE_INACTIVE;
 }
 
@@ -111,6 +112,29 @@ lobby(OUT game_t *game)
 }
 
 /**
+ * @brief Swap NPC tile data to animate them
+ * 
+ * @param lobby Pointer to the lobby state structure
+ */
+static void
+animate_npcs(IN const lobby_state_t *lobby)
+{
+    static BOOLEAN up = TRUE;
+
+    if (lobby->fps_counter != 0 || (lobby->current_map_id != MAP_ID_CL && lobby->current_map_id != MAP_ID_CR))
+        return;
+    if (up == TRUE) {
+        set_bkg_data(23, 4, ennemies1_tile_2);
+        set_bkg_data(27, 4, ennemies2_tile_2);
+        up = FALSE;
+    } else {
+        set_bkg_data(23, 4, ennemies1_tile);
+        set_bkg_data(27, 4, ennemies2_tile);
+        up = TRUE;
+    }
+}
+
+/**
  * @brief Move the player sprite based on the current movement state
  * @param game Pointer to the game structure
  * @return void
@@ -151,6 +175,7 @@ update_lobby(OUT game_t *game)
         lobby->fps_counter = 0;
         lobby->seconds_counter++;
     }
+    animate_npcs(lobby);
     lore_update(game);
     if (game->state != GAME_STATE_LOBBY)
         return;
