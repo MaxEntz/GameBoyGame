@@ -7,6 +7,23 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.19.0] - 2026-05-16
+
+### Added
+- Save selection state and assets for choosing a save slot and difficulty
+- Difficulty selection menu and input handling for choosing game difficulty
+- Difficulty-aware save/load support (difficulty persisted in save data)
+- Difficulty-based scoring adjustments
+
+### Changed
+- Restrict save selection input handling to specific keys and fix cursor rendering
+- Update save logic to validate difficulty ranges before assignment
+
+### Fixed
+- Minor asset/header formatting fixes (file headers, trailing newlines)
+
+--
+
 ## [1.18.0] - 2026-05-15
 
 ### Added

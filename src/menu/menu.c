@@ -21,7 +21,7 @@ handle_input_menu(OUT game_t *game,
                   IN UINT8 keys)
 {
     if (keys & J_START)
-        game_changer(game, GAME_STATE_LOBBY, TRUE);
+        game_changer(game, GAME_STATE_SAVE_SELECT, TRUE);
 }
 
 void

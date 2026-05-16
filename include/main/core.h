@@ -11,6 +11,14 @@
     #include <gb/gb.h>
     #include "common/common.h"
     #include "asset_lobby.h"
+    #include "common/text_renderer.h"
+    #include "common/dialogue.h"
+    #include "lobby/lobby.h"
+    #include "mg1/trap_memory.h"
+    #include "mg2/tetris.h"
+    #include "menu/menu.h"
+    #include "mg3/mg3.h"
+    #include "menu/save_select.h"
 
 
 /**

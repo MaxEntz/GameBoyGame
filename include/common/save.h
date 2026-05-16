@@ -19,17 +19,18 @@
  * magic must equal SAVE_MAGIC
  */
 typedef struct save_data_s {
-    UINT16   magic;
-    UINT16   best_mg1;
-    UINT16   best_mg2;
-    UINT16   best_mg3;
-    UINT16   run_mg1;
-    UINT16   run_mg2;
-    UINT16   run_mg3;
-    UINT8    dialogue_index;
-    UINT8    player_x;
-    UINT8    player_y;
-    UINT8    current_map_id;
+    UINT16          magic;
+    UINT16          best_mg1;
+    UINT16          best_mg2;
+    UINT16          best_mg3;
+    UINT16          run_mg1;
+    UINT16          run_mg2;
+    UINT16          run_mg3;
+    UINT8           dialogue_index;
+    UINT8           player_x;
+    UINT8           player_y;
+    UINT8           current_map_id;
+    difficulty_t    difficulty;
 } save_data_t;
 
 /**

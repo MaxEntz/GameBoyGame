@@ -33,11 +33,28 @@ static const CHAR *idle_text = "Hmm...\n \nLooks like he\ndoesn't want\nto talk\
 static void
 check_win(INOUT lobby_state_t *lobby, IN game_t *game)
 {
-    if (lobby->dialogue_index == LORE_LEFT_LOSE && game->score_mg2 >= MASTER_SCORE_MG2)
+    UINT16 master_score_mg1 = 0;
+    UINT16 master_score_mg2 = 0;
+    UINT16 master_score_mg3 = 0;
+
+    if (game->difficulty == DIFFICULTY_EASY) {
+        master_score_mg1 = MASTER_SCORE_EASY_MG1;
+        master_score_mg2 = MASTER_SCORE_EASY_MG2;
+        master_score_mg3 = MASTER_SCORE_EASY_MG3;
+    } else if (game->difficulty == DIFFICULTY_MEDIUM) {
+        master_score_mg1 = MASTER_SCORE_MEDIUM_MG1;
+        master_score_mg2 = MASTER_SCORE_MEDIUM_MG2;
+        master_score_mg3 = MASTER_SCORE_MEDIUM_MG3;
+    } else if (game->difficulty == DIFFICULTY_HARD) {
+        master_score_mg1 = MASTER_SCORE_HARD_MG1;
+        master_score_mg2 = MASTER_SCORE_HARD_MG2;
+        master_score_mg3 = MASTER_SCORE_HARD_MG3;
+    }
+    if (lobby->dialogue_index == LORE_LEFT_LOSE && game->score_mg2 >= master_score_mg2)
         lobby->dialogue_index = LORE_LEFT_WIN;
-    else if (lobby->dialogue_index == LORE_RIGHT_LOSE && game->score_mg2 >= MASTER_SCORE_MG2) //a changer pr flappy
+    else if (lobby->dialogue_index == LORE_RIGHT_LOSE && game->score_mg2 >= master_score_mg2) //a changer pr flappy
         lobby->dialogue_index = LORE_RIGHT_WIN;
-    else if (lobby->dialogue_index == LORE_CC_LOSE && game->score_mg1 >= MASTER_SCORE_MG1)
+    else if (lobby->dialogue_index == LORE_CC_LOSE && game->score_mg1 >= master_score_mg1)
         lobby->dialogue_index = LORE_CC_WIN;
 }
 
