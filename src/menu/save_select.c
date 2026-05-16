@@ -6,18 +6,21 @@
 */
 
 #include "menu/save_select.h"
-#include <string.h>
 
 static text_render_t g_continue_render = {"CONTINUE", 6, 8};
 static text_render_t g_new_render = {"NEW SAVE", 6, 10};
 static text_render_t g_cursor_render = {"!", 4, 8};
 static BOOLEAN g_has_save = FALSE;
 static UINT8 g_selected = 0;
+BOOLEAN g_in_choose_difficulty = FALSE;
 
 void
 save_select(OUT game_t *game)
 {
-    (void)game;
+    if (g_in_choose_difficulty == TRUE) {
+        choose_difficulty(game);
+        return;
+    }
     set_bkg_data(0, 1, void_tile);
     set_bkg_tiles(0, 0, 20, 18, save_select_map);
     text_renderer_init();
@@ -45,7 +48,11 @@ save_select(OUT game_t *game)
 void
 handle_input_save_select(OUT game_t *game,
                         IN UINT8 keys)
-{    
+{   
+    if (g_in_choose_difficulty == TRUE) {
+        handle_input_choose_difficulty(game, keys);
+        return;
+    }
     UINT8 prev = g_selected;
 
     if (keys & J_UP) {
@@ -71,8 +78,9 @@ handle_input_save_select(OUT game_t *game,
             save_load(game);
             game_changer(game, GAME_STATE_LOBBY, TRUE);
         } else if (g_selected == 1) {
+            g_in_choose_difficulty = TRUE;
             save_reset(game);
-            game_changer(game, GAME_STATE_LOBBY, TRUE);
+            choose_difficulty(game);
         }
     }
 }
@@ -80,5 +88,7 @@ handle_input_save_select(OUT game_t *game,
 void
 update_save_select(OUT game_t *game)
 {
-    (void)game;
+    if (g_in_choose_difficulty == TRUE) {
+        update_choose_difficulty(game);
+    }
 }

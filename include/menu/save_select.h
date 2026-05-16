@@ -14,6 +14,7 @@
     #include "common/text_renderer.h"
     #include "asset_lobby.h"
     #include "menu/asset_save_select.h"
+    #include <string.h>
 
 /**
  * @brief Load the start save_select assets
@@ -43,6 +44,36 @@ handle_input_save_select(OUT game_t *game,
  */
 void
 update_save_select(OUT game_t *game);
+
+/**
+ * @brief Choose the difficulty level
+ * 
+ * @param game Pointer to the game structure
+ * @return void
+ */
+void
+choose_difficulty(OUT game_t *game);
+
+/**
+ * @brief Handle input in the choose difficulty state
+ * 
+ * @param game Pointer to the game structure
+ * @param keys The keys pressed
+ * @return void
+ */
+void
+handle_input_choose_difficulty(OUT game_t *game,
+                               IN UINT8 keys);
+
+/**
+ * @brief Update the choose difficulty state
+ * 
+ * @param game Pointer to the game structure
+ * @return void
+ */
+void
+update_choose_difficulty(OUT game_t *game);
+
 
 
 #endif /* !SAVE_SELECT_H_ */
