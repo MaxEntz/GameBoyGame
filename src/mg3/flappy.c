@@ -15,14 +15,16 @@ static flappy_t fbird;
  * @param pipe pointer to the pipe to draw
  * @param actual_col background column index to draw on (0-31)
  */
-
 static void
 draw_color_pipe(IN pipe_t *pipe,
-                IN UINT8 actual_col)
+                IN UINT8 actual_col,
+                IN UINT8 col_index)
 {
+    UINT8 tile = (col_index == 0) ? FLAPPY_TILE_PIPE_LEFT : FLAPPY_TILE_PIPE_RIGHT;
+
     for (UINT8 row = 2; row < COMMON_SCREEN_HEIGHT_TILES; row++) {
         if (row < pipe->pipe_y || row >= pipe->pipe_y + fbird.pipe_gap)
-            set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_PIPE);
+            set_bkg_tile_xy(actual_col, row, tile);
         else
             set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_EMPTY);
     }
@@ -64,7 +66,7 @@ draw_pipe(IN pipe_t *pipe)
     }
     for (col = 0; col < MG3_PIPE_WIDTH; col++) {
         actual_col = (tile_x + col) & (MG3_BKG_WIDTH_SIZE - 1);
-        draw_color_pipe(pipe, actual_col);
+        draw_color_pipe(pipe, actual_col, col);
     }
 }
 

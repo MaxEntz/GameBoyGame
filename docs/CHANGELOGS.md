@@ -7,6 +7,14 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.21.0] - 2026-05-17
+
+### Changed
+- `mg3/asset_flappy.c` : change the design of pipes
+- `mg3/flappy.c`: change in the code to determine which pipes to display
+
+---
+
 ## [1.20.0] - 2026-05-16
 
 ### Added

@@ -12,9 +12,10 @@
 
 enum flappy_tile_id_e {
     FLAPPY_TILE_EMPTY = 0,
-    FLAPPY_TILE_PIPE = 1,
-    FLAPPY_TILE_BIRD = 2,
-    FLAPPY_TILE_COUNT = 3
+    FLAPPY_TILE_PIPE_LEFT = 1,
+    FLAPPY_TILE_PIPE_RIGHT = 2,
+    FLAPPY_TILE_BIRD = 3,
+    FLAPPY_TILE_COUNT = 4
 };
 
 extern const UINT8 flappy_tiles[];
