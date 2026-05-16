@@ -66,7 +66,7 @@ handle_input_save_select(OUT game_t *game,
     }
 
     if (prev != g_selected) {
-        text_render_t old_cursor = g_cursor_render;
+        text_render_t old_cursor = {g_cursor_render.text, g_cursor_render.x, g_cursor_render.y};
 
         text_renderer_clear(&old_cursor);
         g_cursor_render.y = g_selected == 0 ? g_continue_render.y : g_new_render.y;
