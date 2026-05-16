@@ -29,7 +29,7 @@ static const UINT8 g_tm_map[COMMON_SCREEN_WIDTH_TILES * COMMON_SCREEN_HEIGHT_TIL
     8 ,9 ,8 ,9 ,8 ,9 ,8 ,9 ,8 ,9 ,8 ,9 ,8 ,9 ,8 ,9 ,8 ,9 ,8 ,9 ,
 };
 
-static CHAR g_tm_score_text[] = "SCORE 00000";
+static CHAR g_tm_score_text[] = "SCORE 000";
 static CHAR g_tm_level_text[] = "LEVEL 01";
 static CHAR g_tm_gameover_text[] = "GAME OVER";
 static CHAR g_tm_victory_text[] = "VICTORY !";
@@ -225,14 +225,20 @@ check_game_over(IN const game_t *game)
 static void
 handle_new_round(OUT game_t *game)
 {
+    UINT8 min_total_time_round = 0;
+
     if (g_tm.time_round >= g_tm.total_time_round) {
         if (g_tm.game_finished)
             return game_changer(game, GAME_STATE_LOBBY, TRUE);
         if (check_game_over(game))
             return;
         if (g_tm.nb_round == 5) {
+            min_total_time_round = g_tm.see_safe_tile + 1;
             g_tm.nb_round = 0;
-            g_tm.total_time_round -= 1;
+            if (g_tm.total_time_round > min_total_time_round)
+                 g_tm.total_time_round -= 1;
+             else
+                 g_tm.total_time_round = min_total_time_round;
             game->level++;
             if (game->level % 2 == 0)
                 g_tm.nb_safe_tiles = (g_tm.nb_safe_tiles == 1) ? 1 : g_tm.nb_safe_tiles - 1;
@@ -242,7 +248,7 @@ handle_new_round(OUT game_t *game)
         clear_map(g_tm.current_map);
         find_new_safe_tile(g_tm.current_map);
         set_bkg_tiles(0, 0, 20, 18, g_tm.current_map);
-        game->score_mg1 += 10 * game->level;
+        game->score_mg1 += 10;
         g_tm.nb_round++;
         tm_draw_hud(game);
     }
