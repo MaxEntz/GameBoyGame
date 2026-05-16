@@ -1,0 +1,56 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=false,
+  linkbordercolor={0 0 0},
+  urlbordercolor={0 0 0},
+  citebordercolor={0 0 0},
+  pdfborderstyle={/S/U/W 1}
+}
+
+\lstdefinestyle{gbcstyle}{
+  language=C,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape,
+  numbers=left,
+  numberstyle=\tiny,
+  stepnumber=1,
+  numbersep=8pt,
+  frame=single,
+  breaklines=true,
+  tabsize=4,
+  showstringspaces=false
+}
+\lstset{style=gbcstyle}
+
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\fancyhf{}
+\lhead{GameBoyGame Technical Documentation}
+\rhead{\thepage}
+
+\title{GameBoyGame\\Technical Documentation}
+\author{Maxime ENTZ / Enzo LAUGEL / Mélanie SCHMITT}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\include{docs/chapters/01-project-overview}
+\include{docs/chapters/02-code-conventions}
+\include{docs/chapters/03-hardware-reference}
+\include{docs/chapters/04-architecture-modules}
+\include{docs/chapters/05-data-formats}
+\include{docs/chapters/06-adding-a-minigame}
+
+\end{document}

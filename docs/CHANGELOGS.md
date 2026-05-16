@@ -11,6 +11,7 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ### Added
 - Adding a Doxyfile and update the Makefile to have the make doc rule.
+- Adding the TECH documentation, in latex and his pdf.
 
 ---
 

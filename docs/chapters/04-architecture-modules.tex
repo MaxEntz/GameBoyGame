@@ -1,0 +1,685 @@
+\chapter{Architecture and Module Documentation}
+
+\section{Overall Architecture}
+
+The program starts in \texttt{main}, calls \texttt{core}, initializes shared text and dialogue assets, registers an empty VBlank ISR, loads the initial menu, and then runs a frame loop. Each frame waits for VBlank, changes scene if requested, reads the joypad, dispatches input to the current scene, and dispatches the current scene update.
+
+The scene table in \texttt{src/main/core.c} maps \texttt{game\_state\_t} values to three callbacks: load assets, handle input, and update. Implemented states are \texttt{GAME\_STATE\_MENU}, \texttt{GAME\_STATE\_SAVE\_SELECT}, \texttt{GAME\_STATE\_CHOOSE\_DIFFICULTY}, \texttt{GAME\_STATE\_LOBBY}, \texttt{GAME\_STATE\_MG1}, \texttt{GAME\_STATE\_MG2}, and \texttt{GAME\_STATE\_MG3}.
+
+Cycle costs are not documented in the codebase.
+% TODO: not found in codebase: function cycle costs.
+
+\section{Main Module}
+
+\subsection{Source Files}
+
+\begin{description}
+  \item[\texttt{src/main/main.c}] C entry point; calls \texttt{core}.
+  \item[\texttt{src/main/core.c}] Global scene table, display toggles, VBlank registration, input dispatch, update dispatch, and main loop.
+\end{description}
+
+\subsection*{\texttt{main}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] None.
+  \item[Side effects] Enters the game by calling \texttt{core}.
+  \item[Calls] \texttt{core}.
+\end{description}
+
+\subsection*{\texttt{core}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] None.
+  \item[Side effects] Initializes \texttt{game\_t}, loads shared VRAM assets, installs the VBlank ISR, enables interrupts, controls LCD visibility, and runs until \texttt{game.is\_running} becomes false.
+  \item[Calls] \texttt{text\_renderer\_init}, \texttt{dialogue\_init}, \texttt{add\_VBL}, \texttt{enable\_interrupts}, \texttt{wait\_vbl\_done}, \texttt{change\_scene}, scene input callbacks, scene update callbacks.
+\end{description}
+
+\subsection*{\texttt{change\_scene}}
+\begin{description}
+  \item[Input] \texttt{game} points to the global runtime state. \texttt{game->state\_changed} determines whether work is done.
+  \item[Output] Clears \texttt{game->state\_changed} after loading the new state.
+  \item[Side effects] Turns display, sprites, background, and window off; calls the current state's asset loader; then turns display, sprites, and background on.
+  \item[Calls] Current scene load callback.
+\end{description}
+
+\section{Common Modules}
+
+\subsection{Source Files and State}
+
+\begin{description}
+  \item[\texttt{src/common/text\_renderer.c}] Shared text renderer using the common font at tile base 128. Owns \texttt{g\_text\_renderer\_ready}.
+  \item[\texttt{src/common/dialogue.c}] Dialogue box state machine and typing sound. Owns \texttt{g\_dialogue\_ready}.
+  \item[\texttt{src/common/game\_changer.c}] State transitions with fade, sound, optional VRAM clearing, and immediate scene load.
+  \item[\texttt{src/common/save.c}] Battery-backed save load, write, and reset at \texttt{\$A000}.
+  \item[\texttt{src/common/transition.c}] Palette fade and channel 1 transition sound effects.
+  \item[\texttt{src/common/random.c}] RNG seeding and modulo random helper. Owns \texttt{g\_seed}.
+  \item[\texttt{src/common/get\_tile\_by\_map.c}] Pixel-to-tile lookup helper for 20x18 maps.
+  \item[\texttt{src/common/vram\_clear.c}] Clears 256 background tiles, background map, text/dialogue readiness flags, and all 40 sprites.
+\end{description}
+
+\subsection*{\texttt{text\_renderer\_init}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] None.
+  \item[Side effects] Loads \texttt{font\_tiles} to VRAM starting at tile \texttt{128}; marks renderer ready.
+  \item[Calls] \texttt{set\_bkg\_data}.
+\end{description}
+
+\subsection*{\texttt{text\_renderer\_destroy}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] None.
+  \item[Side effects] Allows the font tiles to be reloaded after VRAM clearing.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{text\_renderer\_draw}}
+\begin{description}
+  \item[Input] \texttt{render} points to \texttt{text\_render\_t}; \texttt{text} must be null-terminated; \texttt{x} and \texttt{y} are tile coordinates.
+  \item[Output] None.
+  \item[Side effects] Writes font tile IDs to the background map until the string ends or the row reaches tile X 20.
+  \item[Calls] \texttt{set\_bkg\_tile\_xy}.
+\end{description}
+
+\subsection*{\texttt{text\_renderer\_clear}}
+\begin{description}
+  \item[Input] Same contract as \texttt{text\_renderer\_draw}.
+  \item[Output] None.
+  \item[Side effects] Replaces the rendered text range with the space tile.
+  \item[Calls] \texttt{set\_bkg\_tile\_xy}.
+\end{description}
+
+\subsection*{\texttt{dialogue\_init}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] None.
+  \item[Side effects] Loads dialogue box tiles into VRAM at tile \texttt{171}; marks dialogue assets ready.
+  \item[Calls] \texttt{set\_bkg\_data}.
+\end{description}
+
+\subsection*{\texttt{dialogue\_destroy}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] None.
+  \item[Side effects] Allows dialogue tiles to be reloaded after VRAM clearing.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{dialogue\_start}}
+\begin{description}
+  \item[Input] \texttt{dlg} points to a \texttt{dialogue\_t}; \texttt{text} is a null-terminated string where \texttt{\textbackslash n} separates lines.
+  \item[Output] Initializes the dialogue state to page 0 and animation state.
+  \item[Side effects] Writes the dialogue window tilemap, moves the window to Y 112, and shows the window.
+  \item[Calls] \texttt{set\_win\_tiles}, \texttt{move\_win}, \texttt{SHOW\_WIN}.
+\end{description}
+
+\subsection*{\texttt{dialogue\_update}}
+\begin{description}
+  \item[Input] \texttt{dlg} points to active dialogue state.
+  \item[Output] Advances typing timers and state.
+  \item[Side effects] Writes one character tile at a time to the window map and plays channel 1 typing sound for non-space characters.
+  \item[Calls] \texttt{set\_win\_tile\_xy}; internal sound helper writes \texttt{NR10\_REG} through \texttt{NR14\_REG}, \texttt{NR50\_REG}, \texttt{NR51\_REG}, and \texttt{NR52\_REG}.
+\end{description}
+
+\subsection*{\texttt{dialogue\_handle\_input}}
+\begin{description}
+  \item[Input] \texttt{dlg} points to dialogue state; \texttt{keys} is the current \texttt{joypad()} mask.
+  \item[Output] May skip animation, advance a page, or close the dialogue.
+  \item[Side effects] Updates \texttt{dlg}; may hide the window.
+  \item[Calls] Internal page helpers and \texttt{HIDE\_WIN}.
+\end{description}
+
+\subsection*{\texttt{dialogue\_is\_active}}
+\begin{description}
+  \item[Input] \texttt{dlg} points to dialogue state.
+  \item[Output] Returns true when the dialogue state is not inactive.
+  \item[Side effects] None.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{game\_changer}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state; \texttt{new\_state} is the requested state; \texttt{clear\_vram} decides whether to clear VRAM.
+  \item[Output] Updates \texttt{game->state} and \texttt{game->state\_changed} if valid.
+  \item[Side effects] Plays transition sound, fades out and in, optionally clears VRAM, loads the new scene immediately via \texttt{change\_scene}, and delays 300 ms.
+  \item[Calls] \texttt{transition\_sound}, \texttt{transition\_fade\_out}, \texttt{vram\_clear}, \texttt{change\_scene}, \texttt{delay}, \texttt{transition\_fade\_in}.
+\end{description}
+
+\subsection*{\texttt{save\_load}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state. SRAM must contain \texttt{save\_data\_t} or an invalid magic value.
+  \item[Output] Updates scores, lobby position, lobby map, dialogue index, and difficulty if \texttt{SAVE\_MAGIC} matches.
+  \item[Side effects] Enables and disables external RAM; reads from \texttt{\$A000}.
+  \item[Calls] \texttt{lobby\_get\_state}, \texttt{set\_map}, \texttt{memcpy}.
+\end{description}
+
+\subsection*{\texttt{save\_write}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state; lobby state is available through \texttt{lobby\_get\_state}.
+  \item[Output] Updates best scores in \texttt{game} if current scores are higher.
+  \item[Side effects] Writes \texttt{save\_data\_t} to external RAM at \texttt{\$A000}.
+  \item[Calls] \texttt{lobby\_get\_state}, \texttt{memcpy}.
+\end{description}
+
+\subsection*{\texttt{save\_reset}}
+\begin{description}
+  \item[Input] \texttt{game} provides current best scores.
+  \item[Output] None.
+  \item[Side effects] Writes a fresh save at \texttt{\$A000}, preserving best scores and resetting run scores, dialogue index, player position, map, and difficulty.
+  \item[Calls] \texttt{memcpy}.
+\end{description}
+
+\subsection*{\texttt{transition\_fade\_out}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] None.
+  \item[Side effects] Writes \texttt{BGP\_REG} through four palettes from normal to dark and plays transition tones.
+  \item[Calls] \texttt{wait\_vbl\_done}, \texttt{transition\_sound}, \texttt{delay}.
+\end{description}
+
+\subsection*{\texttt{transition\_fade\_in}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] None.
+  \item[Side effects] Writes \texttt{BGP\_REG} through four palettes from dark to normal and plays transition tones.
+  \item[Calls] \texttt{wait\_vbl\_done}, \texttt{transition\_sound}, \texttt{delay}.
+\end{description}
+
+\subsection*{\texttt{transition\_sound}}
+\begin{description}
+  \item[Input] \texttt{stage} selects one of four \texttt{NR13} frequency low values; invalid stage resets to 0.
+  \item[Output] None.
+  \item[Side effects] Enables sound and triggers channel 1.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{random\_init}}
+\begin{description}
+  \item[Input] \texttt{keys} is the current nonzero joypad mask.
+  \item[Output] Seeds GBDK's RNG.
+  \item[Side effects] Reads \texttt{DIV\_REG}; writes static \texttt{g\_seed}.
+  \item[Calls] \texttt{initrand}.
+\end{description}
+
+\subsection*{\texttt{random\_get}}
+\begin{description}
+  \item[Input] \texttt{modulo} is used as the divisor for \texttt{rand() \% modulo}; callers must pass nonzero.
+  \item[Output] Returns a \texttt{UINT8} in the range \texttt{0} to \texttt{modulo - 1}.
+  \item[Side effects] Advances the GBDK RNG state.
+  \item[Calls] \texttt{rand}.
+\end{description}
+
+\subsection*{\texttt{get\_tile\_by\_map}}
+\begin{description}
+  \item[Input] \texttt{map} is a 20x18 tile array; \texttt{x} and \texttt{y} are pixel coordinates.
+  \item[Output] Returns the tile ID at \texttt{x / 8}, \texttt{y / 8}; returns 0 out of bounds.
+  \item[Side effects] None.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{vram\_clear}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] None.
+  \item[Side effects] Clears 256 background tile patterns to zero, invalidates shared text/dialogue loaded flags, fills the visible background map with tile 0, and moves all 40 sprites to 0,0.
+  \item[Calls] \texttt{set\_bkg\_data}, \texttt{text\_renderer\_destroy}, \texttt{dialogue\_destroy}, \texttt{fill\_bkg\_rect}, \texttt{move\_sprite}.
+\end{description}
+
+\section{Menu Modules}
+
+\subsection{Source Files and State}
+
+\begin{description}
+  \item[\texttt{src/menu/menu.c}] Start screen loader and Start-button transition to save selection.
+  \item[\texttt{src/menu/save\_select.c}] Continue/new-save menu. Owns cursor render state, save presence flag, and selected row.
+  \item[\texttt{src/menu/difficult\_select.c}] Difficulty selection scene. Owns selected difficulty, key-release gating, and last key mask.
+\end{description}
+
+\subsection*{\texttt{menu}}
+\begin{description}
+  \item[Input] \texttt{game} is unused.
+  \item[Output] None.
+  \item[Side effects] Loads \texttt{menu\_bg\_tiles} and \texttt{menu\_bg\_map}.
+  \item[Calls] \texttt{set\_bkg\_data}, \texttt{set\_bkg\_tiles}.
+\end{description}
+
+\subsection*{\texttt{handle\_input\_menu}}
+\begin{description}
+  \item[Input] \texttt{game}; \texttt{keys} from \texttt{joypad()}.
+  \item[Output] None.
+  \item[Side effects] On \texttt{J\_START}, switches to \texttt{GAME\_STATE\_SAVE\_SELECT}.
+  \item[Calls] \texttt{game\_changer}.
+\end{description}
+
+\subsection*{\texttt{update\_menu}}
+\begin{description}
+  \item[Input] \texttt{game} is unused.
+  \item[Output] None.
+  \item[Side effects] None.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{save\_select}}
+\begin{description}
+  \item[Input] \texttt{game} is unused.
+  \item[Output] None.
+  \item[Side effects] Loads save-select background, checks SRAM magic, draws \texttt{CONTINUE}, \texttt{NEW SAVE}, and cursor.
+  \item[Calls] \texttt{set\_bkg\_data}, \texttt{set\_bkg\_tiles}, \texttt{text\_renderer\_init}, \texttt{text\_renderer\_draw}, \texttt{memcpy}.
+\end{description}
+
+\subsection*{\texttt{handle\_input\_save\_select}}
+\begin{description}
+  \item[Input] \texttt{game}; \texttt{keys} from \texttt{joypad()}.
+  \item[Output] None.
+  \item[Side effects] Moves cursor; may load an existing save and enter lobby, or reset save and enter difficulty selection.
+  \item[Calls] \texttt{text\_renderer\_clear}, \texttt{text\_renderer\_draw}, \texttt{save\_load}, \texttt{save\_reset}, \texttt{game\_changer}.
+\end{description}
+
+\subsection*{\texttt{update\_save\_select}}
+\begin{description}
+  \item[Input] \texttt{game} is unused.
+  \item[Output] None.
+  \item[Side effects] None.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{choose\_difficulty}}
+\begin{description}
+  \item[Input] \texttt{game} is unused.
+  \item[Output] None.
+  \item[Side effects] Loads the difficulty menu background and draws labels and cursor; resets selection to easy and waits for key release.
+  \item[Calls] \texttt{set\_bkg\_data}, \texttt{set\_bkg\_tiles}, \texttt{text\_renderer\_init}, \texttt{text\_renderer\_draw}.
+\end{description}
+
+\subsection*{\texttt{handle\_input\_choose\_difficulty}}
+\begin{description}
+  \item[Input] \texttt{game}; \texttt{keys} from \texttt{joypad()}.
+  \item[Output] Sets \texttt{game->difficulty} when confirmed.
+  \item[Side effects] Updates cursor, writes selected difficulty into the save, and switches to lobby.
+  \item[Calls] \texttt{text\_renderer\_clear}, \texttt{text\_renderer\_draw}, internal SRAM writer, \texttt{game\_changer}.
+\end{description}
+
+\subsection*{\texttt{update\_choose\_difficulty}}
+\begin{description}
+  \item[Input] \texttt{game} is unused.
+  \item[Output] None.
+  \item[Side effects] None.
+  \item[Calls] None.
+\end{description}
+
+\section{Lobby Modules}
+
+\subsection{Source Files and State}
+
+\begin{description}
+  \item[\texttt{src/lobby/lobby.c}] Lobby runtime state, asset loading, player sprite update, NPC animation, and frame counters. Owns static \texttt{g\_lobby}.
+  \item[\texttt{src/lobby/input\_handler\_lobby.c}] Movement, collision, NPC interaction, RNG initialization, save-on-select, and menu return.
+  \item[\texttt{src/lobby/map\_manager\_lobby.c}] 3x3 map lookup, current map copy, and boundary map switching.
+  \item[\texttt{src/lobby/transition\_map\_lobby.c}] Blocking transition animation between maps.
+  \item[\texttt{src/lobby/lore\_lobby.c}] Dialogue script and story progression. Owns \texttt{g\_dialogue\_texts} and idle text.
+  \item[\texttt{src/lobby/scoreboard\_lobby.c}] Scoreboard text rendering.
+\end{description}
+
+\subsection*{\texttt{lobby\_init\_state}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] Initializes \texttt{g\_lobby} to spawn position, map \texttt{MAP\_ID\_BL}, default movement direction, counters, and dialogue state.
+  \item[Side effects] Copies map data through \texttt{set\_map}.
+  \item[Calls] \texttt{set\_map}.
+\end{description}
+
+\subsection*{\texttt{lobby\_get\_state}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] Returns pointer to static \texttt{g\_lobby}.
+  \item[Side effects] None.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{lobby}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state.
+  \item[Output] May load save data into \texttt{game} and lobby state the first time.
+  \item[Side effects] Loads lobby tiles, sprite data, current map, text/dialogue assets, and scoreboard if on \texttt{MAP\_ID\_TC}.
+  \item[Calls] \texttt{lobby\_init\_state}, \texttt{save\_load}, \texttt{set\_bkg\_data}, \texttt{set\_bkg\_tiles}, \texttt{set\_sprite\_data}, \texttt{set\_sprite\_tile}, \texttt{move\_sprite}, \texttt{text\_renderer\_init}, \texttt{dialogue\_init}, \texttt{draw\_scoreboard}.
+\end{description}
+
+\subsection*{\texttt{handle\_input\_lobby}}
+\begin{description}
+  \item[Input] \texttt{game}; \texttt{keys} from \texttt{joypad()}.
+  \item[Output] Updates lobby player position and movement direction.
+  \item[Side effects] Seeds RNG on first key press, advances dialogue input, starts NPC dialogue with A, writes save and returns to menu on Select, and may switch maps.
+  \item[Calls] \texttt{random\_init}, \texttt{dialogue\_is\_active}, \texttt{dialogue\_handle\_input}, \texttt{lore\_start\_dialogue}, \texttt{lore\_start\_idle\_dialogue}, \texttt{save\_write}, \texttt{game\_changer}, \texttt{get\_tile\_by\_map}, \texttt{switch\_map}.
+\end{description}
+
+\subsection*{\texttt{update\_lobby}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state.
+  \item[Output] Updates lobby counters and sprite position.
+  \item[Side effects] Animates NPC tiles, updates lore/dialogue, updates four player sprites.
+  \item[Calls] \texttt{lore\_update}, \texttt{set\_bkg\_data}, \texttt{set\_sprite\_tile}, \texttt{move\_sprite}.
+\end{description}
+
+\subsection*{\texttt{transition\_map\_animation}}
+\begin{description}
+  \item[Input] \texttt{game}; \texttt{dir} is \texttt{TRANSITION\_TB}, \texttt{TRANSITION\_BT}, \texttt{TRANSITION\_LR}, or \texttt{TRANSITION\_RL}.
+  \item[Output] Updates lobby player coordinates after crossing the map boundary.
+  \item[Side effects] Displays \texttt{transition\_map}, moves player sprites in a blocking loop, waits for VBlank per step, then restores the new current map and scoreboard if needed.
+  \item[Calls] \texttt{set\_bkg\_tiles}, \texttt{move\_sprite}, \texttt{wait\_vbl\_done}, \texttt{draw\_scoreboard}.
+\end{description}
+
+\subsection*{\texttt{switch\_map}}
+\begin{description}
+  \item[Input] \texttt{game}; \texttt{x} and \texttt{y} are pixel collision coordinates; \texttt{tile} is the touched tile.
+  \item[Output] Returns true if a map switch starts.
+  \item[Side effects] Updates current map ID and map copy, marks map as changing, and runs transition animation.
+  \item[Calls] \texttt{transition\_map\_animation}.
+\end{description}
+
+\subsection*{\texttt{set\_map}}
+\begin{description}
+  \item[Input] \texttt{lobby}; \texttt{map\_id}.
+  \item[Output] Sets \texttt{lobby->current\_map\_id} and copies 360 tile IDs into \texttt{lobby->current\_map}.
+  \item[Side effects] Invalid IDs fall back to \texttt{MAP\_ID\_BL}.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{lore\_start\_idle\_dialogue}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] None.
+  \item[Side effects] Starts idle dialogue without advancing lore.
+  \item[Calls] \texttt{lobby\_get\_state}, \texttt{dialogue\_is\_active}, \texttt{dialogue\_start}.
+\end{description}
+
+\subsection*{\texttt{lore\_start\_dialogue}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state for score and difficulty checks.
+  \item[Output] None.
+  \item[Side effects] May adjust \texttt{dialogue\_index} to a win branch and starts the current lore dialogue.
+  \item[Calls] \texttt{lobby\_get\_state}, \texttt{dialogue\_is\_active}, \texttt{dialogue\_start}.
+\end{description}
+
+\subsection*{\texttt{lore\_update}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state.
+  \item[Output] None.
+  \item[Side effects] Auto-starts story dialogue, updates dialogue animation, transitions to minigames or menu when story steps finish, writes or resets save data.
+  \item[Calls] \texttt{dialogue\_update}, \texttt{dialogue\_is\_active}, \texttt{game\_changer}, \texttt{save\_write}, \texttt{save\_reset}.
+\end{description}
+
+\subsection*{\texttt{draw\_scoreboard}}
+\begin{description}
+  \item[Input] \texttt{game} supplies best and current scores.
+  \item[Output] None.
+  \item[Side effects] Draws scoreboard labels and zero-padded score rows onto the background map.
+  \item[Calls] \texttt{text\_renderer\_draw}.
+\end{description}
+
+\section{Minigame 1: Trap Memory}
+
+\subsection{Source Files and State}
+
+\begin{description}
+  \item[\texttt{src/mg1/trap\_memory.c}] Trap Memory map, HUD, round timing, safe tile generation, scoring, game-over handling, and sprite placement. Owns \texttt{g\_tm}.
+  \item[\texttt{src/mg1/tm\_handle\_input.c}] Trap Memory movement and collision.
+  \item[\texttt{src/mg1/tm\_sprite\_handle.c}] Trap Memory player sprite animation.
+\end{description}
+
+\subsection*{\texttt{trap\_memory}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state.
+  \item[Output] Resets \texttt{game->score\_mg1} to 0 and \texttt{game->level} to 1.
+  \item[Side effects] Initializes \texttt{g\_tm}, loads lobby-style terrain and safe tiles, writes the Trap Memory tilemap, hides window, initializes text renderer, and draws HUD.
+  \item[Calls] \texttt{set\_bkg\_data}, \texttt{set\_bkg\_tiles}, \texttt{set\_sprite\_tile}, \texttt{HIDE\_WIN}, \texttt{text\_renderer\_init}.
+\end{description}
+
+\subsection*{\texttt{trap\_memory\_get}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] Returns pointer to static \texttt{g\_tm}.
+  \item[Side effects] None.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{handle\_input\_trap\_memory}}
+\begin{description}
+  \item[Input] \texttt{game}; \texttt{keys} from \texttt{joypad()}.
+  \item[Output] Updates Trap Memory player position and movement direction.
+  \item[Side effects] Does nothing while \texttt{block\_movement} is true; otherwise moves by \texttt{SPEED} if collision allows.
+  \item[Calls] \texttt{trap\_memory\_get}, \texttt{get\_tile\_by\_map}.
+\end{description}
+
+\subsection*{\texttt{update\_trap\_memory}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state.
+  \item[Output] Updates score, level, round counters, and player sprite positions.
+  \item[Side effects] Shows safe tiles, hides them after \texttt{TIME\_SEE\_SAFE\_TILE}, detects game over, writes victory/game-over text, and returns to lobby when finished.
+  \item[Calls] \texttt{text\_renderer\_draw}, \texttt{random\_get}, \texttt{set\_bkg\_tiles}, \texttt{game\_changer}, \texttt{move\_sprite\_personage}, \texttt{move\_sprite}.
+\end{description}
+
+\subsection*{\texttt{move\_sprite\_personage}}
+\begin{description}
+  \item[Input] \texttt{game} points to \texttt{trap\_memory\_t}.
+  \item[Output] Clears \texttt{game->is\_moving}.
+  \item[Side effects] Chooses four sprite tile IDs according to direction and animation frame.
+  \item[Calls] \texttt{set\_sprite\_tile}.
+\end{description}
+
+\section{Minigame 2: Tetris}
+
+\subsection{Source Files and State}
+
+\begin{description}
+  \item[\texttt{src/mg2/tetris.c}] Tetris scene state, spawning, drop timing, scoring, level progression, and input. Owns \texttt{g\_tetris}.
+  \item[\texttt{src/mg2/tetris\_grid.c}] 10x18 playfield storage and line clearing. Owns global \texttt{tetris\_grid}.
+  \item[\texttt{src/mg2/tetris\_piece.c}] Piece shapes, drawing, erasing, movement checks, lock, spawn check, and rotation.
+  \item[\texttt{src/mg2/tetris\_hud.c}] Score, level, line, and next-piece rendering.
+\end{description}
+
+\subsection*{\texttt{tetris}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state.
+  \item[Output] Resets \texttt{game->score\_mg2}, \texttt{game->level}, and Tetris counters.
+  \item[Side effects] Initializes grid, hides first four sprites, loads Tetris tiles and background, draws HUD, spawns and draws the first piece.
+  \item[Calls] \texttt{random\_get}, \texttt{grid\_init}, \texttt{move\_sprite}, \texttt{set\_bkg\_data}, \texttt{text\_renderer\_init}, \texttt{set\_bkg\_tiles}, \texttt{draw\_hud}, \texttt{draw\_next\_piece}, \texttt{piece\_draw}.
+\end{description}
+
+\subsection*{\texttt{handle\_input\_tetris}}
+\begin{description}
+  \item[Input] \texttt{game}; \texttt{keys} from \texttt{joypad()}.
+  \item[Output] Updates current piece rotation, horizontal position, and soft-drop timer.
+  \item[Side effects] Select returns to lobby; A rotates right, B rotates left, Down accelerates drop, Left/Right move with throttle.
+  \item[Calls] \texttt{game\_changer}, \texttt{rotate\_r}, \texttt{rotate\_l}, \texttt{piece\_can\_move\_left}, \texttt{piece\_can\_move\_right}, \texttt{piece\_erase}, \texttt{piece\_draw}.
+\end{description}
+
+\subsection*{\texttt{update\_tetris}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state.
+  \item[Output] Advances current piece downward or locks it when blocked.
+  \item[Side effects] Updates background tiles, grid, score, level, lines, next preview, and may return to lobby on spawn failure.
+  \item[Calls] \texttt{piece\_can\_move\_down}, \texttt{piece\_erase}, \texttt{piece\_draw}, \texttt{piece\_lock}, \texttt{grid\_clear\_lines}, \texttt{grid\_draw\_playfield}, \texttt{draw\_score}, \texttt{draw\_lines}, \texttt{draw\_level}, \texttt{draw\_next\_piece}, \texttt{piece\_can\_spawn}, \texttt{game\_changer}.
+\end{description}
+
+\subsection*{\texttt{grid\_init}}
+\begin{description}
+  \item[Input] None.
+  \item[Output] Sets every cell in \texttt{tetris\_grid} to 0.
+  \item[Side effects] Modifies \texttt{tetris\_grid}.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{grid\_clear\_lines}}
+\begin{description}
+  \item[Input] \texttt{tetris\_grid} contains tile IDs or 0.
+  \item[Output] Returns number of cleared lines.
+  \item[Side effects] Collapses full rows in \texttt{tetris\_grid}.
+  \item[Calls] Internal row helpers.
+\end{description}
+
+\subsection*{\texttt{grid\_draw\_playfield}}
+\begin{description}
+  \item[Input] \texttt{tetris\_grid}.
+  \item[Output] None.
+  \item[Side effects] Redraws the 10x18 playfield into the background map at X offset \texttt{MG2\_PLAYFIELD\_X}.
+  \item[Calls] \texttt{set\_bkg\_tile\_xy}.
+\end{description}
+
+\subsection*{\texttt{piece\_draw}}
+\begin{description}
+  \item[Input] \texttt{piece} points to a valid \texttt{piece\_t}.
+  \item[Output] None.
+  \item[Side effects] Draws occupied 4x4 shape cells to the background map.
+  \item[Calls] \texttt{set\_bkg\_tile\_xy}.
+\end{description}
+
+\subsection*{\texttt{piece\_erase}}
+\begin{description}
+  \item[Input] \texttt{piece} points to a valid \texttt{piece\_t}.
+  \item[Output] None.
+  \item[Side effects] Replaces occupied piece cells with \texttt{TETRIS\_TILE\_EMPTY}.
+  \item[Calls] \texttt{set\_bkg\_tile\_xy}.
+\end{description}
+
+\subsection*{\texttt{piece\_can\_move\_down}}
+\begin{description}
+  \item[Input] \texttt{piece} points to a valid \texttt{piece\_t}.
+  \item[Output] Returns true if the shape can move down inside bounds and without grid collision.
+  \item[Side effects] None.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{piece\_can\_move\_left}}
+\begin{description}
+  \item[Input] \texttt{piece}.
+  \item[Output] Returns true if the piece fits one cell left.
+  \item[Side effects] None.
+  \item[Calls] Internal fit helper.
+\end{description}
+
+\subsection*{\texttt{piece\_can\_move\_right}}
+\begin{description}
+  \item[Input] \texttt{piece}.
+  \item[Output] Returns true if the piece fits one cell right.
+  \item[Side effects] None.
+  \item[Calls] Internal fit helper.
+\end{description}
+
+\subsection*{\texttt{piece\_lock}}
+\begin{description}
+  \item[Input] \texttt{piece}.
+  \item[Output] None.
+  \item[Side effects] Writes occupied cells into \texttt{tetris\_grid}.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{piece\_can\_spawn}}
+\begin{description}
+  \item[Input] \texttt{piece}.
+  \item[Output] Returns true if the piece fits at its current spawn position.
+  \item[Side effects] None.
+  \item[Calls] Internal fit helper.
+\end{description}
+
+\subsection*{\texttt{rotate\_r}}
+\begin{description}
+  \item[Input] \texttt{piece}.
+  \item[Output] Updates \texttt{piece->rot} and possibly \texttt{piece->x}.
+  \item[Side effects] Erases and redraws the piece if rotation fits, including a one-cell wall adjustment.
+  \item[Calls] \texttt{piece\_erase}, \texttt{piece\_draw}.
+\end{description}
+
+\subsection*{\texttt{rotate\_l}}
+\begin{description}
+  \item[Input] \texttt{piece}.
+  \item[Output] Updates \texttt{piece->rot} and possibly \texttt{piece->x}.
+  \item[Side effects] Erases and redraws the piece if rotation fits, including a one-cell wall adjustment.
+  \item[Calls] \texttt{piece\_erase}, \texttt{piece\_draw}.
+\end{description}
+
+\subsection*{\texttt{draw\_score}}
+\begin{description}
+  \item[Input] \texttt{score}.
+  \item[Output] None.
+  \item[Side effects] Draws a six-digit zero-padded score.
+  \item[Calls] \texttt{text\_renderer\_draw}.
+\end{description}
+
+\subsection*{\texttt{draw\_lines}}
+\begin{description}
+  \item[Input] \texttt{lines}.
+  \item[Output] None.
+  \item[Side effects] Draws a three-digit zero-padded line counter.
+  \item[Calls] \texttt{text\_renderer\_draw}.
+\end{description}
+
+\subsection*{\texttt{draw\_level}}
+\begin{description}
+  \item[Input] \texttt{level}.
+  \item[Output] None.
+  \item[Side effects] Draws a two-digit zero-padded level value.
+  \item[Calls] \texttt{text\_renderer\_draw}.
+\end{description}
+
+\subsection*{\texttt{draw\_hud}}
+\begin{description}
+  \item[Input] \texttt{score}, \texttt{level}, and \texttt{lines}.
+  \item[Output] None.
+  \item[Side effects] Draws Tetris HUD labels and values.
+  \item[Calls] \texttt{text\_renderer\_draw}, \texttt{draw\_score}, \texttt{draw\_level}, \texttt{draw\_lines}.
+\end{description}
+
+\subsection*{\texttt{draw\_next\_piece}}
+\begin{description}
+  \item[Input] \texttt{type} is a \texttt{piece\_type\_t}.
+  \item[Output] None.
+  \item[Side effects] Draws the next-piece preview box interior.
+  \item[Calls] \texttt{set\_bkg\_tile\_xy}.
+\end{description}
+
+\section{Minigame 3: Flappy Bird}
+
+\subsection{Source Files and State}
+
+\begin{description}
+  \item[\texttt{src/mg3/flappy.c}] Flappy Bird state, pipe generation, collision, drawing, gravity, and jump input. Owns static \texttt{fbird}.
+\end{description}
+
+\subsection*{\texttt{flappybird}}
+\begin{description}
+  \item[Input] \texttt{game} is unused.
+  \item[Output] Initializes bird Y and pipe positions.
+  \item[Side effects] Loads Flappy tiles and background, copies bird tile data into sprite tile 0, and assigns sprite 0.
+  \item[Calls] \texttt{random\_get}, \texttt{set\_bkg\_data}, \texttt{set\_bkg\_tiles}, \texttt{set\_sprite\_data}, \texttt{set\_sprite\_tile}.
+\end{description}
+
+\subsection*{\texttt{handle\_input\_flappybird}}
+\begin{description}
+  \item[Input] \texttt{game} is unused; \texttt{keys} from \texttt{joypad()}.
+  \item[Output] Updates bird Y on \texttt{J\_A}.
+  \item[Side effects] Subtracts \texttt{MG3\_JUMP} from \texttt{fbird.bird\_y}.
+  \item[Calls] None.
+\end{description}
+
+\subsection*{\texttt{update\_flappybird}}
+\begin{description}
+  \item[Input] \texttt{game} points to runtime state.
+  \item[Output] Updates bird and pipe positions.
+  \item[Side effects] Applies gravity, moves sprite 0, draws and wraps pipes in the background map, and returns to lobby on collision or falling below the screen.
+  \item[Calls] \texttt{game\_changer}, \texttt{move\_sprite}, \texttt{set\_bkg\_tile\_xy}, \texttt{random\_get}.
+\end{description}
+
+\section{Asset Modules}
+
+Asset source files contain public \texttt{const UINT8} arrays compiled into ROM. They do not own mutable state and do not call functions.
+
+\begin{description}
+  \item[\texttt{asset/src/asset\_lobby.c}] Lobby terrain, player, NPC, transition, and 3x3 lobby map arrays.
+  \item[\texttt{asset/src/common/asset\_common\_font.c}] Common font tile array.
+  \item[\texttt{asset/src/common/asset\_dialogue.c}] Dialogue box tile and window map arrays.
+  \item[\texttt{asset/src/menu/asset\_menu.c}] Start menu tiles and tilemap.
+  \item[\texttt{asset/src/menu/asset\_save\_select.c}] Save-select background tilemap.
+  \item[\texttt{asset/src/mg1/asset\_tm.c}] Trap Memory safe-tile overlays.
+  \item[\texttt{asset/src/mg2/asset\_tetris.c}] Tetris tileset and background map.
+  \item[\texttt{asset/src/mg3/asset\_flappy.c}] Flappy tileset and background map.
+\end{description}

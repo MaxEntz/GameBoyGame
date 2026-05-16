@@ -1,0 +1,98 @@
+\chapter{Project Overview}
+
+\section{Game Concept and Target Hardware}
+
+GameBoyGame is a Game Boy homebrew game built around a lobby and several minigames. The player starts from a menu, selects or creates a save, chooses a difficulty, explores a tile-based island lobby, talks to NPCs through a dialogue box, and is routed into minigames such as Trap Memory, Tetris, and Flappy Bird.
+
+The build target is a DMG-compatible \texttt{.gb} ROM. The Makefile configures a cartridge with MBC5, RAM, and battery-backed save support using \texttt{-Wm-yt27}, with eight 16 KiB ROM banks using \texttt{-Wm-yo8}, and one 8 KiB external RAM bank using \texttt{-Wm-ya1}. The code uses DMG-style palettes and does not contain CGB palette or double-speed configuration, so it should be treated as a DMG target that also runs on GBC or GBA in compatibility mode.
+
+\section{Repository Structure}
+
+\begin{description}
+  \item[\texttt{asset/}] Generated or hand-maintained C asset arrays for tiles, sprites, and tilemaps.
+  \item[\texttt{asset/include/}] Public headers for asset arrays. These headers expose \texttt{extern const UINT8} declarations and tile ID enums.
+  \item[\texttt{asset/include/common/}] Shared font and dialogue-box asset declarations.
+  \item[\texttt{asset/include/menu/}] Menu and save-select screen asset declarations.
+  \item[\texttt{asset/include/mg1/}] Trap Memory-specific asset declarations.
+  \item[\texttt{asset/include/mg2/}] Tetris tile and background asset declarations.
+  \item[\texttt{asset/include/mg3/}] Flappy Bird tile and background asset declarations.
+  \item[\texttt{asset/src/}] Asset array definitions compiled directly into the ROM.
+  \item[\texttt{asset/src/common/}] Shared font and dialogue-box tile definitions.
+  \item[\texttt{asset/src/menu/}] Menu and save-select tilemap or tile definitions.
+  \item[\texttt{asset/src/mg1/}] Trap Memory safe-tile definitions.
+  \item[\texttt{asset/src/mg2/}] Tetris tileset and background tilemap definitions.
+  \item[\texttt{asset/src/mg3/}] Flappy Bird tileset and background tilemap definitions.
+  \item[\texttt{include/}] Public project headers.
+  \item[\texttt{include/common/}] Shared engine-style services: common types, text rendering, dialogue, transitions, RNG, save data, VRAM clearing, and tile lookup.
+  \item[\texttt{include/lobby/}] Lobby state, map transition, lore, and scoreboard interfaces.
+  \item[\texttt{include/main/}] Core loop and scene-change interface.
+  \item[\texttt{include/menu/}] Start menu, save-select, and difficulty-select interfaces.
+  \item[\texttt{include/mg1/}] Trap Memory public interface and state definition.
+  \item[\texttt{include/mg2/}] Tetris state, grid, piece, HUD, and layout interfaces.
+  \item[\texttt{include/mg3/}] Flappy Bird public interface and layout constants.
+  \item[\texttt{src/}] Game logic source files.
+  \item[\texttt{src/common/}] Shared runtime modules.
+  \item[\texttt{src/lobby/}] Lobby loading, input, map switching, transition animation, lore flow, and scoreboard rendering.
+  \item[\texttt{src/main/}] Program entry point and core state machine.
+  \item[\texttt{src/menu/}] Menu, save-select, and difficulty-select scenes.
+  \item[\texttt{src/mg1/}] Trap Memory minigame.
+  \item[\texttt{src/mg2/}] Tetris minigame.
+  \item[\texttt{src/mg3/}] Flappy Bird minigame.
+  \item[\texttt{docs/}] Technical documentation, Doxygen configuration, and changelog.
+  \item[\texttt{.github/workflows/}] Repository automation configuration.
+  \item[\texttt{.vscode/}] Editor configuration.
+  \item[\texttt{Makefile}] Build, clean, rebuild, and Doxygen targets.
+  \item[\texttt{README.md}] Basic user-facing build instructions.
+  \item[\texttt{game.sav}] Local emulator save RAM file.
+\end{description}
+
+\section{Toolchain}
+
+\begin{description}
+  \item[Compiler] GBDK-2020 \texttt{lcc}, configured by \texttt{GBDK\_HOME ?= /opt/gbdk} and invoked as \texttt{\$(GBDK\_HOME)/bin/lcc}.
+  \item[Assembler and linker] Invoked through \texttt{lcc}. The Makefile passes \texttt{-Wa-l} for assembler listing output and \texttt{-Wl-m -Wl-j} for linker map and related output.
+  \item[Cartridge configuration] \texttt{-Wm-yt27 -Wm-yo8 -Wm-ya1}, meaning MBC5 + RAM + battery, 8 ROM banks, and 1 RAM bank according to the Makefile comments.
+  \item[Asset pipeline] Assets are C arrays in \texttt{asset/src/} with declarations in \texttt{asset/include/}. There is no conversion script, source image, or build rule in the repository.
+  % TODO: not found in codebase: source asset format and conversion command.
+  \item[Documentation tool] Doxygen through the \texttt{make doc} target.
+  \item[Emulator used for testing] The repository only says to use a Game Boy emulator; it does not name one.
+  % TODO: not found in codebase: exact emulator used for testing.
+\end{description}
+
+\section{Build and Run From Scratch}
+
+\begin{lstlisting}[language=bash,caption={Build from a fresh machine}]
+# 1. Install make and GBDK-2020.
+# On macOS, if a formula is available:
+brew install gbdk-2020
+
+# Otherwise download GBDK-2020 and point GBDK_HOME at it.
+export GBDK_HOME="$HOME/gbdk"
+export PATH="$GBDK_HOME/bin:$PATH"
+
+# 2. Clone the repository.
+git clone <repository-url> GameBoyGame
+cd GameBoyGame
+
+# 3. Build the ROM.
+make
+
+# 4. The output ROM is:
+ls -l game.gb
+\end{lstlisting}
+
+The Makefile assumes \texttt{GBDK\_HOME=/opt/gbdk} if the variable is not provided. Override it in the environment when GBDK is installed elsewhere:
+
+\begin{lstlisting}[language=bash,caption={Build with an explicit GBDK path}]
+GBDK_HOME="$HOME/gbdk" make
+\end{lstlisting}
+
+Run \texttt{game.gb} in a DMG-compatible emulator.
+% TODO: not found in codebase: exact emulator command used by the project.
+
+\begin{lstlisting}[language=bash,caption={Maintenance commands}]
+make clean   # remove intermediate build files
+make fclean  # remove intermediates and game.gb
+make re      # clean rebuild
+make doc     # run Doxygen using docs/Doxyfile
+\end{lstlisting}
