@@ -7,11 +7,66 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
-## [1.18.0] - 2026-06-16
+## [1.20.0] - 2026-05-16
+
+### Added
+- Score display using text_renderer (3 digits, top-left)
+- uint_to_str() helper for score rendering
+- Score increments when pipe crosses bird position
+- Difficulty scaling every MG3_PIPE_SPEED_STEP pipes :
+  - pipe_speed increases up to MG3_PIPE_SPEED_MAX
+  - jump_force increases alongside speed
+  - pipe_gap widens to compensate faster pipes
+
+---
+
+## [1.19.1] - 2026-05-16
+
+### Added
+- Updated/added assets for lobby, menu and mini-games (see `asset/include/*` and `asset/src/*`).
+- `src/lobby/scoreboard_lobby.c`: scoreboard logic and display for lobby.
+- Trap Memory: infinite gameplay support and related input/sprite handlers (`src/mg1/trap_memory.c`, `src/mg1/tm_handle_input.c`, `src/mg1/tm_sprite_handle.c`).
 
 ### Changed
-- `src/mg3/flappy.c`: added difficulties to game and added score to the game
-- `include/mg3/mg3_layout.h`: increased the number of `MG3_PIPE_SPEED_STEP`
+- Core & lobby: various updates to map transitions, input handling and lobby flow (`include/main/core.h`, `src/main/core.c`, `src/lobby/*`).
+- Tetris improvements: grid, HUD, piece logic and layout updates (`include/mg2/*`, `src/mg2/*`).
+- Flappy: gameplay and collision improvements (`include/mg3/*`, `src/mg3/flappy.c`).
+- Common utilities: updates to save, random, text rendering, VRAM clearing and game changer utilities (`include/common/*`, `src/common/*`).
+
+### Fixed
+- Multiple gameplay and UI fixes across mini-games and lobby (collision detection, sprite handling, VRAM/tilemap issues).
+
+---
+
+## [1.19.0] - 2026-05-16
+
+### Added
+- Save selection state and assets for choosing a save slot and difficulty
+- Difficulty selection menu and input handling for choosing game difficulty
+- Difficulty-aware save/load support (difficulty persisted in save data)
+- Difficulty-based scoring adjustments
+
+### Changed
+- Restrict save selection input handling to specific keys and fix cursor rendering
+- Update save logic to validate difficulty ranges before assignment
+
+### Fixed
+- Minor asset/header formatting fixes (file headers, trailing newlines)
+
+--
+
+## [1.18.0] - 2026-05-15
+
+### Added
+- `src/lobby/lore_lobby.c`: added a "won't talk" dialogue when speaking to a npc not in the correct lore state
+- `include/lobby/lobby.h`: bool flag in `lobby_state_t` to prevent idle dialogues from advancing the lore state
+- `include/lobby/lore_lobby.h`: `LORE_ESCAPE` step and updated `LORE_STEP_COUNT`
+- `asset/src/asset_lobby.c`: `ennemies1_tile_2` and `ennemies2_tile_2` — breathing animation frames for the NPCs
+- `src/lobby/lobby.c`: `animate_npcs` animates the 2 npcs
+
+### Changed
+- `src/lobby/lore_lobby.c`: changed some dialogues and added a final dialogue for the escape
+- `src/lobby/input_handler_lobby.c`: SELECT now saves and returns to menu; START removed
 
 ---
 

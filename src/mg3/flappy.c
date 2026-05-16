@@ -125,10 +125,12 @@ draw_score(void)
 }
 
 /**
- * @brief Move all pipes, handle score increment and difficulty scaling
+ * @brief Move all pipes, update score and difficulty scaling
+ *
+ * @param game pointer to the game structure
  */
 static void
-update_pipes(void)
+update_pipes(game_t *game)
 {
     for (UINT8 i = 0; i < MG3_NB_PIPE; i++) {
         fbird.pipes[i].pipe_x -= fbird.pipe_speed;
@@ -136,6 +138,7 @@ update_pipes(void)
         if (fbird.pipes[i].pipe_x < MG3_BIRD_X &&
             fbird.pipes[i].pipe_x + fbird.pipe_speed >= MG3_BIRD_X) {
             fbird.pipes_passed++;
+            game->score_mg3 = (UINT16)fbird.pipes_passed;
             if (fbird.pipes_passed % MG3_PIPE_SPEED_STEP == 0) {
                 if (fbird.pipe_speed < MG3_PIPE_SPEED_MAX) {
                     fbird.pipe_speed++;
@@ -180,12 +183,14 @@ update_flappybird(game_t *game)
 {
     draw_score();
     if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
+        if (game->score_mg3 > game->best_score_mg3)
+            game->best_score_mg3 = game->score_mg3;
         game_changer(game, GAME_STATE_LOBBY, TRUE);
         return;
     }
     fbird.bird_y += 1;
     move_sprite(0, MG3_BIRD_X, fbird.bird_y);
-    update_pipes();
+    update_pipes(game);
 }
 
 void
