@@ -48,7 +48,6 @@ choose_difficulty(OUT game_t *game)
     g_selected_difficulty = DIFFICULTY_EASY;
     g_cursor_render.y = g_easy_render.y;
     text_renderer_draw(&g_cursor_render);
-    /* Ignore any lingering button press from the previous menu input */
     g_wait_release = TRUE;
     g_last_keys = 0;
 }
@@ -57,7 +56,6 @@ void
 handle_input_choose_difficulty(OUT game_t *game,
                                IN UINT8 keys)
 {
-    /* If we just entered the screen, wait until no button is pressed */
     if (g_wait_release) {
         if (keys == 0)
             g_wait_release = FALSE;
@@ -76,7 +74,7 @@ handle_input_choose_difficulty(OUT game_t *game,
         g_selected_difficulty++;
 
     if (prev != g_selected_difficulty) {
-        text_render_t old_cursor = g_cursor_render;
+        text_render_t old_cursor = {g_cursor_render.text, g_cursor_render.x, g_cursor_render.y};
 
         text_renderer_clear(&old_cursor);
         if (g_selected_difficulty == DIFFICULTY_EASY)
