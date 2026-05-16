@@ -20,7 +20,8 @@ static const management_state_t g_state_function[MAX_STATES] = {
     {GAME_STATE_MG3        ,flappybird         ,handle_input_flappybird     ,update_flappybird}         ,
     {GAME_STATE_GAME_OVER  ,NULL               ,NULL                        ,NULL}                      ,
     {GAME_STATE_MENU       ,menu               ,handle_input_menu           ,update_menu}               ,
-    {GAME_STATE_SAVE_SELECT,save_select        ,handle_input_save_select    ,update_save_select}
+    {GAME_STATE_SAVE_SELECT,save_select        ,handle_input_save_select    ,update_save_select}        ,
+    {GAME_STATE_CHOOSE_DIFFICULTY,choose_difficulty,handle_input_choose_difficulty,update_choose_difficulty}
 };
 
 static void

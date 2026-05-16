@@ -87,7 +87,6 @@ handle_input_choose_difficulty(OUT game_t *game,
     if (pressed & (J_START | J_A)) {
         game->difficulty = (difficulty_t)g_selected_difficulty;
         write_selected_difficulty(game);
-        save_select_set_in_choose_difficulty(FALSE);
         game_changer(game, GAME_STATE_LOBBY, TRUE);
     }
 }
