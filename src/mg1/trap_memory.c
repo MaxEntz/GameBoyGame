@@ -236,10 +236,11 @@ handle_new_round(OUT game_t *game)
             min_total_time_round = g_tm.see_safe_tile + 1;
             g_tm.nb_round = 0;
             if (g_tm.total_time_round > min_total_time_round)
-                 g_tm.total_time_round -= 1;
+                g_tm.total_time_round -= 1;
              else
-                 g_tm.total_time_round = min_total_time_round;
-            game->level++;
+                g_tm.total_time_round = min_total_time_round;
+            if (game->level < 99)
+                game->level++;
             if (game->level % 2 == 0)
                 g_tm.nb_safe_tiles = (g_tm.nb_safe_tiles == 1) ? 1 : g_tm.nb_safe_tiles - 1;
         }
