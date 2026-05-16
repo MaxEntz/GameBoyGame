@@ -20,6 +20,13 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.19.2] - 2026-05-16
+
+### Added
+- Adding a Doxyfile and update the Makefile to have the make doc rule.
+
+---
+
 ## [1.19.1] - 2026-05-16
 
 ### Added
