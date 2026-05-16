@@ -9,6 +9,7 @@ TARGET  =   game
 
 GBDK_HOME ?= /opt/gbdk
 LCC     ?=   $(GBDK_HOME)/bin/lcc
+DOXYGEN ?=   doxygen
 
 SRC     =   $(shell find src/ -name "*.c")
 ASSET   =   $(shell find asset/src/ -name "*.c")
@@ -32,4 +33,7 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+doc:
+	$(DOXYGEN) docs/Doxyfile
+
+.PHONY: all clean fclean re doc
