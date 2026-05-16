@@ -93,7 +93,7 @@ handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
         return;
     } else if (lobby->dialogue_index == LORE_RIGHT_INTRO) {
         lobby->dialogue_index++;
-        game_changer(game, GAME_STATE_MG2, TRUE);
+        game_changer(game, GAME_STATE_MG3, TRUE);
         return;
     } else if (lobby->dialogue_index == LORE_CC_INTRO) {
         lobby->dialogue_index++;
