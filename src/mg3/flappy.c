@@ -20,7 +20,7 @@ static void
 draw_color_pipe(IN pipe_t *pipe,
                 IN UINT8 actual_col)
 {
-    for (UINT8 row = 0; row < COMMON_SCREEN_HEIGHT_TILES; row++) {
+    for (UINT8 row = 2; row < COMMON_SCREEN_HEIGHT_TILES; row++) {
         if (row < pipe->pipe_y || row >= pipe->pipe_y + fbird.pipe_gap)
             set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_PIPE);
         else
@@ -48,22 +48,22 @@ static void
 draw_pipe(IN pipe_t *pipe)
 {
     INT16 tile_x = pipe->pipe_x / MG3_PX_TO_TILE;
-    UINT8 actual_col;
-    UINT8 col;
-    UINT8 clear_col = (tile_x + MG3_PIPE_WIDTH) & 31; 
+    UINT8 actual_col = 0;
+    UINT8 col = 0;
+    UINT8 clear_col = (tile_x + MG3_PIPE_WIDTH) & (MG3_BKG_WIDTH_SIZE - 1);
 
-    for (UINT8 row = 0; row < COMMON_SCREEN_HEIGHT_TILES; row++)
+    for (UINT8 row = 2; row < COMMON_SCREEN_HEIGHT_TILES; row++)
         set_bkg_tile_xy(clear_col, row, FLAPPY_TILE_EMPTY);
     if (pipe->pipe_x <= 0) {
         for (col = 0; col < MG3_PIPE_WIDTH; col++) {
-            actual_col = (tile_x + col) & 31;
-            for (UINT8 row = 0; row < COMMON_SCREEN_HEIGHT_TILES; row++)
+            actual_col = (tile_x + col) & (MG3_BKG_WIDTH_SIZE - 1);
+            for (UINT8 row = 2; row < COMMON_SCREEN_HEIGHT_TILES; row++)
                 set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_EMPTY);
         }
         return;
     }
     for (col = 0; col < MG3_PIPE_WIDTH; col++) {
-        actual_col = (tile_x + col) & 31;
+        actual_col = (tile_x + col) & (MG3_BKG_WIDTH_SIZE - 1);
         draw_color_pipe(pipe, actual_col);
     }
 }
@@ -117,14 +117,18 @@ uint_to_str(IN UINT16 val,
 static void
 draw_score(void)
 {
-    CHAR          buf[4];
+    CHAR buf[4];
     text_render_t render;
 
-    uint_to_str((UINT16)fbird.pipes_passed, buf, 3);
     render.text = buf;
-    render.x    = 1;
-    render.y    = 1;
-    text_renderer_draw(&render);
+    render.x = 1;
+    render.y = 1;
+
+    if (fbird.pipes_passed != fbird.last_score){
+        uint_to_str(fbird.pipes_passed, buf, 3);
+        text_renderer_draw(&render);
+        fbird.last_score = (INT16)fbird.pipes_passed;
+    }
 }
 
 /**
@@ -141,7 +145,7 @@ update_pipes(OUT game_t *game)
         if (fbird.pipes[i].pipe_x < MG3_BIRD_X &&
             fbird.pipes[i].pipe_x + fbird.pipe_speed >= MG3_BIRD_X) {
             fbird.pipes_passed++;
-            game->score_mg3 = (UINT16)fbird.pipes_passed;
+            game->score_mg3 = fbird.pipes_passed;
             if (fbird.pipes_passed % MG3_PIPE_SPEED_STEP == 0) {
                 if (fbird.pipe_speed < MG3_PIPE_SPEED_MAX) {
                     fbird.pipe_speed++;
@@ -162,6 +166,7 @@ void
 flappybird(OUT game_t *game)
 {
     (void)game;
+    fbird.last_score = -1;
     fbird.bird_y = MG3_SCREEN_Y_PX / 2;
     fbird.pipes_passed = 0;
     fbird.pipe_speed = MG3_PIPE_SPEED_INIT;

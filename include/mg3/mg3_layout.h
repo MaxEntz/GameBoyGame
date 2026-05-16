@@ -28,5 +28,6 @@
     #define MG3_SPRITE_Y_OFFSET 16
     #define MG3_JUMP_INIT       4
     #define MG3_PX_TO_TILE      8
+    #define MG3_BKG_WIDTH_SIZE  32
 
 #endif /* MG3_LAYOUT_H_ */
