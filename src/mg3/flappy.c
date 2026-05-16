@@ -17,7 +17,8 @@ static flappy_t fbird;
  */
 
 static void
-draw_color_pipe(pipe_t *pipe, UINT8 actual_col)
+draw_color_pipe(IN pipe_t *pipe,
+                IN UINT8 actual_col)
 {
     for (UINT8 row = 0; row < COMMON_SCREEN_HEIGHT_TILES; row++) {
         if (row < pipe->pipe_y || row >= pipe->pipe_y + fbird.pipe_gap)
@@ -44,7 +45,7 @@ next_pipe_y(void)
  * @param pipe pointer to the pipe to draw
  */
 static void
-draw_pipe(pipe_t *pipe)
+draw_pipe(IN pipe_t *pipe)
 {
     INT16 tile_x = pipe->pipe_x / MG3_PX_TO_TILE;
     UINT8 actual_col;
@@ -99,7 +100,9 @@ check_collision(void)
  * @param width number of digits to write
  */
 static void
-uint_to_str(UINT16 val, CHAR *buf, UINT8 width)
+uint_to_str(IN UINT16 val,
+            OUT CHAR *buf,
+            IN UINT8 width)
 {
     for (INT8 i = (INT8)(width - 1); i >= 0; i--) {
         buf[i] = '0' + (CHAR)(val % 10);
@@ -130,7 +133,7 @@ draw_score(void)
  * @param game pointer to the game structure
  */
 static void
-update_pipes(game_t *game)
+update_pipes(OUT game_t *game)
 {
     for (UINT8 i = 0; i < MG3_NB_PIPE; i++) {
         fbird.pipes[i].pipe_x -= fbird.pipe_speed;
@@ -156,7 +159,7 @@ update_pipes(game_t *game)
 }
 
 void
-flappybird(game_t *game)
+flappybird(OUT game_t *game)
 {
     (void)game;
     fbird.bird_y = MG3_SCREEN_Y_PX / 2;
@@ -179,7 +182,7 @@ flappybird(game_t *game)
 }
 
 void
-update_flappybird(game_t *game)
+update_flappybird(OUT game_t *game)
 {
     draw_score();
     if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
@@ -194,7 +197,8 @@ update_flappybird(game_t *game)
 }
 
 void
-handle_input_flappybird(game_t *game, UINT8 keys)
+handle_input_flappybird(OUT game_t *game,
+                        IN UINT8 keys)
 {
     (void)game;
     if (keys & J_A) {
