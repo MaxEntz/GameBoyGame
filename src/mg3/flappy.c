@@ -9,6 +9,13 @@
 
 static flappy_t fbird;
 
+/**
+ * @brief Draw a single column of a pipe on the background
+ *
+ * @param pipe pointer to the pipe to draw
+ * @param actual_col background column index to draw on (0-31)
+ */
+
 static void
 draw_color_pipe(pipe_t *pipe, UINT8 actual_col)
 {
@@ -20,12 +27,22 @@ draw_color_pipe(pipe_t *pipe, UINT8 actual_col)
     }
 }
 
+**
+ * @brief Generate a pseudo-random vertical position for the pipe gap
+ *
+ * @return gap position between MG3_PIPE_Y_MIN and MG3_PIPE_Y_MAX
+ */
 static UINT8
 next_pipe_y(void)
 {
     return MG3_PIPE_Y_MIN + random_get(MG3_PIPE_Y_MAX - MG3_PIPE_Y_MIN + 1);
 }
 
+/**
+ * @brief Draw a pipe on the background or erase it if out of screen
+ *
+ * @param pipe pointer to the pipe to draw
+ */
 static void
 draw_pipe(pipe_t *pipe)
 {
@@ -50,6 +67,11 @@ draw_pipe(pipe_t *pipe)
     }
 }
 
+/**
+ * @brief Check if the bird collides with any pipe
+ *
+ * @return TRUE if a collision is detected, FALSE otherwise
+ */
 static BOOLEAN
 check_collision(void)
 {
@@ -69,6 +91,13 @@ check_collision(void)
     return FALSE;
 }
 
+/**
+ * @brief Convert an unsigned integer to a fixed-width decimal string
+ *
+ * @param val value to convert
+ * @param buf destination buffer (must be at least width + 1 bytes)
+ * @param width number of digits to write
+ */
 static void
 uint_to_str(UINT16 val, CHAR *buf, UINT8 width)
 {
@@ -79,6 +108,9 @@ uint_to_str(UINT16 val, CHAR *buf, UINT8 width)
     buf[width] = '\0';
 }
 
+/**
+ * @brief Draw the current score on the top-left of the screen
+ */
 static void
 draw_score(void)
 {
@@ -92,6 +124,9 @@ draw_score(void)
     text_renderer_draw(&render);
 }
 
+/**
+ * @brief Move all pipes, handle score increment and difficulty scaling
+ */
 static void
 update_pipes(void)
 {
