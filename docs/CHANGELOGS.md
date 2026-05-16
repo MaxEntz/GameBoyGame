@@ -7,6 +7,24 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.19.1] - 2026-05-16
+
+### Added
+- Updated/added assets for lobby, menu and mini-games (see `asset/include/*` and `asset/src/*`).
+- `src/lobby/scoreboard_lobby.c`: scoreboard logic and display for lobby.
+- Trap Memory: infinite gameplay support and related input/sprite handlers (`src/mg1/trap_memory.c`, `src/mg1/tm_handle_input.c`, `src/mg1/tm_sprite_handle.c`).
+
+### Changed
+- Core & lobby: various updates to map transitions, input handling and lobby flow (`include/main/core.h`, `src/main/core.c`, `src/lobby/*`).
+- Tetris improvements: grid, HUD, piece logic and layout updates (`include/mg2/*`, `src/mg2/*`).
+- Flappy: gameplay and collision improvements (`include/mg3/*`, `src/mg3/flappy.c`).
+- Common utilities: updates to save, random, text rendering, VRAM clearing and game changer utilities (`include/common/*`, `src/common/*`).
+
+### Fixed
+- Multiple gameplay and UI fixes across mini-games and lobby (collision detection, sprite handling, VRAM/tilemap issues).
+
+---
+
 ## [1.19.0] - 2026-05-16
 
 ### Added
