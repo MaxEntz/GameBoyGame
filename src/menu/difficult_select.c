@@ -7,8 +7,6 @@
 
 #include "menu/save_select.h"
 
-extern BOOLEAN g_in_choose_difficulty;
-
 static text_render_t g_difficulty_render = {"DIFFICULTY", 6, 4};
 static text_render_t g_easy_render = {"EASY", 6, 8};
 static text_render_t g_medium_render = {"MEDIUM", 6, 10};
@@ -89,7 +87,7 @@ handle_input_choose_difficulty(OUT game_t *game,
     if (pressed & (J_START | J_A)) {
         game->difficulty = (difficulty_t)g_selected_difficulty;
         write_selected_difficulty(game);
-        g_in_choose_difficulty = FALSE;
+        save_select_set_in_choose_difficulty(FALSE);
         game_changer(game, GAME_STATE_LOBBY, TRUE);
     }
 }

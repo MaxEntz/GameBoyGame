@@ -12,7 +12,19 @@ static text_render_t g_new_render = {"NEW SAVE", 6, 10};
 static text_render_t g_cursor_render = {"!", 4, 8};
 static BOOLEAN g_has_save = FALSE;
 static UINT8 g_selected = 0;
-BOOLEAN g_in_choose_difficulty = FALSE;
+static BOOLEAN g_in_choose_difficulty = FALSE;
+
+BOOLEAN
+is_in_choose_difficulty(void)
+{
+    return g_in_choose_difficulty;
+}
+
+void
+save_select_set_in_choose_difficulty(IN BOOLEAN in_choose_difficulty)
+{
+    g_in_choose_difficulty = in_choose_difficulty;
+}
 
 void
 save_select(OUT game_t *game)

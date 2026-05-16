@@ -74,6 +74,21 @@ handle_input_choose_difficulty(OUT game_t *game,
 void
 update_choose_difficulty(OUT game_t *game);
 
+/**
+ * @brief Check if the game is in the choose difficulty state
+ * 
+ * @return BOOLEAN
+ */
+BOOLEAN
+is_in_choose_difficulty(void);
 
+/**
+ * @brief Set the game state to choose difficulty
+ * 
+ * @param in_choose_difficulty The state to set
+ * @return void
+ */
+void
+save_select_set_in_choose_difficulty(IN BOOLEAN in_choose_difficulty);
 
 #endif /* !SAVE_SELECT_H_ */
