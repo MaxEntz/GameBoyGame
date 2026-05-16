@@ -73,7 +73,7 @@ handle_input_save_select(OUT game_t *game,
         text_renderer_draw(&g_cursor_render);
     }
 
-    if (keys & (J_START | J_A)) {
+    if (keys & (J_A)) {
         if (g_selected == 0 && g_has_save) {
             save_load(game);
             game_changer(game, GAME_STATE_LOBBY, TRUE);
