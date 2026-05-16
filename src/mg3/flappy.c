@@ -79,7 +79,7 @@ check_collision(void)
     UINT8 bird_tile_x  = MG3_BIRD_X / MG3_PX_TO_TILE;
     UINT8 bird_tile_y1 = (fbird.bird_y - MG3_SPRITE_Y_OFFSET) / MG3_PX_TO_TILE;
     UINT8 bird_tile_y2 = bird_tile_y1 + 1;
-    UINT8 tile_x;
+    UINT8 tile_x = 0;
 
     for (UINT8 i = 0; i < MG3_NB_PIPE; i++) {
         tile_x = fbird.pipes[i].pipe_x / MG3_PX_TO_TILE;
