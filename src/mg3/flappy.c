@@ -79,6 +79,44 @@ uint_to_str(UINT16 val, CHAR *buf, UINT8 width)
     buf[width] = '\0';
 }
 
+static void
+draw_score(void)
+{
+    CHAR          buf[4];
+    text_render_t render;
+
+    uint_to_str((UINT16)fbird.pipes_passed, buf, 3);
+    render.text = buf;
+    render.x    = 1;
+    render.y    = 1;
+    text_renderer_draw(&render);
+}
+
+static void
+update_pipes(void)
+{
+    for (UINT8 i = 0; i < MG3_NB_PIPE; i++) {
+        fbird.pipes[i].pipe_x -= fbird.pipe_speed;
+        draw_pipe(&fbird.pipes[i]);
+        if (fbird.pipes[i].pipe_x < MG3_BIRD_X &&
+            fbird.pipes[i].pipe_x + fbird.pipe_speed >= MG3_BIRD_X) {
+            fbird.pipes_passed++;
+            if (fbird.pipes_passed % MG3_PIPE_SPEED_STEP == 0) {
+                if (fbird.pipe_speed < MG3_PIPE_SPEED_MAX) {
+                    fbird.pipe_speed++;
+                    fbird.jump_force++;
+                    if (fbird.pipe_gap < MG3_PIPE_GAP + 2)
+                        fbird.pipe_gap++;
+                }
+            }
+        }
+        if (fbird.pipes[i].pipe_x <= 0) {
+            fbird.pipes[i].pipe_x = MG3_SCREEN_X_PX;
+            fbird.pipes[i].pipe_y = next_pipe_y();
+        }
+    }
+}
+
 void
 flappybird(game_t *game)
 {
@@ -105,51 +143,14 @@ flappybird(game_t *game)
 void
 update_flappybird(game_t *game)
 {
-    CHAR buf[4];
-    text_render_t render;
-
-    render.text = buf;
-    render.x = 1;
-    render.y = 1;
-
-    (void)game;
-    uint_to_str((UINT16)fbird.pipes_passed, buf, 3);
-    text_renderer_draw(&render);
-
-    uint_to_str((UINT16)fbird.pipes_passed, buf, 3);
-    text_renderer_draw(&render);
-   if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
+    draw_score();
+    if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
         game_changer(game, GAME_STATE_LOBBY, TRUE);
         return;
     }
-
     fbird.bird_y += 1;
     move_sprite(0, MG3_BIRD_X, fbird.bird_y);
-
-    for (UINT8 i = 0; i < MG3_NB_PIPE; i++) {
-        fbird.pipes[i].pipe_x -= fbird.pipe_speed;
-        draw_pipe(&fbird.pipes[i]);
-
-        if (fbird.pipes[i].pipe_x < MG3_BIRD_X && 
-            fbird.pipes[i].pipe_x + fbird.pipe_speed >= MG3_BIRD_X) {
-            
-            fbird.pipes_passed++;
-            
-            if (fbird.pipes_passed % MG3_PIPE_SPEED_STEP == 0) {
-                if (fbird.pipe_speed < MG3_PIPE_SPEED_MAX) {
-                    fbird.pipe_speed++;
-                    fbird.jump_force++;
-                    if (fbird.pipe_gap < MG3_PIPE_GAP + 2)
-                        fbird.pipe_gap++;
-                }
-            }
-        }
-
-        if (fbird.pipes[i].pipe_x <= 0) {
-            fbird.pipes[i].pipe_x = MG3_SCREEN_X_PX;
-            fbird.pipes[i].pipe_y = next_pipe_y();
-        }
-    }
+    update_pipes();
 }
 
 void
