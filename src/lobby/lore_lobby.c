@@ -81,7 +81,7 @@ handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
         return;
     }
     if (lobby->dialogue_index == LORE_RIGHT_LOSE) {
-        game_changer(game, GAME_STATE_MG2, TRUE);           // a changer pr flappy
+        game_changer(game, GAME_STATE_MG3, TRUE);
         return;
     }
     if (lobby->dialogue_index == LORE_CC_LOSE) {

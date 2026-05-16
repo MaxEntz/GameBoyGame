@@ -27,7 +27,7 @@ draw_color_pipe(pipe_t *pipe, UINT8 actual_col)
     }
 }
 
-**
+/**
  * @brief Generate a pseudo-random vertical position for the pipe gap
  *
  * @return gap position between MG3_PIPE_Y_MIN and MG3_PIPE_Y_MAX
