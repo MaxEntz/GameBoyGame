@@ -124,10 +124,10 @@ draw_score(void)
     render.x = 1;
     render.y = 1;
 
-    if (fbird.pipes_passed != fbird.last_score){
+    if (fbird.pipes_passed != fbird.last_score) {
         uint_to_str(fbird.pipes_passed, buf, 3);
         text_renderer_draw(&render);
-        fbird.last_score = (INT16)fbird.pipes_passed;
+        fbird.last_score = fbird.pipes_passed;
     }
 }
 
@@ -166,7 +166,7 @@ void
 flappybird(OUT game_t *game)
 {
     (void)game;
-    fbird.last_score = -1;
+    fbird.last_score = 0;
     fbird.bird_y = MG3_SCREEN_Y_PX / 2;
     fbird.pipes_passed = 0;
     fbird.pipe_speed = MG3_PIPE_SPEED_INIT;
@@ -177,12 +177,10 @@ flappybird(OUT game_t *game)
         fbird.pipes[i].pipe_x = MG3_SCREEN_X_PX + (i * MG3_PIPE_SPACING);
         fbird.pipes[i].pipe_y = next_pipe_y();
     }
-
     set_bkg_data(0, FLAPPY_TILE_COUNT, flappy_tiles);
     set_bkg_tiles(0, 0, COMMON_SCREEN_WIDTH_TILES, COMMON_SCREEN_HEIGHT_TILES, flappy_bg_map);
     set_sprite_data(0, 1, &flappy_tiles[FLAPPY_TILE_BIRD * MG3_SPRITE_Y_OFFSET]);
     set_sprite_tile(0, 0);
-
     text_renderer_init();
 }
 
@@ -191,8 +189,6 @@ update_flappybird(OUT game_t *game)
 {
     draw_score();
     if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
-        if (game->score_mg3 > game->best_score_mg3)
-            game->best_score_mg3 = game->score_mg3;
         game_changer(game, GAME_STATE_LOBBY, TRUE);
         return;
     }

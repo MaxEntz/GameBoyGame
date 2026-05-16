@@ -20,7 +20,7 @@
     #define MG3_PIPE_Y_MAX      10
     #define MG3_PIPE_SPEED_INIT  1
     #define MG3_PIPE_SPEED_MAX   4
-    #define MG3_PIPE_SPEED_STEP  20
+    #define MG3_PIPE_SPEED_STEP  50
 
     // Others
     #define MG3_SCREEN_X_PX     160
