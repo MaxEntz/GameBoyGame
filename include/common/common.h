@@ -23,15 +23,15 @@
     // To update... about your game
     #define MASTER_SCORE_EASY_MG1 100
     #define MASTER_SCORE_EASY_MG2 1500
-    #define MASTER_SCORE_EASY_MG3 100
+    #define MASTER_SCORE_EASY_MG3 10
 
     #define MASTER_SCORE_MEDIUM_MG1 200
     #define MASTER_SCORE_MEDIUM_MG2 2000
-    #define MASTER_SCORE_MEDIUM_MG3 200
+    #define MASTER_SCORE_MEDIUM_MG3 20
 
     #define MASTER_SCORE_HARD_MG1 600
     #define MASTER_SCORE_HARD_MG2 3000
-    #define MASTER_SCORE_HARD_MG3 700
+    #define MASTER_SCORE_HARD_MG3 30
 
 /**
  * @brief Enum to represent different game states

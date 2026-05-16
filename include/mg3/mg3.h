@@ -13,6 +13,8 @@
     #include "mg3/mg3_layout.h"
     #include "mg3/asset_flappy.h"
     #include "common/random.h"
+    #include "common/asset_common_font.h"
+    #include "common/text_renderer.h"
 
     typedef struct pipe_s {
         INT16 pipe_x;
@@ -21,6 +23,11 @@
 
     typedef struct flappy_s {
         INT16 bird_y;
+        UINT16 pipes_passed;
+        UINT8 pipe_speed;
+        UINT8 jump_force;
+        UINT8 pipe_gap;
+        UINT16 last_score;
         pipe_t pipes[MG3_NB_PIPE];
     } flappy_t;
 

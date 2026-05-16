@@ -7,6 +7,19 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
+## [1.20.0] - 2026-05-16
+
+### Added
+- Score display using text_renderer (3 digits, top-left)
+- uint_to_str() helper for score rendering
+- Score increments when pipe crosses bird position
+- Difficulty scaling every MG3_PIPE_SPEED_STEP pipes :
+  - pipe_speed increases up to MG3_PIPE_SPEED_MAX
+  - jump_force increases alongside speed
+  - pipe_gap widens to compensate faster pipes
+
+---
+
 ## [1.19.2] - 2026-05-16
 
 ### Added
