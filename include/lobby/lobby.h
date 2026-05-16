@@ -48,6 +48,7 @@ typedef struct lobby_state_s {
     BOOLEAN    rng_initialized;
     UINT8      dialogue_index;
     BOOLEAN    should_dialogue;
+    BOOLEAN    is_idle_dialogue;
     dialogue_t dialogue;
 } lobby_state_t;
 

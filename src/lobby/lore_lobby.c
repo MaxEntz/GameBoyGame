@@ -11,16 +11,21 @@
 #include "common/save.h"
 
 static const CHAR *g_dialogue_texts[LORE_STEP_COUNT] = {
+    "Ouch...\nMy head...\nThose crabs\nkidnapped me!\nI need to\nfind a way out!",
     "Welcome\nlittle Mole!\nBeat me and my bro\nat our games\nto escape the\nisland!",
-    "Haha!\n Gotcha!\nWanna try again?",
-    "Ouch!\n \nWell done little\nmole\nfind my bro\non the right side\n",
-    "You beat my bro?\nImpressive!\nBut can you beat\nme?",
-    "Pfff!\n \nDid you really\nbeat my bro ?\n You're not good\n enough !",
-    "Noooooo!\n \nYou beat us both?\nImpossible!\nWell done little\nmole, you can\nleave the island\nFind the hole\nin the center!",
-    "Wait!\n \nYou want to leave?\n\nSure, \nbut I warn you,\nI won't go easy\n on you!\n",
-    "Too slow!\n \nYou won't escape\nthat easily!\nTry again!",
-    "Incredible...\n \nYou truly earned\nyour freedom!\nGoodbye little\nmole!"
+    "Hahaha!\n \nToo easy!\nWanna try again?",
+    "Ouch!\n \nWell done\nlittle mole!\nNow find my bro\non the right!",
+    "You beat my bro?\nImpressive!\nBut can you\nbeat me?",
+    "Pfff!\n \nYou beat my bro\nbut not me!\nTry harder,\nlittle mole!",
+    "Noooo!\n \nYou beat us both!\nHead to the\ncenter if you\nwant to escape!",
+    "The ground...\n \nIt's moving!\nI must find\nsafe places!",
+    "Ugh!\n \nThe ground got me!\nI must try\nagain!",
+    "Yes!\n \nI made it through!\nThe exit must\nbe at the top\nof the island!",
+    "And so...\n \nGab the mole\nleft the island.\n"
 };
+
+static const CHAR *idle_text = "Hmm...\n \nLooks like he\ndoesn't want\nto talk\nright now.";
+
 
 /**
  * @brief Advance dialogue_index to the win branch if the score threshold is met
@@ -43,6 +48,8 @@ static void
 check_auto(INOUT game_t *game, INOUT lobby_state_t *lobby,
                     IN dialogue_t *dlg)
 {
+    if (lobby->dialogue_index == LORE_SPAWN_INTRO && !dialogue_is_active(dlg) && dlg->chars_shown == 0)
+        lore_start_dialogue(game);
     if (lobby->should_dialogue) {
         lobby->should_dialogue = FALSE;
         if (lobby->dialogue_index == LORE_LEFT_LOSE
@@ -88,18 +95,29 @@ handle_dialogue_end(INOUT game_t *game, INOUT lobby_state_t *lobby)
         game_changer(game, GAME_STATE_MG1, TRUE);
         return;
     }
-    if (lobby->dialogue_index == LORE_LEFT_WIN || lobby->dialogue_index == LORE_RIGHT_WIN) {
+    if (lobby->dialogue_index == LORE_LEFT_WIN || lobby->dialogue_index == LORE_RIGHT_WIN || lobby->dialogue_index == LORE_CC_WIN) {
         lobby->dialogue_index++;
         save_write(game);
         return;
     }
-    if (lobby->dialogue_index == LORE_CC_WIN) {
+    if (lobby->dialogue_index == LORE_ESCAPE) {
         lobby->dialogue_index++;
-        save_write(game);
+        save_reset(game);
         game_changer(game, GAME_STATE_MENU, TRUE);
         return;
     }
     lobby->dialogue_index++;
+}
+
+void
+lore_start_idle_dialogue(void)
+{
+    lobby_state_t *lobby = lobby_get_state();
+
+    if (dialogue_is_active(&lobby->dialogue))
+        return;
+    lobby->is_idle_dialogue = TRUE;
+    dialogue_start(&lobby->dialogue, idle_text);
 }
 
 void
@@ -128,5 +146,9 @@ lore_update(OUT game_t *game)
     if (dialogue_is_active(dlg) || dlg->chars_shown == 0)
         return;
     dlg->chars_shown = 0;
+    if (lobby->is_idle_dialogue) {
+        lobby->is_idle_dialogue = FALSE;
+        return;
+    }
     handle_dialogue_end(game, lobby);
 }

@@ -11,21 +11,29 @@
     #include "common/common.h"
 
 typedef enum lore_step_e {
-    LORE_LEFT_INTRO  = 0,
-    LORE_LEFT_LOSE   = 1,
-    LORE_LEFT_WIN    = 2,
-    LORE_RIGHT_INTRO = 3,
-    LORE_RIGHT_LOSE  = 4,
-    LORE_RIGHT_WIN   = 5,
-    LORE_CC_INTRO    = 6,
-    LORE_CC_LOSE     = 7,
-    LORE_CC_WIN      = 8,
-    LORE_STEP_COUNT  = 9
+    LORE_SPAWN_INTRO = 0,
+    LORE_LEFT_INTRO  = 1,
+    LORE_LEFT_LOSE   = 2,
+    LORE_LEFT_WIN    = 3,
+    LORE_RIGHT_INTRO = 4,
+    LORE_RIGHT_LOSE  = 5,
+    LORE_RIGHT_WIN   = 6,
+    LORE_CC_INTRO    = 7,
+    LORE_CC_LOSE     = 8,
+    LORE_CC_WIN      = 9,
+    LORE_ESCAPE      = 10,
+    LORE_STEP_COUNT  = 11
 } lore_step_t;
 
 /**
+ * @brief Show "won't talk" dialogue without advancing the lore state.
+ */
+void
+lore_start_idle_dialogue(void);
+
+/**
  * @brief Start the dialogue when the player interacts with an NPC.
- * 
+ *
  * @param game Pointer to the game structure
  */
 void
