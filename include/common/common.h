@@ -25,6 +25,18 @@
     #define MASTER_SCORE_MG2 1500
     #define MASTER_SCORE_MG3 100
 
+    #define MASTER_SCORE_EASY_MG1 100
+    #define MASTER_SCORE_EASY_MG2 1500
+    #define MASTER_SCORE_EASY_MG3 100
+
+    #define MASTER_SCORE_MEDIUM_MG1 200
+    #define MASTER_SCORE_MEDIUM_MG2 2000
+    #define MASTER_SCORE_MEDIUM_MG3 200
+
+    #define MASTER_SCORE_HARD_MG1 600
+    #define MASTER_SCORE_HARD_MG2 3000
+    #define MASTER_SCORE_HARD_MG3 700
+
 /**
  * @brief Enum to represent different game states
  */
@@ -55,6 +67,14 @@ typedef enum map_id_e {
     MAP_ID_INVALID = 0
 } map_id_t;
 
+typedef enum difficulty_e {
+    DIFFICULTY_EASY,
+    DIFFICULTY_MEDIUM,
+    DIFFICULTY_HARD,
+    DIFFICULTY_NOT_CHOSEN,
+    DIFFICULTY_COUNT
+} difficulty_t;
+
 /**
  * @brief Structure to manage global game state and scores
  */
@@ -69,6 +89,7 @@ typedef struct game_s {
     UINT16       score_mg2;
     UINT16       score_mg3;
     UINT8        level;
+    difficulty_t difficulty;
 } game_t;
 
 /**
