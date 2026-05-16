@@ -7,7 +7,7 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ---
 
-## [1.17.1] - 2026-05-15
+## [1.19.1] - 2026-05-16
 
 ### Added
 - Updated/added assets for lobby, menu and mini-games (see `asset/include/*` and `asset/src/*`).
@@ -22,6 +22,38 @@ and this project adheres to Semantic Versioning. (MAJOR.MINOR.PATCH)
 
 ### Fixed
 - Multiple gameplay and UI fixes across mini-games and lobby (collision detection, sprite handling, VRAM/tilemap issues).
+
+---
+
+## [1.19.0] - 2026-05-16
+
+### Added
+- Save selection state and assets for choosing a save slot and difficulty
+- Difficulty selection menu and input handling for choosing game difficulty
+- Difficulty-aware save/load support (difficulty persisted in save data)
+- Difficulty-based scoring adjustments
+
+### Changed
+- Restrict save selection input handling to specific keys and fix cursor rendering
+- Update save logic to validate difficulty ranges before assignment
+
+### Fixed
+- Minor asset/header formatting fixes (file headers, trailing newlines)
+
+--
+
+## [1.18.0] - 2026-05-15
+
+### Added
+- `src/lobby/lore_lobby.c`: added a "won't talk" dialogue when speaking to a npc not in the correct lore state
+- `include/lobby/lobby.h`: bool flag in `lobby_state_t` to prevent idle dialogues from advancing the lore state
+- `include/lobby/lore_lobby.h`: `LORE_ESCAPE` step and updated `LORE_STEP_COUNT`
+- `asset/src/asset_lobby.c`: `ennemies1_tile_2` and `ennemies2_tile_2` — breathing animation frames for the NPCs
+- `src/lobby/lobby.c`: `animate_npcs` animates the 2 npcs
+
+### Changed
+- `src/lobby/lore_lobby.c`: changed some dialogues and added a final dialogue for the escape
+- `src/lobby/input_handler_lobby.c`: SELECT now saves and returns to menu; START removed
 
 ---
 

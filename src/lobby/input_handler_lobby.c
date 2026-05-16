@@ -90,9 +90,18 @@ handle_a_input(IN game_t *game)
     lobby_state_t *lobby = lobby_get_state();
     UINT8 tile = get_faced_tile(lobby);
 
-    if (tile >= 23 && tile <= 26 && lobby->dialogue_index == LORE_LEFT_INTRO)
-        lore_start_dialogue(game);
-    if (tile >= 27 && tile <= 30 && lobby->dialogue_index == LORE_RIGHT_INTRO)
+    if (tile >= 23 && tile <= 26)
+        if (lobby->dialogue_index == LORE_LEFT_INTRO)
+            lore_start_dialogue(game);
+        else
+            lore_start_idle_dialogue();
+    if (tile >= 27 && tile <= 30) {
+        if (lobby->dialogue_index == LORE_RIGHT_INTRO)
+            lore_start_dialogue(game);
+        else
+            lore_start_idle_dialogue();
+    }
+    if (tile == 10 && lobby->current_map_id == MAP_ID_TC && lobby->dialogue_index == LORE_ESCAPE)
         lore_start_dialogue(game);
 }
 
@@ -140,13 +149,9 @@ handle_input_lobby(OUT game_t *game, IN UINT8 keys)
         return dialogue_handle_input(&lobby->dialogue, keys);
     if (keys & J_A)
         handle_a_input(game);
-    if (keys & J_START) {
-        if (lobby->dialogue_index >= LORE_STEP_COUNT)
-            save_reset(game);
-        else
-            save_write(game);
-    }
-    if (keys & J_SELECT)
+    if (keys & J_SELECT) {
+        save_write(game);
         game_changer(game, GAME_STATE_MENU, TRUE);
+    }
     handle_movement(game, lobby, keys);
 }

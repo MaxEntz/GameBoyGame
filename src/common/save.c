@@ -30,6 +30,10 @@ save_load(INOUT game_t *game)
     lobby->player_y = tmp.player_y;
     lobby->dialogue_index = tmp.dialogue_index;
     set_map(lobby, (map_id_t)tmp.current_map_id);
+    if (tmp.difficulty <= DIFFICULTY_HARD)
+        game->difficulty = tmp.difficulty;
+    else
+        game->difficulty = DIFFICULTY_EASY;
 }
 
 void
@@ -48,6 +52,7 @@ save_reset(IN const game_t *game)
     tmp.player_x = 88;
     tmp.player_y = 78;
     tmp.current_map_id = (UINT8)MAP_ID_BL;
+    tmp.difficulty = DIFFICULTY_NOT_CHOSEN;
     ENABLE_RAM;
     memcpy((void *)SRAM_BASE, &tmp, sizeof(save_data_t));
     DISABLE_RAM;
@@ -75,6 +80,7 @@ save_write(INOUT game_t *game)
     tmp.player_x = lobby->player_x;
     tmp.player_y = lobby->player_y;
     tmp.current_map_id = (UINT8)lobby->current_map_id;
+    tmp.difficulty = game->difficulty;
     tmp.magic = SAVE_MAGIC;
     ENABLE_RAM;
     memcpy((void *)SRAM_BASE, &tmp, sizeof(save_data_t));
