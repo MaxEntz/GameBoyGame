@@ -4,23 +4,15 @@
 ![C](https://img.shields.io/badge/C-GBDK--2020-306998?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-TO%20BE%20FILLED-lightgrey?style=for-the-badge)
 
-```text
-  .--------------------.
-  |  GAMEBOYGAME       |
-  |                    |
-  |  GAB THE MOLE      |
-  |  ESCAPE THE ISLAND |
-  |____________________|
-       [A] [B]  START
-```
+![Title screen](docs/images/menu.png)
 
-Help Gab the mole escape a Game Boy island by beating its crab captors across three sharp, score-chasing minigames.
+Help Gab the mole escape a Game Boy island by beating 3 different minigames.
 
 ## About the Game
 
-Gab wakes up with a headache and a problem: crabs have kidnapped him and trapped him on an island. The only way out is to explore the lobby, talk to the island's strange challengers, and prove himself in their games.
+Gab wakes up with a headache and a problem: crabs have kidnapped him and trapped him on an island. The only way out is to explore the lobby, talk to the island's strange bros, and prove himself in their games.
 
-GameBoyGame is built like a tiny retro adventure hub. Between challenges, you move through a 3x3 tile-based island, meet animated NPCs, follow short dialogue scenes, and track your best attempts on a lobby scoreboard. The mood is simple, playful, and very Game Boy: readable tiles, small sounds, quick restarts, and compact challenges that ask for one more try.
+GameBoyGame is built like a tiny retro adventure hub. Between challenges, you move through a 3x3 tile-based island, meet animated NPCs, follow short dialogue scenes, and track your best attempts on a lobby scoreboard.
 
 ## Gameplay
 
@@ -28,32 +20,19 @@ The game starts at a title screen, then moves into save selection and difficulty
 
 | Difficulty | Trap Memory | Tetris | Flappy Bird |
 | --- | ---: | ---: | ---: |
-| Easy | 100 | 1500 | 10 |
-| Medium | 200 | 2000 | 20 |
-| Hard | 600 | 3000 | 30 |
+| Easy | 100 | 1500 | 15 |
+| Medium | 200 | 2000 | 40 |
+| Hard | 600 | 3000 | 75 |
 
 Once in the lobby, Gab can walk between island screens, talk to NPCs, and enter minigames through story dialogue. Winning enough points advances the dialogue, saves progress, and opens the next step toward escape.
-
-### Controls
-
-| Scene | D-pad | A | B | Start | Select |
-| --- | --- | --- | --- | --- | --- |
-| Title screen | - | - | - | Go to save select | - |
-| Save select | Move cursor | Confirm | - | - | - |
-| Difficulty select | Move cursor | Confirm | - | Confirm | - |
-| Dialogue | - | Skip / advance / close | Skip / advance / close | - | - |
-| Lobby | Move Gab | Talk / interact | - | - | Save and return to menu |
-| Trap Memory | Move Gab | - | - | - | - |
-| Tetris | Move piece, Down soft-drops | Rotate right | Rotate left | - | Return to lobby |
-| Flappy Bird | - | Jump | - | - | - |
 
 ### Minigames
 
 **Trap Memory** asks you to remember where the safe tiles appeared. Safe zones are shown briefly, then hidden. Move Gab onto safety before the ground catches him. Each new round adds score, and the game tightens over time with faster rounds and fewer safe tiles.
 
-**Tetris** is a compact 10x18 version with the familiar seven pieces, line clears, scoring, level progression, soft drop, rotation, and a next-piece preview.
+**Tetris** is a compact 10x18 version with the original seven pieces, line clears, scoring, level progression, soft drop, rotation, and a next-piece preview.
 
-**Flappy Bird** keeps the pressure simple: tap A to jump, pass pipe gaps, and keep flying. The score rises as pipes pass Gab's position, while speed, jump force, and pipe gap scaling evolve as the run gets longer.
+**Flappy Bird** keeps the pressure simple: tap A to jump, pass pipe gaps, and keep flying. The score rises as pipes pass Gab's position. Every 5 pipes the level increases, and every 3 levels the pipes move one pixel per frame faster.
 
 ## Features
 
@@ -66,6 +45,19 @@ Once in the lobby, Gab can walk between island screens, talk to NPCs, and enter 
 - Animated lobby player and NPC sprites.
 - Screen fades, transition sounds, and map-to-map lobby movement.
 - DMG-style Game Boy visuals built from 2bpp tile and sprite assets.
+
+## Controls
+
+| Scene | D-pad | A | B | Start | Select |
+| --- | --- | --- | --- | --- | --- |
+| Title screen | — | — | — | Go to save select | — |
+| Save select | Move cursor | Confirm | — | — | — |
+| Difficulty select | Move cursor | Confirm | — | Confirm | — |
+| Dialogue | — | Advance / skip | Advance / skip | — | — |
+| Lobby | Move Gab | Talk / interact | — | — | Save and return to menu |
+| Trap Memory | Move Gab | — | — | — | — |
+| Tetris | Move piece · ↓ soft-drops | Rotate right | Rotate left | — | Return to lobby |
+| Flappy Bird | — | Jump | — | — | — |
 
 ## Screenshots / Demo
 
@@ -92,14 +84,14 @@ Note: the changelog contains version entries dated both May 2026 and June 2026. 
 
 ## How to Play
 
-1. Build the ROM with `make`, or use the existing `game.gb` if it is already present.
-2. Open `game.gb` in a DMG-compatible Game Boy emulator.
+1. Build the ROM with `make`, or use the existing `GabTheMole.gb` if it is already present.
+2. Open `GabTheMole.gb` in a DMG-compatible Game Boy emulator.
 3. Press **Start** on the title screen.
 4. Choose **Continue** or **New Save**.
 5. For a new save, choose **Easy**, **Medium**, or **Hard**.
 6. Explore the lobby, talk to NPCs with **A**, and beat the minigames to help Gab escape.
 
-Recommended emulator: `[TO BE FILLED: project-recommended emulator]`
+Recommended emulator: `SameBoy` (MacOS) or `Retroarch Emulator` (with the preset core `Gambatte`)
 
 ## Installation / Build
 
@@ -119,7 +111,7 @@ Useful commands:
 
 ```sh
 make clean   # remove intermediate build files
-make fclean  # remove intermediates and game.gb
+make fclean  # remove intermediates and GabTheMole.gb
 make re      # rebuild from scratch
 make doc     # generate Doxygen documentation
 ```
@@ -134,8 +126,7 @@ For deeper technical details, see [`docs/TECH.tex`](docs/TECH.tex), [`docs/TECH.
 |-- docs/               # Technical documentation, Doxygen configuration, and changelog
 |-- include/            # Public headers for core systems, scenes, lobby, and minigames
 |-- src/                # C source code for the game loop, scenes, lobby, common systems, and minigames
-|-- game.gb             # Built Game Boy ROM, when present
-|-- game.sav            # Local emulator save RAM file, when present
+|-- GabTheMole.gb             # Built Game Boy ROM, when present
 |-- Makefile            # GBDK-2020 build and documentation targets
 `-- README.md           # Project overview and player-facing guide
 ```
@@ -150,29 +141,6 @@ Key source areas:
 - `src/mg2/`: Tetris.
 - `src/mg3/`: Flappy Bird.
 
-## Roadmap
-
-No player-facing roadmap file was found in the repository.
-
-Known TODO-style documentation gaps found in the technical docs:
-
-- `[TO BE FILLED: source asset format and conversion command]`
-- `[TO BE FILLED: exact emulator used for testing]`
-- `[TO BE FILLED: explicit ROM bank ownership boundaries]`
-- `[TO BE FILLED: cycle cost annotations]`
-- `[TO BE FILLED: music driver and song data format, if music is added]`
-- `[TO BE FILLED: asserted compiled size of save_data_t]`
-
-## Contributing
-
-Contributions are welcome. The cleanest way to add or adjust gameplay is to follow the existing scene structure:
-
-1. Put reusable systems in `src/common/` and `include/common/`.
-2. Keep each minigame in its own `src/mgN/`, `include/mgN/`, and `asset/` area.
-3. Register new scenes through the core state table.
-4. Document behavior changes in [`docs/CHANGELOGS.md`](docs/CHANGELOGS.md).
-5. Check [`docs/chapters/06-adding-a-minigame.tex`](docs/chapters/06-adding-a-minigame.tex) before adding another minigame.
-
 ## License
 
-`[TO BE FILLED: no LICENSE or COPYING file was found in the repository]`
+currently none
