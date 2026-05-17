@@ -114,7 +114,7 @@ uint_to_str(IN UINT16 val,
 }
 
 /**
- * @brief Draw the current score on the top-left of the screen
+ * @brief Draw the current score value in the HUD
  */
 static void
 draw_score(void)
@@ -123,13 +123,33 @@ draw_score(void)
     text_render_t render;
 
     render.text = buf;
-    render.x = 1;
-    render.y = 1;
+    render.x = MG3_HUD_SCORE_VAL_X;
+    render.y = MG3_HUD_ROW;
 
     if (fbird.pipes_passed != fbird.last_score) {
         uint_to_str(fbird.pipes_passed, buf, 3);
         text_renderer_draw(&render);
         fbird.last_score = fbird.pipes_passed;
+    }
+}
+
+/**
+ * @brief Draw the current speed level value in the HUD
+ */
+static void
+draw_level(void)
+{
+    CHAR buf[2];
+    text_render_t render;
+
+    render.text = buf;
+    render.x = MG3_HUD_LVL_VAL_X;
+    render.y = MG3_HUD_ROW;
+
+    if (fbird.pipe_speed != fbird.last_speed) {
+        uint_to_str(fbird.pipe_speed, buf, 1);
+        text_renderer_draw(&render);
+        fbird.last_speed = fbird.pipe_speed;
     }
 }
 
@@ -167,15 +187,19 @@ update_pipes(OUT game_t *game)
 void
 flappybird(OUT game_t *game)
 {
+    text_render_t label;
+    UINT8 i = 0;
+
     (void)game;
-    fbird.last_score = 0;
+    fbird.last_score = (UINT16)(-1);
+    fbird.last_speed = (UINT8)(-1);
     fbird.bird_y = MG3_SCREEN_Y_PX / 2;
     fbird.pipes_passed = 0;
     fbird.pipe_speed = MG3_PIPE_SPEED_INIT;
     fbird.jump_force = MG3_JUMP_INIT;
     fbird.pipe_gap = MG3_PIPE_GAP;
 
-    for(UINT8 i = 0; i < MG3_NB_PIPE; i++){
+    for (i = 0; i < MG3_NB_PIPE; i++) {
         fbird.pipes[i].pipe_x = MG3_SCREEN_X_PX + (i * MG3_PIPE_SPACING);
         fbird.pipes[i].pipe_y = next_pipe_y();
     }
@@ -184,12 +208,22 @@ flappybird(OUT game_t *game)
     set_sprite_data(0, 1, &flappy_tiles[FLAPPY_TILE_BIRD * MG3_SPRITE_Y_OFFSET]);
     set_sprite_tile(0, 0);
     text_renderer_init();
+    label.y = MG3_HUD_ROW;
+    label.text = "SCORE";
+    label.x = MG3_HUD_SCORE_LABEL_X;
+    text_renderer_draw(&label);
+    label.text = "LVL";
+    label.x = MG3_HUD_LVL_LABEL_X;
+    text_renderer_draw(&label);
+    draw_score();
+    draw_level();
 }
 
 void
 update_flappybird(OUT game_t *game)
 {
     draw_score();
+    draw_level();
     if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
         game_changer(game, GAME_STATE_LOBBY, TRUE);
         return;

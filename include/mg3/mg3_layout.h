@@ -22,6 +22,13 @@
     #define MG3_PIPE_SPEED_MAX   4
     #define MG3_PIPE_SPEED_STEP  50
 
+    // HUD
+    #define MG3_HUD_ROW           0
+    #define MG3_HUD_SCORE_LABEL_X 1
+    #define MG3_HUD_SCORE_VAL_X   7
+    #define MG3_HUD_LVL_LABEL_X   12
+    #define MG3_HUD_LVL_VAL_X     16
+
     // Others
     #define MG3_SCREEN_X_PX     160
     #define MG3_SCREEN_Y_PX     144
