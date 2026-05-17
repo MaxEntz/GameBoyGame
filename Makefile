@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-TARGET  =   game
+TARGET  =   GabTheMole
 
 GBDK_HOME ?= /opt/gbdk
 LCC     ?=   $(GBDK_HOME)/bin/lcc
