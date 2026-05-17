@@ -40,11 +40,21 @@ void
 save_reset(IN const game_t *game)
 {
     save_data_t tmp;
+    save_data_t existing;
 
+    ENABLE_RAM;
+    memcpy(&existing, (const void *)SRAM_BASE, sizeof(save_data_t));
+    DISABLE_RAM;
     tmp.magic = SAVE_MAGIC;
-    tmp.best_mg1= game->best_score_mg1;
-    tmp.best_mg2 = game->best_score_mg2;
-    tmp.best_mg3 = game->best_score_mg3;
+    if (existing.magic == SAVE_MAGIC) {
+        tmp.best_mg1 = existing.best_mg1 > game->best_score_mg1 ? existing.best_mg1 : game->best_score_mg1;
+        tmp.best_mg2 = existing.best_mg2 > game->best_score_mg2 ? existing.best_mg2 : game->best_score_mg2;
+        tmp.best_mg3 = existing.best_mg3 > game->best_score_mg3 ? existing.best_mg3 : game->best_score_mg3;
+    } else {
+        tmp.best_mg1 = game->best_score_mg1;
+        tmp.best_mg2 = game->best_score_mg2;
+        tmp.best_mg3 = game->best_score_mg3;
+    }
     tmp.run_mg1 = 0;
     tmp.run_mg2 = 0;
     tmp.run_mg3 = 0;
