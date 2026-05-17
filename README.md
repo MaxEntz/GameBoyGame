@@ -20,9 +20,9 @@ The game starts at a title screen, then moves into save selection and difficulty
 
 | Difficulty | Trap Memory | Tetris | Flappy Bird |
 | --- | ---: | ---: | ---: |
-| Easy | 100 | 1500 | 15 |
-| Medium | 200 | 2000 | 40 |
-| Hard | 600 | 3000 | 75 |
+| Easy | 100 | 1500 | 10 |
+| Medium | 200 | 2000 | 20 |
+| Hard | 600 | 3000 | 30 |
 
 Once in the lobby, Gab can walk between island screens, talk to NPCs, and enter minigames through story dialogue. Winning enough points advances the dialogue, saves progress, and opens the next step toward escape.
 
