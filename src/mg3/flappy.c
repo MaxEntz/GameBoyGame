@@ -23,7 +23,7 @@ draw_color_pipe(IN pipe_t *pipe,
     UINT8 tile = (col_index == 0) ? FLAPPY_TILE_PIPE_LEFT : FLAPPY_TILE_PIPE_RIGHT;
 
     for (UINT8 row = 2; row < COMMON_SCREEN_HEIGHT_TILES; row++) {
-        if (row < pipe->pipe_y || row >= pipe->pipe_y + fbird.pipe_gap)
+        if (row < pipe->pipe_y || row >= pipe->pipe_y + MG3_PIPE_GAP)
             set_bkg_tile_xy(actual_col, row, tile);
         else
             set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_EMPTY);
@@ -88,7 +88,7 @@ check_collision(void)
         if (bird_tile_x < tile_x || bird_tile_x >= tile_x + MG3_PIPE_WIDTH)
             continue;
         if (bird_tile_y1 < fbird.pipes[i].pipe_y ||
-            bird_tile_y2 >= fbird.pipes[i].pipe_y + fbird.pipe_gap)
+            bird_tile_y2 >= fbird.pipes[i].pipe_y + MG3_PIPE_GAP)
             return TRUE;
     }
     return FALSE;
@@ -139,7 +139,7 @@ draw_score(IN game_t *game)
 static void
 draw_level(IN game_t *game)
 {
-    CHAR buf[2];
+    CHAR buf[3];
     text_render_t render;
 
     render.text = buf;
@@ -147,7 +147,7 @@ draw_level(IN game_t *game)
     render.y = MG3_HUD_ROW;
 
     if (game->level != fbird.last_speed) {
-        uint_to_str(game->level, buf, 1);
+        uint_to_str(game->level, buf, 2);
         text_renderer_draw(&render);
         fbird.last_speed = game->level;
     }
@@ -162,18 +162,14 @@ static void
 update_pipes(OUT game_t *game)
 {
     for (UINT8 i = 0; i < MG3_NB_PIPE; i++) {
-        fbird.pipes[i].pipe_x -= game->level;
+        fbird.pipes[i].pipe_x -= fbird.pipe_speed;
         draw_pipe(&fbird.pipes[i]);
         if (fbird.pipes[i].pipe_x < MG3_BIRD_X &&
-            fbird.pipes[i].pipe_x + game->level >= MG3_BIRD_X) {
+            fbird.pipes[i].pipe_x + fbird.pipe_speed >= MG3_BIRD_X) {
             game->score_mg3++;
             if (game->score_mg3 % MG3_PIPE_SPEED_STEP == 0) {
-                if (game->level < MG3_PIPE_SPEED_MAX) {
-                    game->level++;
-                    fbird.jump_force++;
-                    if (fbird.pipe_gap < MG3_PIPE_GAP + 2)
-                        fbird.pipe_gap++;
-                }
+                game->level++;
+                fbird.pipe_speed = MG3_SPEED_FROM_LEVEL(game->level);
             }
         }
         if (fbird.pipes[i].pipe_x <= 0) {
@@ -194,8 +190,7 @@ flappybird(OUT game_t *game)
     fbird.last_speed = (UINT8)(-1);
     fbird.bird_y = MG3_SCREEN_Y_PX / 2;
     game->score_mg3 = 0;
-    fbird.jump_force = MG3_JUMP_INIT;
-    fbird.pipe_gap = MG3_PIPE_GAP;
+    fbird.pipe_speed = MG3_PIPE_SPEED_INIT;
 
     for (i = 0; i < MG3_NB_PIPE; i++) {
         fbird.pipes[i].pipe_x = MG3_SCREEN_X_PX + (i * MG3_PIPE_SPACING);
@@ -237,7 +232,7 @@ handle_input_flappybird(OUT game_t *game,
 {
     (void)game;
     if (keys & J_A) {
-        fbird.bird_y -= fbird.jump_force;
+        fbird.bird_y -= MG3_JUMP_INIT;
         if (fbird.bird_y < MG3_SPRITE_Y_OFFSET)
             fbird.bird_y = MG3_SPRITE_Y_OFFSET;
     }
