@@ -10,19 +10,33 @@
 static flappy_t fbird;
 
 /**
+ * @brief Move every tile composing the mole sprite
+ */
+static void
+move_mole_sprite(void)
+{
+    move_sprite(0, MG3_BIRD_X, fbird.bird_y);
+    move_sprite(1, MG3_BIRD_X + MG3_PX_TO_TILE, fbird.bird_y);
+    move_sprite(2, MG3_BIRD_X, fbird.bird_y + MG3_PX_TO_TILE);
+    move_sprite(3, MG3_BIRD_X + MG3_PX_TO_TILE, fbird.bird_y + MG3_PX_TO_TILE);
+}
+
+/**
  * @brief Draw a single column of a pipe on the background
  *
  * @param pipe pointer to the pipe to draw
  * @param actual_col background column index to draw on (0-31)
  */
-
 static void
 draw_color_pipe(IN pipe_t *pipe,
-                IN UINT8 actual_col)
+                IN UINT8 actual_col,
+                IN UINT8 col_index)
 {
+    UINT8 tile = (col_index == 0) ? FLAPPY_TILE_PIPE_LEFT : FLAPPY_TILE_PIPE_RIGHT;
+
     for (UINT8 row = 2; row < COMMON_SCREEN_HEIGHT_TILES; row++) {
-        if (row < pipe->pipe_y || row >= pipe->pipe_y + fbird.pipe_gap)
-            set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_PIPE);
+        if (row < pipe->pipe_y || row >= pipe->pipe_y + MG3_PIPE_GAP)
+            set_bkg_tile_xy(actual_col, row, tile);
         else
             set_bkg_tile_xy(actual_col, row, FLAPPY_TILE_EMPTY);
     }
@@ -64,7 +78,7 @@ draw_pipe(IN pipe_t *pipe)
     }
     for (col = 0; col < MG3_PIPE_WIDTH; col++) {
         actual_col = (tile_x + col) & (MG3_BKG_WIDTH_SIZE - 1);
-        draw_color_pipe(pipe, actual_col);
+        draw_color_pipe(pipe, actual_col, col);
     }
 }
 
@@ -76,17 +90,21 @@ draw_pipe(IN pipe_t *pipe)
 static BOOLEAN
 check_collision(void)
 {
-    UINT8 bird_tile_x  = MG3_BIRD_X / MG3_PX_TO_TILE;
-    UINT8 bird_tile_y1 = (fbird.bird_y - MG3_SPRITE_Y_OFFSET) / MG3_PX_TO_TILE;
-    UINT8 bird_tile_y2 = bird_tile_y1 + 1;
-    UINT8 tile_x = 0;
+    UINT8 bird_top_tile = (fbird.bird_y - MG3_SPRITE_Y_OFFSET) / MG3_PX_TO_TILE;
+    UINT8 bird_bottom_tile =
+        (fbird.bird_y - MG3_SPRITE_Y_OFFSET + MG3_BIRD_HEIGHT_PX - 1) / MG3_PX_TO_TILE;
+    INT16 bird_left = MG3_BIRD_X;
+    INT16 bird_right = MG3_BIRD_X + MG3_BIRD_WIDTH_PX - 1;
+    INT16 pipe_left = 0;
+    INT16 pipe_right = 0;
 
     for (UINT8 i = 0; i < MG3_NB_PIPE; i++) {
-        tile_x = fbird.pipes[i].pipe_x / MG3_PX_TO_TILE;
-        if (bird_tile_x < tile_x || bird_tile_x >= tile_x + MG3_PIPE_WIDTH)
+        pipe_left = fbird.pipes[i].pipe_x;
+        pipe_right = pipe_left + (MG3_PIPE_WIDTH * MG3_PX_TO_TILE) - 1;
+        if (bird_right < pipe_left || bird_left > pipe_right)
             continue;
-        if (bird_tile_y1 < fbird.pipes[i].pipe_y ||
-            bird_tile_y2 >= fbird.pipes[i].pipe_y + fbird.pipe_gap)
+        if (bird_top_tile < fbird.pipes[i].pipe_y ||
+            bird_bottom_tile >= fbird.pipes[i].pipe_y + MG3_PIPE_GAP)
             return TRUE;
     }
     return FALSE;
@@ -112,22 +130,42 @@ uint_to_str(IN UINT16 val,
 }
 
 /**
- * @brief Draw the current score on the top-left of the screen
+ * @brief Draw the current score value in the HUD
  */
 static void
-draw_score(void)
+draw_score(IN game_t *game)
 {
     CHAR buf[4];
     text_render_t render;
 
     render.text = buf;
-    render.x = 1;
-    render.y = 1;
+    render.x = MG3_HUD_SCORE_VAL_X;
+    render.y = MG3_HUD_ROW;
 
-    if (fbird.pipes_passed != fbird.last_score) {
-        uint_to_str(fbird.pipes_passed, buf, 3);
+    if (game->score_mg3 != fbird.last_score) {
+        uint_to_str(game->score_mg3, buf, 3);
         text_renderer_draw(&render);
-        fbird.last_score = fbird.pipes_passed;
+        fbird.last_score = game->score_mg3;
+    }
+}
+
+/**
+ * @brief Draw the current level value in the HUD
+ */
+static void
+draw_level(IN game_t *game)
+{
+    CHAR buf[3];
+    text_render_t render;
+
+    render.text = buf;
+    render.x = MG3_HUD_LVL_VAL_X;
+    render.y = MG3_HUD_ROW;
+
+    if (game->level != fbird.last_speed) {
+        uint_to_str(game->level, buf, 2);
+        text_renderer_draw(&render);
+        fbird.last_speed = game->level;
     }
 }
 
@@ -144,15 +182,10 @@ update_pipes(OUT game_t *game)
         draw_pipe(&fbird.pipes[i]);
         if (fbird.pipes[i].pipe_x < MG3_BIRD_X &&
             fbird.pipes[i].pipe_x + fbird.pipe_speed >= MG3_BIRD_X) {
-            fbird.pipes_passed++;
-            game->score_mg3 = fbird.pipes_passed;
-            if (fbird.pipes_passed % MG3_PIPE_SPEED_STEP == 0) {
-                if (fbird.pipe_speed < MG3_PIPE_SPEED_MAX) {
-                    fbird.pipe_speed++;
-                    fbird.jump_force++;
-                    if (fbird.pipe_gap < MG3_PIPE_GAP + 2)
-                        fbird.pipe_gap++;
-                }
+            game->score_mg3++;
+            if (game->score_mg3 % MG3_PIPE_SPEED_STEP == 0) {
+                game->level++;
+                fbird.pipe_speed = MG3_SPEED_FROM_LEVEL(game->level);
             }
         }
         if (fbird.pipes[i].pipe_x <= 0) {
@@ -165,35 +198,51 @@ update_pipes(OUT game_t *game)
 void
 flappybird(OUT game_t *game)
 {
-    (void)game;
-    fbird.last_score = 0;
-    fbird.bird_y = MG3_SCREEN_Y_PX / 2;
-    fbird.pipes_passed = 0;
-    fbird.pipe_speed = MG3_PIPE_SPEED_INIT;
-    fbird.jump_force = MG3_JUMP_INIT;
-    fbird.pipe_gap = MG3_PIPE_GAP;
+    text_render_t label;
+    UINT8 i = 0;
 
-    for(UINT8 i = 0; i < MG3_NB_PIPE; i++){
+    game->level = MG3_PIPE_SPEED_INIT;
+    fbird.last_score = (UINT16)(-1);
+    fbird.last_speed = (UINT8)(-1);
+    fbird.bird_y = MG3_SCREEN_Y_PX / 2;
+    game->score_mg3 = 0;
+    fbird.pipe_speed = MG3_PIPE_SPEED_INIT;
+
+    for (i = 0; i < MG3_NB_PIPE; i++) {
         fbird.pipes[i].pipe_x = MG3_SCREEN_X_PX + (i * MG3_PIPE_SPACING);
         fbird.pipes[i].pipe_y = next_pipe_y();
     }
     set_bkg_data(0, FLAPPY_TILE_COUNT, flappy_tiles);
     set_bkg_tiles(0, 0, COMMON_SCREEN_WIDTH_TILES, COMMON_SCREEN_HEIGHT_TILES, flappy_bg_map);
-    set_sprite_data(0, 1, &flappy_tiles[FLAPPY_TILE_BIRD * MG3_SPRITE_Y_OFFSET]);
+    set_sprite_data(0, 4, mole_plane_1);
     set_sprite_tile(0, 0);
+    set_sprite_tile(1, 1);
+    set_sprite_tile(2, 2);
+    set_sprite_tile(3, 3);
+    move_mole_sprite();
     text_renderer_init();
+    label.y = MG3_HUD_ROW;
+    label.text = "SCORE";
+    label.x = MG3_HUD_SCORE_LABEL_X;
+    text_renderer_draw(&label);
+    label.text = "LVL";
+    label.x = MG3_HUD_LVL_LABEL_X;
+    text_renderer_draw(&label);
+    draw_score(game);
+    draw_level(game);
 }
 
 void
 update_flappybird(OUT game_t *game)
 {
-    draw_score();
-    if (check_collision() || fbird.bird_y >= MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET) {
+    draw_score(game);
+    draw_level(game);
+    if (check_collision() || fbird.bird_y >= MG3_BIRD_FLOOR_Y) {
         game_changer(game, GAME_STATE_LOBBY, TRUE);
         return;
     }
     fbird.bird_y += 1;
-    move_sprite(0, MG3_BIRD_X, fbird.bird_y);
+    move_mole_sprite();
     update_pipes(game);
 }
 
@@ -203,7 +252,7 @@ handle_input_flappybird(OUT game_t *game,
 {
     (void)game;
     if (keys & J_A) {
-        fbird.bird_y -= fbird.jump_force;
+        fbird.bird_y -= MG3_JUMP_INIT;
         if (fbird.bird_y < MG3_SPRITE_Y_OFFSET)
             fbird.bird_y = MG3_SPRITE_Y_OFFSET;
     }

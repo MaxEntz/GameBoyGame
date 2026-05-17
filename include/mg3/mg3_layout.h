@@ -9,7 +9,12 @@
     #define MG3_LAYOUT_H_
 
     // Bird
-    #define MG3_BIRD_X          40
+    #define MG3_BIRD_X            40
+    #define MG3_BIRD_WIDTH_TILES  2
+    #define MG3_BIRD_HEIGHT_TILES 2
+    #define MG3_BIRD_WIDTH_PX     (MG3_BIRD_WIDTH_TILES * MG3_PX_TO_TILE)
+    #define MG3_BIRD_HEIGHT_PX    (MG3_BIRD_HEIGHT_TILES * MG3_PX_TO_TILE)
+    #define MG3_BIRD_FLOOR_Y      (MG3_SCREEN_Y_PX + MG3_SPRITE_Y_OFFSET - MG3_BIRD_HEIGHT_PX)
 
     // Pipe
     #define MG3_PIPE_WIDTH      2
@@ -19,8 +24,15 @@
     #define MG3_PIPE_Y_MIN      3
     #define MG3_PIPE_Y_MAX      10
     #define MG3_PIPE_SPEED_INIT  1
-    #define MG3_PIPE_SPEED_MAX   4
-    #define MG3_PIPE_SPEED_STEP  50
+    #define MG3_PIPE_SPEED_STEP  5
+    #define MG3_SPEED_FROM_LEVEL(l) ((l) / 3 + 1)
+
+    // HUD
+    #define MG3_HUD_ROW           0
+    #define MG3_HUD_SCORE_LABEL_X 1
+    #define MG3_HUD_SCORE_VAL_X   7
+    #define MG3_HUD_LVL_LABEL_X   13
+    #define MG3_HUD_LVL_VAL_X     17
 
     // Others
     #define MG3_SCREEN_X_PX     160
