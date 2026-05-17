@@ -23,6 +23,7 @@ enum flappy_tile_id_e {
     FLAPPY_TILE_COUNT      = 9
 };
 
+extern const UINT8 mole_plane_1[];
 extern const UINT8 flappy_tiles[];
 extern const UINT8 flappy_bg_map[];
 
