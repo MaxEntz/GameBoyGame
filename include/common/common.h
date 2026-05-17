@@ -21,16 +21,16 @@
     #define MOVING_SENS_RIGHT 18
 
     // To update... about your game
-    #define MASTER_SCORE_EASY_MG1 100
+    #define MASTER_SCORE_EASY_MG1 50
     #define MASTER_SCORE_EASY_MG2 1500
     #define MASTER_SCORE_EASY_MG3 15
 
     #define MASTER_SCORE_MEDIUM_MG1 200
-    #define MASTER_SCORE_MEDIUM_MG2 2000
+    #define MASTER_SCORE_MEDIUM_MG2 15000
     #define MASTER_SCORE_MEDIUM_MG3 40
 
     #define MASTER_SCORE_HARD_MG1 600
-    #define MASTER_SCORE_HARD_MG2 3000
+    #define MASTER_SCORE_HARD_MG2 40000
     #define MASTER_SCORE_HARD_MG3 75
 
 /**
